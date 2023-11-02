@@ -23,7 +23,7 @@ const NavBar = () => {
 	const { t } = useTranslation();
 
 	const handleLanguage = () => {
-		const oriLang = getCookie('lang') ?? 'en';
+		const oriLang = getCookie('lang') ?? navigator.language.split("-")[0];
 		const newLang = (oriLang === 'en') ? 'zh' : 'en';
 		setCookie('lang', newLang);
 		i18n.changeLanguage(newLang); 
