@@ -1,8 +1,7 @@
 import '@/styles/globals.css'
-import Index from '@/pages/main/index'
 
 const App = ({ Component, pageProps }) => {
-	return <Index {...pageProps} />
+	return <Component {...pageProps} />
 }
 
 export default App;

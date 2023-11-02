@@ -11,6 +11,8 @@ i18n.use(initReactI18next).init({
 				'Home': 'Home',
 				'Venue': 'Venue',
 				'Login': 'Login',
+				'Rent': 'Rent',
+				'Admin': 'Admin',
 			}
 		},
 		zh: {
@@ -19,6 +21,8 @@ i18n.use(initReactI18next).init({
 				'Home': '首頁',
 				'Venue': '場地',
 				'Login': '登入',
+				'Rent': '租借場地',
+				'Admin': '管理員',
 			}
 		},
 	},
