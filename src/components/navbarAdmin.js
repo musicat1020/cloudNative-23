@@ -34,15 +34,15 @@ const NavBar = () => {
 		<>
 		<Navbar collapseOnSelect expand="lg" bg="cream">
 			<Container className="m-2">
-				<Navbar.Brand href="/main" bsPrefix="text-2xl no-underline" className="text-dark-blue">{ t('Stadium Matching System') }</Navbar.Brand>
+				<Navbar.Brand href="/admin" bsPrefix="text-2xl no-underline" className="text-dark-blue">{ t('Stadium Matching System') }</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav"/>
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav className="me-auto"></Nav>
 					<Nav>
-						<Nav.Link href="/admin">
-							<span className={styles.navAdmin}>{ t('Admin') }</span>
+						<Nav.Link href="/main">
+							<span className={styles.navAdmin}>{ t('Rent') }</span>
 						</Nav.Link>
-						<Nav.Link href="/main" className={styles.navLink}>{ t('Home') }</Nav.Link>
+						<Nav.Link href="/admin" className={styles.navLink}>{ t('Home') }</Nav.Link>
 						<Nav.Link href="/" className={styles.navLink}>{ t('Login') }</Nav.Link>
 						<Nav.Link 
 							className={styles.navLink}

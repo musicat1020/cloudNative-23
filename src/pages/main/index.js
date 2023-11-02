@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import NavBar from '../../components/navbar';
 import { useTranslation } from 'next-i18next';
 
-const Venue = () => {
+const Index = () => {
 
 	const { t } = useTranslation();
 
@@ -28,4 +28,4 @@ const Venue = () => {
 	);
 }
 
-export default Venue;
+export default Index;
