@@ -1,0 +1,36 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "cookies-next": "^4.0.0",
+    "i18next": "^23.6.0",
+    "next": "14.0.1",
+    "next-i18next": "^15.0.0",
+    "react": "^18",
+    "react-bootstrap": "^2.9.1",
+    "react-dom": "^18",
+    "react-i18next": "^13.3.1",
+    "react-icons": "^4.11.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  },
+  "main": "index.js",
+  "repository": "https://github.com/cloud-native-23/frontend.git",
+  "author": "Deru <deru.yang0086@gmail.com>",
+  "license": "MIT"
+}
