@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -12,15 +12,26 @@ const TimeTable = () => {
 
 	const dayDuration = 7;
 	const curDate = dayjs();
+	const maxDate = curDate.clone().add(1, 'year');
 	const [startDate, setStartDate] = useState(curDate);
+	const [scheduleDates, setScheduleDates] = useState([]);
 
-	const convertDateFormat = (date) => {
-		const dateString = dayjs(date).format('MM/DD (ddd)');
+	useEffect(() => {
+		var scheduleDates = [];
+		for (var i=0; i<dayDuration; i++) {
+			const newDate = addDate(startDate.clone(), i);
+			scheduleDates.push(newDate);
+		}
+		setScheduleDates(scheduleDates);
+	}, [startDate]);
+
+	const convertDateFormat = (date, format='MM/DD (ddd)') => {
+		const dateString = dayjs(date).format(format);
 		return dateString;
 	}
 
-	const addDate = (add) => {
-		const newDate = startDate.clone().add(add, 'days');
+	const addDate = (date, add) => {
+		const newDate = date.add(add, 'days');
 		return newDate;
 	}
 
@@ -37,29 +48,46 @@ const TimeTable = () => {
 		var timeCols = [];
 		
 		/** get session time */
-		const sessionTime = convertTimeFormat(sessionStart) + ' - ' + convertTimeFormat(sessionEnd);
+		sessionStart = convertTimeFormat(sessionStart);
+		sessionEnd = convertTimeFormat(sessionEnd);
+		const sessionTime = sessionStart + ' - ' + sessionEnd;
 		timeCols.push(<Col key={-1} className={styles.timeTableSessionCell}>{sessionTime}</Col>)
 
 		/** get time columns */
-		for (var i=0; i<dayDuration; i++) {
-			if (i%2 == 0) { /** TODO */
+		scheduleDates.forEach((date) => {
+			/** TODO */
+			const i = scheduleDates.indexOf(date);
+			if (i%2 == 0) { 
 				var col = 
-					<Col key={i} aria-disabled={true} className={styles.timeTableSessionCell}>
+					<Col 
+						key={i} 
+						data-date={convertDateFormat(date, 'YYYY-MM-DD')} 
+						data-start={sessionStart}
+						data-end={sessionEnd}
+						aria-disabled={true} 
+						className={styles.timeTableSessionCell}
+					>
 						{ t('已租借') }
 					</Col>;
 			}
 			else {
 				var col = 
-					<Col key={i} onClick={handleSessionClick} className={styles.timeTableSessionCell}>
+					<Col 
+						key={i}
+						data-date={convertDateFormat(date, 'YYYY-MM-DD')}
+						data-start={sessionStart}
+						data-end={sessionEnd}
+						onClick={handleSessionClick} 
+						className={styles.timeTableSessionCell}
+					>
 						{ t('開放中') }
 					</Col>;
 			}
-			
+
 			timeCols.push(col);
-		}
+		});
 
 		return timeCols;
-	
 	}
 
 	const handleTimeTable = (data) => {
@@ -95,32 +123,31 @@ const TimeTable = () => {
 		dateCols.push(<Col key={-1} className={styles.timeTableDateCell}>{ t('Session') }</Col>);
 
 		/** get date columns */
-		for (var i=0; i<dayDuration; i++) {
-			const newDate = convertDateFormat(addDate(i));
-			dateCols.push(<Col key={i} className={styles.timeTableDateCell}>{newDate}</Col>);
-		}
+		scheduleDates.forEach((date) => {
+			dateCols.push(<Col key={date} className={styles.timeTableDateCell}>{convertDateFormat(date)}</Col>);
+		});
 
 		return dateCols;
 	}
 
 	return (
 		<>
-		<Container className='bg-cream'>
-			<Row>
-				<Col className='text-center py-1'>
-					<LocalizationProvider dateAdapter={AdapterDayjs}>
-						<ButtonDatePicker
-							label={startDate == null ? null : startDate.format('YYYY/MM/DD')}
-							date={startDate}
-							minDate={curDate}
-							maxDate={curDate.clone().add(1, 'year')}
-							onChange={(newDate) => setStartDate(newDate)}
-						/>
-					</LocalizationProvider>
-				</Col>
-			</Row>
-			{handleTimeTable()}
-		</Container>
+			<Container className='bg-cream'>
+				<Row>
+					<Col className='text-center py-1'>
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
+							<ButtonDatePicker
+								label={startDate == null ? null : startDate.format('YYYY/MM/DD')}
+								date={startDate}
+								minDate={curDate}
+								maxDate={maxDate}
+								onChange={(newDate) => setStartDate(newDate)}
+							/>
+						</LocalizationProvider>
+					</Col>
+				</Row>
+				{handleTimeTable()}
+			</Container>
 		</>
 	);
 }

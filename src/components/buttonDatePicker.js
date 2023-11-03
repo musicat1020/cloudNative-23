@@ -77,19 +77,21 @@ const ButtonDatePicker = (props) => {
 	}
 
 	return (
-		<ThemeProvider theme={dateTheme}>
-			<Button disabled={navigateBeforeDisable} onClick={() => handleDateNavigate(-interval)}><NavigateBeforeIcon/></Button>
-			<DatePicker
-				slots={{ field: ButtonField, ...props.slots }}
-				slotProps={{ field: { setOpen } }}
-				disablePast={true}
-				{...props}
-				open={open}
-				onClose={() => setOpen(false)}
-				onOpen={() => setOpen(true)}
-			/>
-			<Button disabled={navigateNextDisable} onClick={() => handleDateNavigate(interval)}><NavigateNextIcon/></Button>
-		</ThemeProvider>
+		<>
+			<ThemeProvider theme={dateTheme}>
+				<Button disabled={navigateBeforeDisable} onClick={() => handleDateNavigate(-interval)}><NavigateBeforeIcon/></Button>
+				<DatePicker
+					slots={{ field: ButtonField, ...props.slots }}
+					slotProps={{ field: { setOpen } }}
+					disablePast={true}
+					{...props}
+					open={open}
+					onClose={() => setOpen(false)}
+					onOpen={() => setOpen(true)}
+				/>
+				<Button disabled={navigateNextDisable} onClick={() => handleDateNavigate(interval)}><NavigateNextIcon/></Button>
+			</ThemeProvider>
+		</>
 	);
 }
 
