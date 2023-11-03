@@ -3,6 +3,12 @@
 	border-radius: 10px;
 	margin-top: 20px;
 	margin-bottom: 40px;
-	padding: 40px 0px;
+	padding: 40px 10px;
 	color: #14274C;
+}
+
+@media screen and (max-width: 768px) {
+	.container {
+		width: 90vw;
+	}
 }

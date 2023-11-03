@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -10,12 +10,45 @@ import styles from '../styles/timetable.module.css';
 const TimeTable = () => {
 	const { t } = useTranslation();
 
-	const dayDuration = 7;
+	
 	const curDate = dayjs();
 	const maxDate = curDate.clone().add(1, 'year');
 	const [startDate, setStartDate] = useState(curDate);
 	const [scheduleDates, setScheduleDates] = useState([]);
+	const [dayDuration, setDayDuration] = useState(7);
 
+	const [windowSize, setWindowSize] = useState([(typeof window !== 'undefined') ? [window.innerWidth, window.innerHeight] : [0, 0]]);
+
+	/** handle window resize */
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			const handleResize = () => {
+				setWindowSize([window.innerWidth, window.innerHeight]);
+			}
+
+			setWindowSize([window.innerWidth, window.innerHeight]);
+			window.addEventListener('resize', handleResize);
+			return () => window.removeEventListener('resize', handleResize);
+		}
+	}, []);
+
+	/** handle day duration based on window size */
+	useEffect(() => {
+		if (windowSize[0] < 768) {
+			setDayDuration(2);
+		}
+		else if (windowSize[0] < 1024) {
+			setDayDuration(3);
+		}
+		else if (windowSize[0] < 1350) {
+			setDayDuration(5);
+		}
+		else {
+			setDayDuration(7);
+		}
+	})
+
+	/** handle schedule dates based on startDate and dayDuration */
 	useEffect(() => {
 		var scheduleDates = [];
 		for (var i=0; i<dayDuration; i++) {
@@ -23,7 +56,7 @@ const TimeTable = () => {
 			scheduleDates.push(newDate);
 		}
 		setScheduleDates(scheduleDates);
-	}, [startDate]);
+	}, [startDate, dayDuration]);
 
 	const convertDateFormat = (date, format='MM/DD (ddd)') => {
 		const dateString = dayjs(date).format(format);

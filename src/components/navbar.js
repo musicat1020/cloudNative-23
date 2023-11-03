@@ -32,7 +32,7 @@ const NavBar = () => {
 
 	return (
 		<>
-		<Navbar collapseOnSelect expand="lg" bg="light-cream">
+		<Navbar collapseOnSelect expand="lg" bg="light-cream" className='flex-col'>
 			<Container className="m-2">
 				<Navbar.Brand href="/main/venue" bsPrefix="text-2xl no-underline" className="text-dark-blue">{ t('Stadium Matching System') }</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav"/>
