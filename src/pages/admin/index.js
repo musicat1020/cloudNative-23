@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { Container, Row, Col } from 'react-bootstrap';
 import NavBar from '../../components/navbarAdmin';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'react-i18next';
 
 const Index = () => {
 

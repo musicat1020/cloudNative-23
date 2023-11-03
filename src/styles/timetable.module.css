@@ -1,0 +1,26 @@
+.timeTableDateCell {
+	text-align: center;
+	line-height: 40px;
+
+	border-style: solid;
+	border-color: #DADAD1;
+	border-width: 1px;
+
+	
+}
+
+.timeTableSessionCell {
+	text-align: center;
+	line-height: 50px;
+
+	border-style: solid;
+	border-color: #DADAD1;
+	border-width: 1px;
+
+	cursor: pointer;
+}
+
+.timeTableSessionCell[aria-disabled="true"] {
+	color: #ABABAB;
+	cursor: default;
+}

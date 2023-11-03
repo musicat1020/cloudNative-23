@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import React from "react";
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'react-i18next';
 import { getCookie, setCookie } from "cookies-next";
 import getConfig from "next/config";
 import i18n from '../utils/i18n';

@@ -1,8 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import React from "react";
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { useTranslation } from 'next-i18next';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { getCookie, setCookie } from "cookies-next";
 import getConfig from "next/config";
 import i18n from '../utils/i18n';
@@ -32,9 +32,9 @@ const NavBar = () => {
 
 	return (
 		<>
-		<Navbar collapseOnSelect expand="lg" bg="cream">
+		<Navbar collapseOnSelect expand="lg" bg="light-cream">
 			<Container className="m-2">
-				<Navbar.Brand href="/main" bsPrefix="text-2xl no-underline" className="text-dark-blue">{ t('Stadium Matching System') }</Navbar.Brand>
+				<Navbar.Brand href="/main/venue" bsPrefix="text-2xl no-underline" className="text-dark-blue">{ t('Stadium Matching System') }</Navbar.Brand>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav"/>
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav className="me-auto"></Nav>

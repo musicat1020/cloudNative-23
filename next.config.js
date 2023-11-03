@@ -9,6 +9,7 @@ const nextConfig = {
 		frontendRoot: process.env.FRONTEND_ROOT,
 		accessTokenMaxAge: process.env.ACCESS_TOKEN_MAX_AGE,
 		refreshTokenMaxAge: process.env.REFRESH_TOKEN_MAX_AGE,
+		timeZone: process.env.TIMEZONE,
 	}
 }
 
