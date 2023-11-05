@@ -10,7 +10,10 @@ const nextConfig = {
 		accessTokenMaxAge: process.env.ACCESS_TOKEN_MAX_AGE,
 		refreshTokenMaxAge: process.env.REFRESH_TOKEN_MAX_AGE,
 		timeZone: process.env.TIMEZONE,
-	}
+	},
+	images: {
+		domains: ['via.placeholder.com', 'rent.pe.ntu.edu.tw'],
+	},
 }
 
 module.exports = nextConfig
