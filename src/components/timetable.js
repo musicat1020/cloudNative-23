@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import ButtonDatePicker from '../components/buttonDatePicker';
+import ButtonDatePicker from './buttonDatePicker';
+import SessionModal from './sessionModal';
 import styles from '../styles/timetable.module.css';
 
 const TimeTable = () => {
@@ -16,6 +17,7 @@ const TimeTable = () => {
 	const [startDate, setStartDate] = useState(curDate);
 	const [scheduleDates, setScheduleDates] = useState([]);
 	const [dayDuration, setDayDuration] = useState(7);
+	const [showSessionModal, setShowSessionModal] = useState(false);
 
 	const [windowSize, setWindowSize] = useState([(typeof window !== 'undefined') ? [window.innerWidth, window.innerHeight] : [0, 0]]);
 
@@ -73,7 +75,7 @@ const TimeTable = () => {
 	}
 
 	const handleSessionClick = () => {
-		alert('Session clicked');
+		setShowSessionModal(true);
 	}
 
 	const handleTimeCols = (sessionStart, sessionEnd) => {
@@ -181,6 +183,7 @@ const TimeTable = () => {
 				</Row>
 				{handleTimeTable()}
 			</Container>
+			<SessionModal show={showSessionModal} setShow={setShowSessionModal}/>
 		</>
 	);
 }
