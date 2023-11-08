@@ -23,3 +23,9 @@
 	color: #ABABAB;
 	text-decoration: none;
 }
+
+.rentLink {
+	color: #14274C;
+	position: relative;
+	z-index: 1;
+}

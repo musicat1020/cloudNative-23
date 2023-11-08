@@ -27,3 +27,8 @@
 	background-color: #14274C;
 	color: #FFFFFF;
 }
+
+.manageList {
+	color: #14274C;
+	white-space: nowrap;
+}

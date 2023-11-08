@@ -1,32 +1,32 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Container } from 'react-bootstrap';
-import { useTranslation } from 'next-i18next';
-import RecordTable from './recordTable';
-import { mockRentalRecords, mockPairingRecords } from '../../mockData/mockData';
-import PairingTable from './pairingTable';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Container } from "react-bootstrap";
+import { useTranslation } from "next-i18next";
+import RecordTable from "./recordTable";
+import { mockRentalRecords, mockPairingRecords } from "../../mockData/mockData";
+import PairingTable from "./pairingTable";
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#AD5625',
+            main: "#AD5625",
         },
         secondary: {
-            main: '#14274C',
+            main: "#14274C",
         },
         text: {
-            primary: '#14274C',
-            secondary: '#14274C',
+            primary: "#14274C",
+            secondary: "#14274C",
         },
-        divider: '#BEC8DD',
+        divider: "#BEC8DD",
     },
     typography: {
         fontFamily:
-            '"Palatino", sans-serif',
+            "\"Palatino\", sans-serif",
     },
 });
 
@@ -59,7 +59,7 @@ CustomTabPanel.propTypes = {
 function a11yProps(index) {
     return {
         id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        "aria-controls": `simple-tabpanel-${index}`,
     };
 }
 
@@ -74,8 +74,8 @@ const RecordTab = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box sx={{ width: "100%" }}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                     <Tabs
                         value={value}
                         onChange={handleChange}
@@ -83,8 +83,8 @@ const RecordTab = () => {
                         textColor='primary'
                         indicatorColor='primary'
                     >
-                        <Tab label={t('Rental Records')} {...a11yProps(0)} />
-                        <Tab label={t('Pairing Records')} {...a11yProps(1)} />
+                        <Tab label={t("Rental Records")} {...a11yProps(0)} />
+                        <Tab label={t("Pairing Records")} {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
@@ -100,6 +100,6 @@ const RecordTab = () => {
             </Box>
         </ThemeProvider>
     );
-}
+};
 
 export default RecordTab;
