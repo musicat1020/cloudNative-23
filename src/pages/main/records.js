@@ -1,9 +1,11 @@
 import Head from "next/head";
+import { Container } from "react-bootstrap";
 import { useTranslation } from "next-i18next";
-import NavBar from "../../components/navbarAdmin";
-import VenueListConainer from "@/components/venueListConainer";
+import NavBar from "../../components/navbar";
+import RecordTab from "@/components/recordTab";
+import styles from "@/styles/record.module.css";
 
-function Index() {
+function Record() {
   const { t } = useTranslation();
 
   return (
@@ -16,9 +18,11 @@ function Index() {
         />
       </Head>
       <NavBar />
-      <VenueListConainer isAdmin />
+      <Container className={styles.container}>
+        <RecordTab />
+      </Container>
     </>
   );
 }
 
-export default Index;
+export default Record;

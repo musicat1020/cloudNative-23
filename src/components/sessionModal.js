@@ -1,20 +1,18 @@
-import BaseModal from './baseModal';
-import SubVenueTable from './subVenueTable';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import BaseModal from "./baseModal";
+import SubVenueTable from "./subVenueTable";
 
-const SessionModal = ({ show, setShow }) => {
+function SessionModal({ show, setShow }) {
 
 	const { t } = useTranslation();
 
 	return (
-		<>
 		<BaseModal 
 			show={show} 
 			handleClose={() => setShow(false)} 
-			title={t('租借場地')}
+			title={t("租借場地")}
 			content={<SubVenueTable/>}
 		/>
-		</>
 	);
 }
 

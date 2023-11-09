@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
 	--foreground-rgb: 0, 0, 0;
 	--background-start-rgb: 214, 219, 220;
@@ -9,11 +10,11 @@
 }
 
 @media (prefers-color-scheme: dark) {
-:root {
-	--foreground-rgb: 255, 255, 255;
-	--background-start-rgb: 0, 0, 0;
-	--background-end-rgb: 0, 0, 0;
-}
+	:root {
+		--foreground-rgb: 255, 255, 255;
+		--background-start-rgb: 0, 0, 0;
+		--background-end-rgb: 0, 0, 0;
+	}
 }
 
 body {
@@ -35,12 +36,9 @@ input {
 }
 
 input:focus {
-    outline: none;
+	outline: none;
 }
 
-input[type=number]::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-}
 
 input[disabled] {
 	color: #ABABAB;
@@ -48,14 +46,28 @@ input[disabled] {
 	cursor: default;
 }
 
+
+input[type=number]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+}
+
 select {
 	padding: 4px 5px;
 
 	background-color: transparent;
-	border: 1px solid #14274C;
+	border-style: solid;
+	border-color: #14274C;
+	border-width: 1px;
 	border-radius: 7px;
 }
 
 select:focus {
-    outline: none;
+	outline: none;
+}
+
+@font-face {
+	font-family: 'Palatino';
+	src:
+		local('Palatino'),
+		url(./fonts/Palatino.ttf) format('truetype');
 }

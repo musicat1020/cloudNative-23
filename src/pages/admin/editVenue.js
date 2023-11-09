@@ -1,18 +1,18 @@
-import Head from 'next/head';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Container, Row, Col } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import PublishIcon from '@mui/icons-material/Publish';
-import NavBar from '../../components/navbarAdmin';
-import VenueTab from '../../components/venueTab';
-import VenueDetail from '../../components/venueDetail';
-import styles from '../../styles/venue.module.css';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+import Head from "next/head";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Container, Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import PublishIcon from "@mui/icons-material/Publish";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Image from "next/image";
+import NavBar from "../../components/navbarAdmin";
+import VenueTab from "../../components/venueTab";
+import VenueDetail from "../../components/venueDetail";
+import styles from "../../styles/venue.module.css";
 // import Image from 'react-bootstrap/Image';
-import Image from 'next/image';
 
-const Venue = () => {
+function Venue() {
 
 	const { t } = useTranslation();
 	// const address = "台北市羅斯福路四段一號";
@@ -29,27 +29,27 @@ const Venue = () => {
 	const theme = createTheme({
 		palette: {
 			primary: {
-				main: '#AD5625',
+				main: "#AD5625",
 			},
 			secondary: {
-				main: '#14274C',
+				main: "#14274C",
 			},
 			text: {
-				primary: '#14274C',
-				secondary: '#14274C',
+				primary: "#14274C",
+				secondary: "#14274C",
 			},
-			divider: '#BEC8DD',
+			divider: "#BEC8DD",
 		},
 		typography: {
 			fontFamily:
-				'"Palatino", sans-serif',
+				"\"Palatino\", sans-serif",
 		},
 	});
 
 	return (
 		<ThemeProvider theme={theme}>
 			<Head>
-				<title>{t('Stadium Matching System')}</title>
+				<title>{t("Stadium Matching System")}</title>
 				<meta
 					property="og:description"
 					content="Stadium Matching System"
@@ -58,7 +58,7 @@ const Venue = () => {
 			<NavBar />
 
 				<Container className={`${styles.container}`}>
-					<div class="flex justify-center items-center">
+					<div className="flex justify-center items-center">
 						<img
 								className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
 								src='/venue-1.jpg'
