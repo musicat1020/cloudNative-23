@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { 
 	FormGroup, 
 	FormControlLabel, 
-	Checkbox, 
 	Paper, 
 	Table, 
 	TableBody, 
@@ -13,10 +12,18 @@ import {
 	TableHead, 
 	TableRow 
 } from "@mui/material";
+import getConfig from "next/config";
+import axios from "../utils/axios";
 import BaseModal from "./baseModal";
 import BaseSwitch from "./baseSwitch";
 import BaseCheckbox from "./baseCheckbox";
 import styles from "../styles/subvenue.module.css";
+
+const {
+	publicRuntimeConfig: {
+		apiRoot,
+	},
+} = getConfig();
 
 // TODO: get data from backend
 function createData(id, venue, renter, people, levels, status) {
@@ -33,12 +40,14 @@ function SubVenueTable() {
 		"advanced": t("高級"),
 	};
 
-	const [showJoined, setShowJoined] = useState(false);
-	const [showRented, setShowRented] = useState(false);
+	const [showJoin, setShowJoin] = useState(false);
+	const [showRent, setShowRent] = useState(false);
+	const [showRentRes, setShowRentRes] = useState(false);
 	const [peopleUsed, setPeopleUsed] = useState(0);
 	const [allowMatching, setAllowMatching] = useState(false);
 	const [peopleMatching, setPeopleMatching] = useState(0);
 	const [levelChecked, setLevelChecked] = useState([]);
+	const [rentResponse, setRentResponse] = useState({});
 
 	// TODO: get data from backend
 	const rows = [
@@ -49,7 +58,8 @@ function SubVenueTable() {
 		createData(5, "E場", "無","0", [], t("租借")),
 	];
 
-	const data = {
+	// TODO: get data from backend
+	const joinData = {
 		"renter": t("丁丁"),
 		"people": 2,
 		"maxPeople": 4,
@@ -64,23 +74,28 @@ function SubVenueTable() {
 	};
 
 	const handleOpenJoin = () => {
-		setShowJoined(true);
+		setShowJoin(true);
 	};
 
 	const handleOpenRent = () => {
-		setShowRented(true);
+		setShowRent(true);
 	};
 
 	const handleCloseJoin = () => {
-		setShowJoined(false);
+		setShowJoin(false);
 	};
 
 	const handleCloseRent = () => {
 		clearRentInput();
-		setShowRented(false);
+		setShowRent(false);
 	};
 
-	const handleRent = () => {
+	const handleCloseRentRes = () => {
+		setRentResponse({});
+		setShowRentRes(false);
+	};
+
+	const handleRent = async () => {
 
 		// TODO: Sent rent request
 		const data = {
@@ -90,118 +105,179 @@ function SubVenueTable() {
 			"levels": levelChecked,
 		};
 
-		alert(JSON.stringify(data));
+		setRentResponse(data);
+
+		// TODO: send request to backend
+		// const msg = await axios.get(
+		// 	`${apiRoot}/api/healthchecker`
+		// );
+
+		// // Show success message
+		// alert(JSON.stringify(msg));
 
 		// Close modal
 		handleCloseRent();
+
+		setShowRentRes(true);
 	};
 
-	const getJoinedContent = (data) => (
-			<Container>
-				{/* Renter */}
-				<Row>
-					<Col>
-						<span className={styles.joinAttrTitle}>{t("租借人")}</span>
-						<span>{data.renter}</span>
-					</Col>
-				</Row>
+	const getJoinContent = (data) => (
+		<Container>
+			{/* Renter */}
+			<Row>
+				<Col>
+					<span className={styles.joinAttrTitle}>{t("租借人")}</span>
+					<span>{data.renter}</span>
+				</Col>
+			</Row>
 
-				{/* People */}
-				<Row>
-					<Col>
-						<span className={styles.joinAttrTitle}>{t("使用人數")}</span>
-						<span>{`${data.people}/${data.maxPeople}`}</span>
-					</Col>
-				</Row>
+			{/* People */}
+			<Row>
+				<Col>
+					<span className={styles.joinAttrTitle}>{t("使用人數")}</span>
+					<span>{`${data.people}/${data.maxPeople}`}</span>
+				</Col>
+			</Row>
 
 
-				{/* Levels */}
-				<Row>
-					<Col>
-						<span className={styles.joinAttrTitle}>{t("球技要求")}</span>
-						{
-							data.levels.map((item, index) => (
-								<span key={index} className={styles.level}>{levelList[item]}</span>
-							))
-						}
-					</Col>
-				</Row>
+			{/* Levels */}
+			<Row>
+				<Col>
+					<span className={styles.joinAttrTitle}>{t("球技要求")}</span>
+					{
+						data.levels.map((item, index) => (
+							<span key={index} className={styles.level}>{levelList[item]}</span>
+						))
+					}
+				</Col>
+			</Row>
 
-				{/* Button */}
-				<Row className='mt-3'>
-					<Col className='text-center'>
-						<button className={styles.confirmButton} onClick={handleCloseJoin}>{t("確定")}</button>
-					</Col>
-				</Row>
-			</Container>
-		);
+			{/* Button */}
+			<Row className='mt-3'>
+				<Col className='text-center'>
+					<button className={styles.confirmButton} onClick={handleCloseJoin}>{t("確定")}</button>
+				</Col>
+			</Row>
+		</Container>
+	);
 
-	const getRentedContent = () => (
-			<Container>
+	const getRentContent = () => (
+		<Container>
 
-				{/* People */}
-				<Row>
-					<Col>
-						<span className={styles.rentAttrTitle}>{t("使用人數")}</span>
-						<input 
-							type='number'
-							className='ml-4 mr-2 w-12'
-							value={peopleUsed}
-							min="0"
-							onChange={(e) => setPeopleUsed(e.target.value)}
-						/>
-						<span>{ t("人") }</span>
-					</Col>
-				</Row>
+			{/* People */}
+			<Row>
+				<Col>
+					<span className={styles.rentAttrTitle}>{t("使用人數")}</span>
+					<input 
+						type='number'
+						className='ml-4 mr-2 w-12'
+						value={peopleUsed}
+						min="0"
+						onChange={(e) => setPeopleUsed(e.target.value)}
+					/>
+					<span>{ t("人") }</span>
+				</Col>
+			</Row>
 
-				{/* Allow Matching */}
-				<Row>
-					<Col>
-						<span className={styles.rentAttrTitle}>{t("允許配對球友?")}</span>
-						<BaseSwitch 
-							checked={allowMatching}
-							handleChange={setAllowMatching}
-						/>
-					</Col>
-				</Row>
+			{/* Allow Matching */}
+			<Row>
+				<Col>
+					<span className={styles.rentAttrTitle}>{t("允許配對球友?")}</span>
+					<BaseSwitch 
+						checked={allowMatching}
+						handleChange={setAllowMatching}
+					/>
+				</Col>
+			</Row>
 
-				{/* People Matching */}
-				<Row>
-					<Col>
-						<span className={styles.rentAttrTitle}>{t("想再找幾名球友?")}</span>
-						<input 
-							type='number'
-							className='ml-4 mr-2 w-12'
-							value={peopleMatching}
-							disabled={!allowMatching}
-							min="0"
-							onChange={(e) => setPeopleMatching(e.target.value)}
-						/>
-						<span>{ t("人") }</span>
-					</Col>
-				</Row>
+			{/* People Matching */}
+			<Row>
+				<Col>
+					<span className={styles.rentAttrTitle}>{t("想再找幾名球友?")}</span>
+					<input 
+						type='number'
+						className='ml-4 mr-2 w-12'
+						value={peopleMatching}
+						disabled={!allowMatching}
+						min="0"
+						onChange={(e) => setPeopleMatching(e.target.value)}
+					/>
+					<span>{ t("人") }</span>
+				</Col>
+			</Row>
 
-				{/* Levels */}
-				<Row>
-					<Col className='flex flex-row'>
-						<span className={styles.rentAttrTitle}>{t("球友球技要求")}</span>
-						<FormGroup className='ml-4'>
-							<FormControlLabel control={<BaseCheckbox value='beginner' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.beginner} />
-							<FormControlLabel control={<BaseCheckbox value='intermediate' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.intermediate} />
-							<FormControlLabel control={<BaseCheckbox value='advanced' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.advanced} />
-						</FormGroup>
-					</Col>
-				</Row>
+			{/* Levels */}
+			<Row>
+				<Col className='flex flex-row'>
+					<span className={styles.rentAttrTitle}>{t("球友球技要求")}</span>
+					<FormGroup className='ml-4'>
+						<FormControlLabel control={<BaseCheckbox value='beginner' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.beginner} />
+						<FormControlLabel control={<BaseCheckbox value='intermediate' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.intermediate} />
+						<FormControlLabel control={<BaseCheckbox value='advanced' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.advanced} />
+					</FormGroup>
+				</Col>
+			</Row>
 
-				{/* Button */}
-				<Row className='mt-3'>
-					<Col className='text-center'>
-						<button className={styles.cancelButton} onClick={handleCloseRent}>{t("取消")}</button>
-						<button className={styles.confirmButton} onClick={handleRent}>{t("確定")}</button>
-					</Col>
-				</Row>
-			</Container>
-		);
+			{/* Button */}
+			<Row className='mt-3'>
+				<Col className='text-center'>
+					<button className={styles.cancelButton} onClick={handleCloseRent}>{t("取消")}</button>
+					<button className={styles.confirmButton} onClick={handleRent}>{t("確定")}</button>
+				</Col>
+			</Row>
+		</Container>
+	);
+
+	const getRentResContent = () => (
+		<Container>
+			
+			{/* People */}
+			<Row>
+				<Col>
+					<span className={styles.rentSuccAttrTitle}>{t("使用人數")}</span>
+					<span>{`${rentResponse.people}`}</span>
+					<span className="ml-2">{ t("人") }</span>
+				</Col>
+			</Row>
+
+			{/* Allow Matching */}
+			<Row>
+				<Col>
+					<span className={styles.rentSuccAttrTitle}>{t("允許配對")}</span>
+					<span>{ rentResponse.allowMatching ? t("是") : t("否") }</span>
+				</Col>
+			</Row>
+
+			{/* People Matching */}
+			<Row>
+				<Col>
+					<span className={styles.rentSuccAttrTitle}>{t("可加入人數")}</span>
+					<span>{`${rentResponse.peopleMatching}`}</span>
+					<span className="ml-2">{ t("人") }</span>
+				</Col>
+			</Row>
+
+			{/* Levels */}
+			<Row>
+				<Col>
+					<span className={styles.rentSuccAttrTitle}>{t("球技要求")}</span>
+					{
+						rentResponse.levels && 
+						rentResponse.levels.map((item, index) => (
+							<span key={index} className={styles.level}>{levelList[item]}</span>
+						))
+					}
+				</Col>
+			</Row>
+
+			{/* Button */}
+			<Row className='mt-3'>
+				<Col className='text-center'>
+					<button className={styles.confirmButton} onClick={handleCloseRentRes}>{t("確定")}</button>
+				</Col>
+			</Row>
+		</Container>
+	);
 	
 	return (
 		<>
@@ -239,12 +315,16 @@ function SubVenueTable() {
 							</TableCell>
 							<TableCell className={styles.tableCell}>
 								{
-									(row.status == t("加入")) ?
-										<button onClick={handleOpenJoin} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
-									: (row.status == t("租借")) ? 
-										<button onClick={handleOpenRent} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
-									:
-										<span className='text-gray cursor-default'>{row.status}</span>
+									row.status === t("加入") &&
+									<button onClick={handleOpenJoin} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
+								}
+								{
+									row.status === t("租借") &&
+									<button onClick={handleOpenRent} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
+								}
+								{
+									row.status !== t("加入") && row.status !== t("租借") &&
+									<span className='text-gray cursor-default'>{row.status}</span>
 								}
 							</TableCell>
 						</TableRow>
@@ -255,19 +335,34 @@ function SubVenueTable() {
 
 			{/* Modal for joined */}
 			<BaseModal 
-				show={showJoined}
+				venue={t("綜合體育館 一樓多功能球場 A場")}
+				session={t("2021/10/20 14:00 - 16:00")}
+				show={showJoin}
 				handleClose={handleCloseJoin}
 				title={t("已加入隊伍")}
-				content={getJoinedContent(data)}
+				content={getJoinContent(joinData)}
 				customStyles={{width: "35vw"}}
 			/>
 
 			{/* Modal for rented */}
 			<BaseModal 
-				show={showRented}
+				venue={t("綜合體育館 一樓多功能球場 A場")}
+				session={t("2021/10/20 14:00 - 16:00")}
+				show={showRent}
 				handleClose={handleCloseRent}
 				title={t("租借場地")}
-				content={getRentedContent(data)}
+				content={getRentContent()}
+				customStyles={{width: "45vw"}}
+			/>
+
+			{/* Modal for rent success */}
+			<BaseModal 
+				venue={t("綜合體育館 一樓多功能球場 A場")}
+				session={t("2021/10/20 14:00 - 16:00")}
+				show={showRentRes}
+				handleClose={() => setShowRentRes(false)}
+				title={t("租借成功")}
+				content={getRentResContent()}
 				customStyles={{width: "45vw"}}
 			/>
 		</>

@@ -61,7 +61,7 @@ i18n.use(initReactI18next).init({
 				"刪除場地": "Delete whole venue",
 				"下架特定時段場地": "Take down specific time slots for the venue",
 				"已加入隊伍": "Joined Success",
-				"租借成功": "Rented Success",
+				"租借成功": "Rental Successful",
 				"允許配對球友?": "Teammates Matching Needed?",
 				"想再找幾名球友?": "Number of Teammates Needed?",
 				"球友球技要求": "Teammates Level",
