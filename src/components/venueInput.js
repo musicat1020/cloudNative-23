@@ -3,7 +3,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { useTranslation } from 'react-i18next';
 import React from "react";
 import { useRef } from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
@@ -13,15 +13,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Dialog from '@mui/material/Dialog';
-import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import Stack from '@mui/joy/Stack';
-import { Col, Row, Form } from 'react-bootstrap';
-import ButtonDeleteVenue from './buttonDeleteVenue';
-
+import { Button, Col, Row, Form } from 'react-bootstrap';
 
 const VenueDetail = () => {
   const { t } = useTranslation();
@@ -29,26 +26,6 @@ const VenueDetail = () => {
   const [courtList, setCourtList] = React.useState(["A桌", "B桌"]);
   const [weekDays, setWeekDays] = React.useState(() => ["mon", "tue", "wed", "thu", "fri"]);
   const newCourtRef = useRef(null);
-
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#AD5625',
-      },
-      secondary: {
-        main: '#14274C',
-      },
-      text: {
-        primary: '#14274C',
-        secondary: '#14274C',
-      },
-      divider: '#BEC8DD',
-    },
-    typography: {
-      fontFamily:
-        '"Palatino", sans-serif',
-    },
-  });
 
 
   const handleWeekdays = (event, newWeekDays) => {
@@ -58,7 +35,7 @@ const VenueDetail = () => {
   function handleListDelete(courtToDelete) {
     const updatedCourtList = courtList.filter((court) => court !== courtToDelete);
     setCourtList(updatedCourtList);
-  };
+  }
 
   function handleAddCourt() {
     try {
@@ -67,33 +44,26 @@ const VenueDetail = () => {
         setCourtList([...courtList, newCourt]);
         setOpenAddModal(false);
       } else {
+        // Handle the case where the input value is empty (optional)
         alert("Please enter a valid court name.");
       }
     } catch (error) {
       console.log(error);
       alert("Error: failed to add new court");
     }
-  };
+  }
 
   const handleClose = () => {
     setOpenAddModal(false);
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Row>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider'}} >
-          <div className='flex justify-between mt-4'>
-            <div className='flex-none pl-5'>
-              {t('場地資訊')}
-            </div>
-            <div className='flex-none'>
-              <ButtonDeleteVenue />
-            </div>
-          </div>
+    <>
+      <Row style={{ padding: '20px' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tab label={t('場地資訊')} textColor='primary' />
         </Box>
       </Row>
-
       <Row style={{ padding: '20px' }}>
         <Form>
           <Form.Group as={Row} className="mb-3" controlId="address">
@@ -114,12 +84,12 @@ const VenueDetail = () => {
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-3" controlId="venueName">
+          <Form.Group as={Row} className="mb-3" controlId="courtType">
             <Form.Label column sm="2">
               {t('場地名稱')}
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="venue-name" placeholder={t('場地名稱')} />
+              <Form.Control type="court-type" placeholder={t('場地名稱')} />
             </Col>
           </Form.Group>
 
@@ -140,12 +110,7 @@ const VenueDetail = () => {
             <Col sm="10">
               <Stack direction="row" spacing={1}>
                 {courtList.map((court) => (
-                  <Chip 
-                    label={court} 
-                    key={court} 
-                    variant="outlined" 
-                    color='secondary' 
-                    onDelete={() => handleListDelete(court)} />
+                  <Chip label={court} key={court} variant="outlined" color='secondary' onDelete={() => handleListDelete(court)} />
                 ))}
                 <Chip
                   variant="outlined" color='secondary'
@@ -158,12 +123,12 @@ const VenueDetail = () => {
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-3" controlId="area">
+          <Form.Group as={Row} className="mb-3" controlId="room">
             <Form.Label column sm="2">
               {t('場地面積')}
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="area" style={{ width: '80px' }}  />
+              <Form.Control type="room" style={{ width: '80px' }} />
             </Col>
           </Form.Group>
 
@@ -177,10 +142,10 @@ const VenueDetail = () => {
                   // label="Controlled picker" 
                   views={['hours']} 
                   color='secondary' 
-                  slotProps={{ textField: { size: 'small' } }} />
+                  slotProps={{ textField: { size: 'small' } }}  />
                 <span>{t('至')}</span>
                 <TimePicker 
-                  // label="Uncontrolled picker" 
+                  // label="Controlled picker" 
                   views={['hours']} 
                   color='secondary' 
                   slotProps={{ textField: { size: 'small' } }}  />
@@ -249,11 +214,11 @@ const VenueDetail = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='primary' >{t('取消')}</Button>
-          <Button onClick={handleAddCourt}>{t('新增')} </Button>
+          <Button onClick={handleClose} color="secondary" >{t('取消')}</Button>
+          <Button onClick={handleAddCourt} color="secondary" >{t('新增')} </Button>
         </DialogActions>
       </Dialog>
-    </ThemeProvider>
+    </>
   );
 }
 
