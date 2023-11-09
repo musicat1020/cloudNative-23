@@ -17,6 +17,7 @@ module.exports = {
 				'cream': '#E8E6DF',
 				'dark-cream': '#DADAD1',
 				'dark-blue': '#14274C',
+				'dark-blue-hover': '#1C2E52',
 				'light-blue': '#BEC8DD',
 				'brown': '#AD5625',
 				'gray': '#ABABAB',

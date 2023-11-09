@@ -26,7 +26,7 @@
 	border-radius: 50px;
 	border: 1px solid #AD5625;
 	padding: 5px 10px;
-	margin: 0px 3px;
+	margin-right: 10px;
 }
 
 .statusButton {
@@ -45,4 +45,47 @@
 .statusButton:hover {
 	background-size: 100% 1px;
 	background-position: 0 100%;
+}
+
+.joinAttrTitle {
+	display: inline-block;
+	width: 100px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 0px;
+	padding: 5px 10px;
+	border: 1px solid #14274C;
+	border-radius: 50px;
+}
+
+.rentAttrTitle {
+	display: inline-block;
+	width: 250px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 0px;
+}
+
+.confirmButton {
+	color: #FFFFFF;
+	background-color: #14274C;
+	border-radius: 10px;
+	padding: 7px 35px;
+	margin: 0px 20px;
+}
+
+.cancelButton {
+	color: #FFFFFF;
+	background-color: #ABABAB;
+	border-radius: 10px;
+	padding: 7px 35px;
+	margin: 0px 20px;
+}
+
+.cancelButton:hover {
+	background-color: #c0bfbf;
+}
+
+.confirmButton:hover {
+	background-color: #203357;
 }

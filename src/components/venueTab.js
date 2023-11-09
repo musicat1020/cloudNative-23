@@ -105,12 +105,13 @@ const VenueTab = () =>  {
 								type='number'
 								className='ml-4 mr-2 w-12'
 								value={people}
+								min="0"
 								onChange={(e) => setPeople(e.target.value)}
 							/>
 							<span>{ t('人') }</span>
 						</Col>
 						<Col xs={12} md={6} xl={4} className='my-2'>
-							<span>{ t('能力程度') }</span>
+							<span>{ t('球技程度') }</span>
 							<select 
 								className='mx-4 px-2 text-center' 
 								value={level}
