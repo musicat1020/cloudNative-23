@@ -42,7 +42,7 @@ function NavBar() {
   };
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="cream">
+    <Navbar collapseOnSelect expand="lg" bg="light-cream">
       <Container className="m-2">
         <Navbar.Brand href="/main" bsPrefix="text-2xl no-underline" className="text-dark-blue">{t("Stadium Matching System")}</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
