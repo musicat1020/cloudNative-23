@@ -2,6 +2,8 @@ import Head from 'next/head';
 import { Container, Row, Col } from 'react-bootstrap';
 import NavBar from '../../components/navbarAdmin';
 import { useTranslation } from 'react-i18next';
+import styles from '../../styles/venue.module.css';
+
 
 const Index = () => {
 
@@ -17,7 +19,7 @@ const Index = () => {
 				/>
 			</Head>
 			<NavBar/>
-			<Container>
+			<Container className={styles.container}>
 				<Row>
 					<Col className="text-center text-3xl">
 						<h1>{ t('Venue') }</h1>

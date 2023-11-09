@@ -4,7 +4,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import RoomIcon from '@mui/icons-material/Room';
+import IconButton from '@mui/material/IconButton';
+import { Link } from '@mui/material';
 import { Container, Row, Col } from 'react-bootstrap';
+import Carousel from 'react-bootstrap/Carousel';
 import { useTranslation } from 'react-i18next';
 import TimeTable from './timetable';
 
@@ -92,7 +96,42 @@ const VenueTab = () =>  {
 			<CustomTabPanel value={value} index={0}>
 				<Container>
 					<Row>
-						<Col>Item One</Col>
+						<Col>
+							<p>
+								<span class='text-lg'>{ t('場館地點：臺北市羅斯福路四段一號') }</span>
+								<Link href='https://www.google.com/maps/place/NTU+Sports+Center/@25.0216636,121.5352783,15z/data=!4m2!3m1!1s0x0:0x861db0f2b5ef52a3?sa=X&ved=2ahUKEwj_yNTW2LGCAxWIe_UHHbiTAVcQ_BJ6BAhJEAA'>
+									<IconButton>
+										<RoomIcon fontSize='inherit' color='secondary'/>
+									</IconButton>
+								</Link>
+							</p>
+							<p class='text-lg'>{ t('單一場地容納人數：2 人') }</p>
+							<p class='text-lg'>{ t('場地數量：5 場') }</p>
+							<p class='text-lg'>{ t('場地面積：50 m2') }</p>
+							<p class='text-lg'>{ t('開放時間：08 : 00 至 22 : 00') }</p>
+						</Col>
+						<Col>
+							<Carousel>
+								<Carousel.Item>
+									<img 
+										src='/venue-1.jpg'
+										className='d-block w-100 h-80'
+										alt='image 1'/>
+								</Carousel.Item>
+								<Carousel.Item>
+									<img 
+										src='/venue-2.jpg'
+										className='d-block w-100 h-80'
+										alt='image 2'/>
+								</Carousel.Item>
+								<Carousel.Item>
+									<img 
+										src='/venue-3.jpg'
+										className='d-block w-100 h-80'
+										alt='image 3'/>
+								</Carousel.Item>
+							</Carousel>
+						</Col>
 					</Row>
 				</Container>
 			</CustomTabPanel>

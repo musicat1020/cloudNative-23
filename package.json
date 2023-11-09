@@ -19,6 +19,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.4",
     "@mui/styles": "^5.14.16",
     "@mui/x-date-pickers": "^6.17.0",
+    "@mui/joy": "^5.0.0-beta.14",
     "add": "^2.0.6",
     "bootstrap": "^5.3.2",
     "cookies-next": "^4.0.0",
