@@ -1,0 +1,91 @@
+.table {
+	text-align: center;
+	border: 0.5px solid #14274C;
+	cursor: default;
+}
+
+.tableTitle {
+	background-color: #14274C;
+	color: #FFFFFF;
+	text-align: center;
+	padding: 7px 0px;
+	border-style: solid;
+	border-color: #FFFFFF;
+	border-width: 0px 0.5px 0px 0px;
+	border-collapse: collapse;
+}
+
+.tableCell {
+	border: 0.5px solid #14274C;
+	padding: 10px 0px;
+	text-align: center;
+}
+
+.level {
+	color: #AD5625;
+	border-radius: 50px;
+	border: 1px solid #AD5625;
+	padding: 5px 10px;
+	margin-right: 10px;
+}
+
+.statusButton {
+	border-bottom-width: 0;
+	background-image: linear-gradient(transparent, transparent), linear-gradient(#FFF, #FFF);
+	background-size: 0 1px;
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	transition: background-size .3s ease-in-out;
+}
+
+.statusButtonBlack {
+	background-image: linear-gradient(transparent, transparent), linear-gradient(#14274C, #14274C);
+}
+
+.statusButton:hover {
+	background-size: 100% 1px;
+	background-position: 0 100%;
+}
+
+.joinAttrTitle {
+	display: inline-block;
+	width: 100px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 0px;
+	padding: 5px 10px;
+	border: 1px solid #14274C;
+	border-radius: 50px;
+}
+
+.rentAttrTitle {
+	display: inline-block;
+	width: 250px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 0px;
+}
+
+.confirmButton {
+	color: #FFFFFF;
+	background-color: #14274C;
+	border-radius: 10px;
+	padding: 7px 35px;
+	margin: 0px 20px;
+}
+
+.cancelButton {
+	color: #FFFFFF;
+	background-color: #ABABAB;
+	border-radius: 10px;
+	padding: 7px 35px;
+	margin: 0px 20px;
+}
+
+.cancelButton:hover {
+	background-color: #c0bfbf;
+}
+
+.confirmButton:hover {
+	background-color: #203357;
+}

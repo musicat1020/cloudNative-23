@@ -1,0 +1,10 @@
+.modalAttribute {
+	display: inline-block;
+	width: 90px;
+	background-color: #14274C;
+	color: #FFFFFF;
+	text-align: center;
+	margin: 0px 15px;
+	padding: 5px 10px;
+	border-radius: 50px;
+}
