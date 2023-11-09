@@ -1,18 +1,18 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { useTranslation } from 'react-i18next';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { useTranslation } from "react-i18next";
 import React from "react";
-import Button from '@mui/material/Button';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Button from "@mui/material/Button";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 
-const ButtonDeleteVenue = () => {
+function ButtonDeleteVenue() {
   const { t } = useTranslation();
   const [openSubButtons, setOpenSubButtons] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -29,10 +29,10 @@ const ButtonDeleteVenue = () => {
   };
 
   function handleListKeyDown(event) {
-    if (event.key === 'Tab') {
+    if (event.key === "Tab") {
       event.preventDefault();
       setOpenSubButtons(false);
-    } else if (event.key === 'Escape') {
+    } else if (event.key === "Escape") {
       setOpenSubButtons(false);
     }
   };
@@ -51,13 +51,13 @@ const ButtonDeleteVenue = () => {
         ref={anchorRef}
         color='secondary'
         id="composition-button"
-        aria-controls={openSubButtons ? 'composition-menu' : undefined}
-        aria-expanded={openSubButtons ? 'true' : undefined}
+        aria-controls={openSubButtons ? "composition-menu" : undefined}
+        aria-expanded={openSubButtons ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
         endIcon={<ExpandMoreIcon />}
       >
-        {t('下架場地')}
+        {t("下架場地")}
       </Button>
       <Popper
         open={openSubButtons}
@@ -72,7 +72,7 @@ const ButtonDeleteVenue = () => {
             {...TransitionProps}
             style={{
               transformOrigin:
-                placement === 'bottom-start' ? 'left top' : 'left bottom',
+                placement === "bottom-start" ? "left top" : "left bottom",
             }}
           >
             <Paper>
@@ -83,8 +83,8 @@ const ButtonDeleteVenue = () => {
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleSubButtonsClose}>{t('刪除場地')}</MenuItem>
-                  <MenuItem onClick={handleSubButtonsClose}>{t('下架特定時段場地')}</MenuItem>
+                  <MenuItem onClick={handleSubButtonsClose}>{t("刪除場地")}</MenuItem>
+                  <MenuItem onClick={handleSubButtonsClose}>{t("下架特定時段場地")}</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

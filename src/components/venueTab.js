@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import RoomIcon from '@mui/icons-material/Room';
-import IconButton from '@mui/material/IconButton';
-import { Link } from '@mui/material';
-import { Container, Row, Col } from 'react-bootstrap';
-import Carousel from 'react-bootstrap/Carousel';
-import { useTranslation } from 'react-i18next';
-import TimeTable from './timetable';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Box from "@mui/material/Box";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import RoomIcon from "@mui/icons-material/Room";
+import IconButton from "@mui/material/IconButton";
+import { Link } from "@mui/material";
+import { Container, Row, Col } from "react-bootstrap";
+import Carousel from "react-bootstrap/Carousel";
+import { useTranslation } from "react-i18next";
+import TimeTable from "./timetable";
 
 const theme = createTheme({
 	palette: {
 		primary: {
-			main: '#AD5625',
+			main: "#AD5625",
 		},
 		secondary: {
-			main: '#14274C',
+			main: "#14274C",
 		},
 		text: {
-			primary: '#14274C',
-			secondary: '#14274C',
+			primary: "#14274C",
+			secondary: "#14274C",
 		},
-		divider: '#BEC8DD',
+		divider: "#BEC8DD",
 	},
 	typography: {
 		fontFamily: 
-		'"Palatino", sans-serif',
+		"\"Palatino\", sans-serif",
 	},
 });
 
@@ -61,15 +61,15 @@ CustomTabPanel.propTypes = {
 function a11yProps(index) {
 	return {
 		id: `simple-tab-${index}`,
-		'aria-controls': `simple-tabpanel-${index}`,
+		"aria-controls": `simple-tabpanel-${index}`,
 	};
 }
 
-const VenueTab = () =>  {
+function VenueTab() {
 
 	const { t } = useTranslation();
 
-	const levelList = ['beginner', 'intermediate', 'advanced'];
+	const levelList = ["beginner", "intermediate", "advanced"];
 	const [value, setValue] = useState(1);
 	const [people, setPeople] = useState(2);
 	const [level, setLevel] = useState(levelList[1]);
@@ -80,8 +80,8 @@ const VenueTab = () =>  {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Box sx={{ width: '100%' }}>
-			<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+			<Box sx={{ width: "100%" }}>
+			<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 				<Tabs 
 					value={value} 
 					onChange={handleChange} 
@@ -89,8 +89,8 @@ const VenueTab = () =>  {
 					textColor='primary'
 					indicatorColor='primary'
 				>
-					<Tab label={ t('場地資訊')} {...a11yProps(0)}/>
-					<Tab label={ t('場地時段') } {...a11yProps(1)} />
+					<Tab label={ t("場地資訊")} {...a11yProps(0)}/>
+					<Tab label={ t("場地時段") } {...a11yProps(1)} />
 				</Tabs>
 			</Box>
 			<CustomTabPanel value={value} index={0}>
@@ -98,17 +98,17 @@ const VenueTab = () =>  {
 					<Row>
 						<Col>
 							<p>
-								<span class='text-lg'>{ t('場館地點：臺北市羅斯福路四段一號') }</span>
+								<span className='text-lg'>{ t("場館地點：臺北市羅斯福路四段一號") }</span>
 								<Link href='https://www.google.com/maps/place/NTU+Sports+Center/@25.0216636,121.5352783,15z/data=!4m2!3m1!1s0x0:0x861db0f2b5ef52a3?sa=X&ved=2ahUKEwj_yNTW2LGCAxWIe_UHHbiTAVcQ_BJ6BAhJEAA'>
 									<IconButton>
 										<RoomIcon fontSize='inherit' color='secondary'/>
 									</IconButton>
 								</Link>
 							</p>
-							<p class='text-lg'>{ t('單一場地容納人數：2 人') }</p>
-							<p class='text-lg'>{ t('場地數量：5 場') }</p>
-							<p class='text-lg'>{ t('場地面積：50 m2') }</p>
-							<p class='text-lg'>{ t('開放時間：08 : 00 至 22 : 00') }</p>
+							<p className='text-lg'>{ t("單一場地容納人數：2 人") }</p>
+							<p className='text-lg'>{ t("場地數量：5 場") }</p>
+							<p className='text-lg'>{ t("場地面積：50 m2") }</p>
+							<p className='text-lg'>{ t("開放時間：08 : 00 至 22 : 00") }</p>
 						</Col>
 						<Col>
 							<Carousel>
@@ -139,7 +139,7 @@ const VenueTab = () =>  {
 				<Container>
 					<Row>
 						<Col xs={12} md={6} xl={3} className='my-2'>
-							<span>{ t('欲使用人數') }</span>
+							<span>{ t("欲使用人數") }</span>
 							<input 
 								type='number'
 								className='ml-4 mr-2 w-12'
@@ -147,18 +147,18 @@ const VenueTab = () =>  {
 								min="0"
 								onChange={(e) => setPeople(e.target.value)}
 							/>
-							<span>{ t('人') }</span>
+							<span>{ t("人") }</span>
 						</Col>
 						<Col xs={12} md={6} xl={4} className='my-2'>
-							<span>{ t('球技程度') }</span>
+							<span>{ t("球技程度") }</span>
 							<select 
 								className='mx-4 px-2 text-center' 
 								value={level}
 								onChange={(e) => setLevel(e.target.value)}
 							>
-								<option value={levelList[0]}>{ t('初級') }</option>
-								<option value={levelList[1]}>{ t('中級') }</option>
-								<option value={levelList[2]}>{ t('高級') }</option>
+								<option value={levelList[0]}>{ t("初級") }</option>
+								<option value={levelList[1]}>{ t("中級") }</option>
+								<option value={levelList[2]}>{ t("高級") }</option>
 							</select>
 						</Col>
 					</Row>

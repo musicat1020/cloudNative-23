@@ -1,60 +1,57 @@
-import Head from 'next/head';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Container, Row, Col } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import PublishIcon from '@mui/icons-material/Publish';
-import NavBar from '../../components/navbarAdmin';
+import Head from "next/head";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { Container, Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import PublishIcon from "@mui/icons-material/Publish";
 // import VenueTab from '../../components/venueTab';
-import VenueInput from '../../components/venueInput';
-import styles from '../../styles/venue.module.css';
 // import Stack from '@mui/material/Stack';
 // import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Image from 'react-bootstrap/Image';
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import styles from "../../styles/venue.module.css";
+import VenueInput from "../../components/venueInput";
+import NavBar from "../../components/navbarAdmin";
 
-const Venue = () => {
+function Venue() {
 
 	const { t } = useTranslation();
 
 	const theme = createTheme({
 		palette: {
 			primary: {
-				main: '#AD5625',
+				main: "#AD5625",
 			},
 			secondary: {
-				main: '#14274C',
+				main: "#14274C",
 			},
 			text: {
-				primary: '#14274C',
-				secondary: '#14274C',
+				primary: "#14274C",
+				secondary: "#14274C",
 			},
-			divider: '#BEC8DD',
+			divider: "#BEC8DD",
 		},
 		typography: {
 			fontFamily:
-				'"Palatino", sans-serif',
+				"\"Palatino\", sans-serif",
 		},
 	});
 
-	const VisuallyHiddenInput = styled('input')({
-		clip: 'rect(0 0 0 0)',
-		clipPath: 'inset(50%)',
+	const VisuallyHiddenInput = styled("input")({
+		clip: "rect(0 0 0 0)",
+		clipPath: "inset(50%)",
 		height: 1,
-		overflow: 'hidden',
-		position: 'absolute',
+		overflow: "hidden",
+		position: "absolute",
 		bottom: 0,
 		left: 0,
-		whiteSpace: 'nowrap',
+		whiteSpace: "nowrap",
 		width: 1,
 	});
 
 	return (
 		<ThemeProvider theme={theme}>
 			<Head>
-				<title>{t('Stadium Matching System')}</title>
+				<title>{t("Stadium Matching System")}</title>
 				<meta
 					property="og:description"
 					content="Stadium Matching System"
@@ -66,12 +63,12 @@ const Venue = () => {
 				<Row className='flex'>
 					<Col className="text-center">
 						<div className='rounded-6 items-center'>
-							<Col className="text-center" style={{ padding: '100px' }}>
+							<Col className="text-center" style={{ padding: "100px" }}>
 								<IconButton component="label" aria-label="delete">
 									<PublishIcon sx={{ fontSize: 30 }} />
 									<VisuallyHiddenInput type="file" />
 								</IconButton>
-								<p>{t('點擊上傳圖片')}</p>
+								<p>{t("點擊上傳圖片")}</p>
 
 							</Col>
 						</div>

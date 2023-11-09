@@ -1,30 +1,30 @@
-import React, { useState, useReact, useEffect } from 'react';
-import Button from '@mui/material/Button';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import React, { useState, useReact, useEffect } from "react";
+import Button from "@mui/material/Button";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 
 const dateTheme = (theme) => createTheme({
 	...theme,
 	palette: {
 		primary: {
-			main: '#14274C',
+			main: "#14274C",
 		},
 	},
 });
 
-const ButtonField = (props) => {
+function ButtonField(props) {
 	const {
 		setOpen,
 		label,
 		id,
 		disabled,
 		InputProps: { ref } = {},
-		inputProps: { 'aria-label': ariaLabel } = {},
+		inputProps: { "aria-label": ariaLabel } = {},
 	} = props;
 
 	return (
@@ -36,12 +36,12 @@ const ButtonField = (props) => {
 			onClick={() => setOpen?.((prev) => !prev)}
 			className='text-lg'
 		>
-			{label ? `${label}` : 'Pick a date'}
+			{label ? `${label}` : "Pick a date"}
 		</Button>
 	);
 }
 
-const ButtonDatePicker = (props) => {
+function ButtonDatePicker(props) {
 	const interval = 7;
 	const [open, setOpen] = useState(false);
 	const [navigateBeforeDisable, setNavigateBeforeDisable] = useState(false);
@@ -50,12 +50,12 @@ const ButtonDatePicker = (props) => {
 	useEffect(() => {
 		dayjs.extend(isSameOrBefore);
 		dayjs.extend(isSameOrAfter);
-		if (props.date.isSameOrBefore(props.minDate, 'days')) {
+		if (props.date.isSameOrBefore(props.minDate, "days")) {
 			setNavigateBeforeDisable(true);
 		} else {
 			setNavigateBeforeDisable(false);
 		}
-		if (props.date.isSameOrAfter(props.maxDate, 'days')) {
+		if (props.date.isSameOrAfter(props.maxDate, "days")) {
 			setNavigateNextDisable(true);
 		} else {
 			setNavigateNextDisable(false);
@@ -63,27 +63,26 @@ const ButtonDatePicker = (props) => {
 	}, [props.date, props.maxDate, props.minDate]);
 
 	const handleDateNavigate = (interval) => {
-		var newDate = props.date.clone().add(interval, 'days');
+		let newDate = props.date.clone().add(interval, "days");
 
-		if (newDate.isBefore(props.minDate, 'days')) {
+		if (newDate.isBefore(props.minDate, "days")) {
 			newDate = props.minDate;
 		}
 
-		if (newDate.isAfter(props.maxDate, 'days')) {
+		if (newDate.isAfter(props.maxDate, "days")) {
 			newDate = props.maxDate;
 		}
 
 		props.onChange(newDate);
-	}
+	};
 
 	return (
-		<>
-			<ThemeProvider theme={dateTheme}>
+		<ThemeProvider theme={dateTheme}>
 				<Button disabled={navigateBeforeDisable} onClick={() => handleDateNavigate(-interval)}><NavigateBeforeIcon/></Button>
 				<DatePicker
 					slots={{ field: ButtonField, ...props.slots }}
 					slotProps={{ field: { setOpen } }}
-					disablePast={true}
+					disablePast
 					{...props}
 					open={open}
 					onClose={() => setOpen(false)}
@@ -91,7 +90,6 @@ const ButtonDatePicker = (props) => {
 				/>
 				<Button disabled={navigateNextDisable} onClick={() => handleDateNavigate(interval)}><NavigateNextIcon/></Button>
 			</ThemeProvider>
-		</>
 	);
 }
 
