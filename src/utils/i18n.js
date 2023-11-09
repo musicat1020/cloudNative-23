@@ -218,8 +218,11 @@ i18n.use(initReactI18next).init({
 				"Square Meter": "平方公尺",
 				"Sport Center": "綜合體育館",
 				"Table Tennis Room": "桌球室",
-				"Badminton Court": "羽球場",
-				"Click to add a venue": "點擊新增場地",
+				"Badminton Court": "羽球室",
+				"Click to add a venue": "新增場地",
+				"Records": "紀錄",
+				"Logout": "登出",
+				"Cancel Rental": "取消租借",
 			}
 		},
 	},

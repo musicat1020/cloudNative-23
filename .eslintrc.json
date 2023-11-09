@@ -3,7 +3,12 @@
     "browser": true,
     "node": true
   },
-  "extends": "next/core-web-vitals",
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "airbnb",
+    "prettier"
+  ],
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"
@@ -15,6 +20,24 @@
   "rules": {
     "react/react-in-jsx-scope": "off",
     "react/jsx-uses-react": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "react/prop-types": "off",
+    "react/button-has-type": "off",
+    "react/no-array-index-key": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
     "semi": [
       "error",
       "always"

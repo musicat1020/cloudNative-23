@@ -12,8 +12,10 @@ const nextConfig = {
 		timeZone: process.env.TIMEZONE,
 	},
 	images: {
-		domains: ['via.placeholder.com', 'rent.pe.ntu.edu.tw'],
+		domains: ["via.placeholder.com", "rent.pe.ntu.edu.tw"],
 	},
-}
+};
+
+module.exports = nextConfig;
 
 module.exports = nextConfig
