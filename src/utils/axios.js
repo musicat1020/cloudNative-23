@@ -17,10 +17,10 @@ instance.interceptors.response.use(
             status,
             statusText,
             data: {
-                detail: errorMessage
+                detail
             } = {},
         } = {},
-    } = {}) => ({ status, statusText, errorMessage })
+    } = {}) => ({ status, statusText, detail })
 );
 
 export default instance;
