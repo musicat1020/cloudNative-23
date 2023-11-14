@@ -108,12 +108,12 @@ function SubVenueTable() {
 		setRentResponse(data);
 
 		// TODO: send request to backend
-		// const msg = await axios.get(
-		// 	`${apiRoot}/api/healthchecker`
-		// );
+		const msg = await axios.get(
+			`${apiRoot}/api/healthchecker`
+		);
 
-		// // Show success message
-		// alert(JSON.stringify(msg));
+		// Show success message
+		alert(JSON.stringify(msg));
 
 		// Close modal
 		handleCloseRent();

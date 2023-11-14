@@ -11,13 +11,13 @@ const instance = axios.create();
 
 // 後攔截器
 instance.interceptors.response.use(
-    ({ data: { data } }) => ({ status: 200, data }), 
+    ({ data }) => ({ status: 200, ...data }),
     ({
         response: {
             status,
             statusText,
             data: {
-                message: errorMessage
+                detail: errorMessage
             } = {},
         } = {},
     } = {}) => ({ status, statusText, errorMessage })
