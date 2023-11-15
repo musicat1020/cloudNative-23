@@ -1,5 +1,6 @@
 export const mockVenueList = [
     {
+        index: 1,
         name: "Badminton Court",
         imgUrl: "https://rent.pe.ntu.edu.tw/udf/1_600x399.png",
         space: 2343,
@@ -8,6 +9,7 @@ export const mockVenueList = [
 
     },
     {
+        index: 2,
         name: "Table Tennis Room",
         imgUrl: "https://rent.pe.ntu.edu.tw/udf/5_600x399.jpg",
         space: 2343,
@@ -15,6 +17,7 @@ export const mockVenueList = [
         userMax: 604,
     },
     {
+        index: 3,
         name: "Badminton Court",
         imgUrl: "https://rent.pe.ntu.edu.tw/udf/1_600x399.png",
         space: 2343,
@@ -23,6 +26,7 @@ export const mockVenueList = [
 
     },
     {
+        index: 4,
         name: "Table Tennis Room",
         imgUrl: "https://rent.pe.ntu.edu.tw/udf/5_600x399.jpg",
         space: 2343,
@@ -39,7 +43,9 @@ export const mockRentalRecords = [{
     status: "已核准",
     numOfPeople: "3/6",
     renter: "許姍姍",
-    members: ["王曉明"]
+    members: [
+        { name: "王曉明", email: "ming@gmail.com" },
+    ]
 },
 {
     date: "2021-10-05",
@@ -49,7 +55,11 @@ export const mockRentalRecords = [{
     status: "已核准",
     numOfPeople: "4/6",
     renter: "許姍姍",
-    members: ["王曉明", "吳小華", "陳大明"]
+    members: [
+        { name: "王曉明", email: "ming@gmail.com" },
+        { name: "吳小華", email: "wu@gmail.com" },
+        { name: "陳大明", email: "chen@gmail.com" }
+    ]
 },
 {
     date: "2021-10-01",
@@ -59,7 +69,11 @@ export const mockRentalRecords = [{
     status: "已取消",
     numOfPeople: "4/6",
     renter: "許姍姍",
-    members: ["王曉明", "吳小華", "陳大明"]
+    members: [
+        { name: "王曉明", email: "ming@gmail.com" },
+        { name: "吳小華", email: "wu@gmail.com" },
+        { name: "陳大明", email: "chen@gmail.com" }
+    ]
 }
 ];
 
@@ -71,8 +85,13 @@ export const mockPairingRecords = [{
     venue: "一樓多功能球場 A場",
     status: "已加入",
     numOfPeople: "3/6",
-    renter: "許姍姍",
-    members: ["王曉明"]
+    renter: {
+        name: "許姍姍", email: "shan@gmail.com"
+    }
+    ,
+    members: [
+        { name: "王曉明", email: "ming@gmail.com" },
+    ]
 },
 {
     date: "2021-10-05",
@@ -81,8 +100,14 @@ export const mockPairingRecords = [{
     venue: "一樓多功能球場 A場",
     status: "已取消",
     numOfPeople: "4/6",
-    renter: "許姍姍",
-    members: ["王曉明", "吳小華", "陳大明"]
+    renter: {
+        name: "許姍姍", email: "shan@gmail.com"
+    },
+    members: [
+        { name: "王曉明", email: "ming@gmail.com" },
+        { name: "吳小華", email: "wu@gmail.com" },
+        { name: "陳大明", email: "chen@gmail.com" }
+    ]
 },
 {
     date: "2021-10-01",
@@ -91,7 +116,13 @@ export const mockPairingRecords = [{
     venue: "一樓多功能球場 A場",
     status: "已退出",
     numOfPeople: "4/6",
-    renter: "許姍姍",
-    members: ["王曉明", "吳小華", "陳大明"]
+    renter: {
+        name: "許姍姍", email: "shan@gmail.com"
+    },
+    members: [
+        { name: "王曉明", email: "ming@gmail.com" },
+        { name: "吳小華", email: "wu@gmail.com" },
+        { name: "陳大明", email: "chen@gmail.com" }
+    ]
 }
 ];
