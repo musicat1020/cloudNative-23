@@ -71,3 +71,7 @@ select:focus {
 		local('Palatino'),
 		url(./fonts/Palatino.ttf) format('truetype');
 }
+
+.swal2-container {
+	z-index: 20000 !important;
+}

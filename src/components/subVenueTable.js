@@ -12,6 +12,7 @@ import {
 	TableHead, 
 	TableRow 
 } from "@mui/material";
+import Swal from "sweetalert2";
 import getConfig from "next/config";
 import axios from "../utils/axios";
 import BaseModal from "./baseModal";
@@ -101,6 +102,9 @@ function SubVenueTable({ windowSize }) {
 	};
 
 	const handleOpenJoin = () => {
+
+		// TODO: Send request to backend
+
 		setShowJoin(true);
 	};
 
@@ -122,9 +126,30 @@ function SubVenueTable({ windowSize }) {
 		setShowRentRes(false);
 	};
 
+	const checkRentInput = (data) => {
+		if (data.people <= 0) {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: t("使用人數不可為0"),
+				confirmButtonColor: "#14274C"
+			});
+			return false;
+		}
+		if (data.allowMatching && data.peopleMatching <= 0) {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: t("可加入人數不可為0"),
+				confirmButtonColor: "#14274C"
+			});
+			return false;
+		}
+		return true;
+	};
+
 	const handleRent = async () => {
 
-		// TODO: Sent rent request
 		const data = {
 			"people": peopleUsed,
 			"allowMatching": allowMatching,
@@ -132,15 +157,20 @@ function SubVenueTable({ windowSize }) {
 			"levels": levelChecked,
 		};
 
+		// Check if input is valid
+		if (!checkRentInput(data)) {
+			return;
+		}
+
 		setRentResponse(data);
 
 		// TODO: send request to backend
-		const msg = await axios.get(
+		const res = await axios.get(
 			`${apiRoot}/api/healthchecker`
 		);
 
 		// Show success message
-		alert(JSON.stringify(msg));
+		alert(JSON.stringify(res));
 
 		// Close modal
 		handleCloseRent();
@@ -288,12 +318,13 @@ function SubVenueTable({ windowSize }) {
 			<Row>
 				<Col>
 					<span className={styles.rentSuccAttrTitle}>{t("球技要求")}</span>
-					{
-						rentResponse.levels && 
+					{ rentResponse.levels && ((
+						rentResponse.levels.length > 0 && 
 						rentResponse.levels.map((item, index) => (
 							<span key={index} className={styles.level}>{levelList[item]}</span>
-						))
-					}
+						))) 
+						|| (rentResponse.levels.length === 0 && <span key={0} className={styles.level}>{t("無")}</span>)
+					)}
 				</Col>
 			</Row>
 
@@ -312,7 +343,7 @@ function SubVenueTable({ windowSize }) {
 				<Table sx={{ minWidth: 650 }} aria-label='simple table' className={styles.table}>
 					<TableHead>
 						<TableRow>
-							<TableCell className={styles.tableTitle}>{ t("場地") }</TableCell>
+							<TableCell className={styles.tableTitle}>{ t("球場") }</TableCell>
 							<TableCell className={styles.tableTitle}>{ t("租借人") }</TableCell>
 							<TableCell className={styles.tableTitle}>{ t("使用人數") }</TableCell>
 							<TableCell className={styles.tableTitle}>{ t("球技要求") }</TableCell>
