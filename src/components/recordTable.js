@@ -1,9 +1,20 @@
 import { useTranslation } from "next-i18next";
 import { Button } from "react-bootstrap";
+import { useState } from "react";
+import Tooltip from "@mui/material/Tooltip";
 import styles from "../styles/record.module.css";
+import CancelResvationModel from "./cancelReservationModel";
 
 function RecordTable({ records }) {
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
   const { t } = useTranslation();
+
+  const handleModalClick = (record) => {
+    setSelectedRecord(record);
+    setShowCancelModal(true);
+  };
+
 
   return (
 
@@ -40,11 +51,16 @@ function RecordTable({ records }) {
 
                 <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>{record.status}</td>
                 <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>{record.numOfPeople}</td>
-                <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>{record.members.join(", ")}</td>
+                <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>
+                  {record.members.map((member, index) => (
+                    <Tooltip placement="top" title={member.email}>{member.name}{index < record.members.length - 1 && ","} </Tooltip>
+                  ))}
+                </td>
                 <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>
                   <Button
                     className={styles.cancelButton}
                     disabled={isCancelled}
+                    onClick={() => handleModalClick(record)}
                   >
                     {t("Cancel Rental")}
                   </Button>
@@ -54,6 +70,7 @@ function RecordTable({ records }) {
           })}
         </tbody>
       </table>
+      <CancelResvationModel show={showCancelModal} setShow={setShowCancelModal} record={selectedRecord} />
     </div>
   );
 }
