@@ -1,5 +1,6 @@
 export const mockVenueList = [
     {
+        index: 1,
         name: "Badminton Court",
         imgUrl: "https://rent.pe.ntu.edu.tw/udf/1_600x399.png",
         space: 2343,
@@ -8,6 +9,7 @@ export const mockVenueList = [
 
     },
     {
+        index: 2,
         name: "Table Tennis Room",
         imgUrl: "https://rent.pe.ntu.edu.tw/udf/5_600x399.jpg",
         space: 2343,
@@ -15,6 +17,7 @@ export const mockVenueList = [
         userMax: 604,
     },
     {
+        index: 3,
         name: "Badminton Court",
         imgUrl: "https://rent.pe.ntu.edu.tw/udf/1_600x399.png",
         space: 2343,
@@ -23,6 +26,7 @@ export const mockVenueList = [
 
     },
     {
+        index: 4,
         name: "Table Tennis Room",
         imgUrl: "https://rent.pe.ntu.edu.tw/udf/5_600x399.jpg",
         space: 2343,

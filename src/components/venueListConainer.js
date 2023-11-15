@@ -6,6 +6,7 @@ import { LiaPlusSolid } from "react-icons/lia";
 import Link from "next/link";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
 import styles from "../styles/venueItem.module.css";
 import { mockVenueList } from "../../mockData/mockData";
 
@@ -42,11 +43,13 @@ function VenueListConainer({ isAdmin }) {
       >
         {venueList.map((venue) => (
           <VenueItem
+            index={venue.index}
             name={venue.name}
             imgUrl={venue.imgUrl}
             space={venue.space}
             userCount={venue.userCount}
             userMax={venue.userMax}
+            isAdmin={isAdmin}
           />
         ))}
         {isAdmin && (<AddVeuneItem />)}
@@ -56,9 +59,25 @@ function VenueListConainer({ isAdmin }) {
 }
 
 function VenueItem({
-  name, imgUrl, space, userCount, userMax,
+  index,
+  name,
+  imgUrl,
+  space,
+  userCount,
+  userMax,
+  isAdmin
 }) {
   const { t } = useTranslation();
+  const router = useRouter();
+
+  const handleEditClick = () => {
+    // Redirect to the edit page with the corresponding venue index
+    router.push(`/admin/editVenue?venue=${index}`);
+  };
+
+  const handleRentClick = () => {
+    router.push(`/main/venue?venue=${index}`);
+  };
 
   return (
     <div className="bg-white rounded-xl shadow m-2">
@@ -96,12 +115,16 @@ function VenueItem({
             </text>
           </div>
           <div className="flex flex-row items-center">
-            <Link
-              href="/main/venue"
-              className={styles.rentLink}
-            >
-              {t("Rent")}
-            </Link>
+            {isAdmin && (
+              <button onClick={handleEditClick} className={styles.rentLink}>
+                {t("修改")}
+              </button>
+            )}
+            {!isAdmin &&
+              <button onClick={handleRentClick} className={styles.rentLink}>
+                {t("Rent")}
+              </button>
+            }
           </div>
         </div>
       </div>
@@ -116,7 +139,7 @@ function AddVeuneItem() {
   return (
     <Link
       className={styles.addVenueItem}
-      href="/admin/add-venue"
+      href="/admin/newVenue"
     >
       <LiaPlusSolid size={40} />
       <text>{t("Click to add a venue")}</text>
