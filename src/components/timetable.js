@@ -287,9 +287,17 @@ function TimeTable() {
 		/** get time table header */
 		timeTable.push(<Row key={-1}>{handleDateCols()}</Row>);
 
-		/** TODO */
-		const startTime = dayjs("09:00", "HH:mm");
-		const endTime = dayjs("19:00", "HH:mm");
+		/** time table data is empty */
+		if (timeTableData.length === 0) {
+			return timeTable;
+		}
+
+		const sessions = Object.keys(timeTableData[0].day_1);
+		const openingHoursStart = Math.min(...sessions);
+		const openingHoursEnd = Math.max(...sessions)+1;
+
+		const startTime = dayjs(`${openingHoursStart}:00`, "HH:mm");
+		const endTime = dayjs(`${openingHoursEnd}:00`, "HH:mm");
 		const timeIntervals = endTime.diff(startTime, "hour");
 
 		let sessionStart = startTime;
@@ -323,7 +331,7 @@ function TimeTable() {
 				</Row>
 				{handleTimeTable()}
 			</Container>
-			<SessionModal show={showSessionModal} setShow={setShowSessionModal}/>
+			<SessionModal show={showSessionModal} setShow={setShowSessionModal} windowSize={windowSize}/>
 		</>
 	);
 }

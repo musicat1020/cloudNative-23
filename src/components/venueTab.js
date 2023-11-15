@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -138,7 +138,7 @@ function VenueTab() {
 			<CustomTabPanel value={value} index={1}>
 				<Container>
 					<Row>
-						<Col xs={12} md={6} xl={3} className='my-2'>
+						<Col xs={12} md={6} xl={4} className='my-2'>
 							<span>{ t("欲使用人數") }</span>
 							<input 
 								type='number'

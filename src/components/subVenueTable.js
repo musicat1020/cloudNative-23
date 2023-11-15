@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { 
@@ -30,7 +30,7 @@ function createData(id, venue, renter, people, levels, status) {
 	return { id, venue, renter, people, levels, status };
 }
 
-function SubVenueTable() {
+function SubVenueTable({ windowSize }) {
 
 	const { t } = useTranslation();
 
@@ -48,6 +48,33 @@ function SubVenueTable() {
 	const [peopleMatching, setPeopleMatching] = useState(0);
 	const [levelChecked, setLevelChecked] = useState([]);
 	const [rentResponse, setRentResponse] = useState({});
+	const [joinModalWidth, setJoinModalWidth] = useState("35vw");
+	const [rentModalWidth, setRentModalWidth] = useState("45vw");
+	const [rentSuccessModalWidth, setRentSuccessModalWidth] = useState("45vw");
+
+	/** handle modal width based on window size */
+	useEffect(() => {
+		if (windowSize[0] < 768) {
+			setJoinModalWidth("90vw");
+			setRentModalWidth("90vw");
+			setRentSuccessModalWidth("90vw");
+		}
+		else if (windowSize[0] < 1024) {
+			setJoinModalWidth("70vw");
+			setRentModalWidth("70vw");
+			setRentSuccessModalWidth("70vw");
+		}
+		else if (windowSize[0] < 1350) {
+			setJoinModalWidth("50vw");
+			setRentModalWidth("50vw");
+			setRentSuccessModalWidth("50vw");
+		}
+		else {
+			setJoinModalWidth("35vw");
+			setRentModalWidth("45vw");
+			setRentSuccessModalWidth("45vw");
+		}
+	}, [windowSize]);
 
 	// TODO: get data from backend
 	const rows = [
@@ -341,10 +368,10 @@ function SubVenueTable() {
 				handleClose={handleCloseJoin}
 				title={t("已加入隊伍")}
 				content={getJoinContent(joinData)}
-				customStyles={{width: "35vw"}}
+				customStyles={{width: joinModalWidth}}
 			/>
 
-			{/* Modal for rented */}
+			{/* Modal for rental */}
 			<BaseModal 
 				venue={t("綜合體育館 一樓多功能球場 A場")}
 				session={t("2021/10/20 14:00 - 16:00")}
@@ -352,10 +379,10 @@ function SubVenueTable() {
 				handleClose={handleCloseRent}
 				title={t("租借場地")}
 				content={getRentContent()}
-				customStyles={{width: "45vw"}}
+				customStyles={{width: rentModalWidth}}
 			/>
 
-			{/* Modal for rent success */}
+			{/* Modal for rental successfully */}
 			<BaseModal 
 				venue={t("綜合體育館 一樓多功能球場 A場")}
 				session={t("2021/10/20 14:00 - 16:00")}
@@ -363,7 +390,7 @@ function SubVenueTable() {
 				handleClose={() => setShowRentRes(false)}
 				title={t("租借成功")}
 				content={getRentResContent()}
-				customStyles={{width: "45vw"}}
+				customStyles={{width: rentSuccessModalWidth}}
 			/>
 		</>
 	);
