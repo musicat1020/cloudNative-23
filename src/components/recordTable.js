@@ -18,7 +18,7 @@ function RecordTable({ records }) {
 
   return (
 
-    <div className="rounded-xl  overflow-hidden border border-cream">
+    <div className="overflow-auto rounded-xl border border-cream">
       <table className="table-auto" style={{ width: "100%" }}>
         <thead>
           <tr className="bg-cream justify-center items-center">
@@ -36,7 +36,7 @@ function RecordTable({ records }) {
             return (
               <tr key={idx} className="border-t border-cream ">
                 <td className={`x-4 py-2 ${isCancelled ? "text-gray" : ""}`}>
-                  <div className="flex flex-col justify-center items-center">
+                  <div className="flex flex-col justify-center items-center whitespace-nowrap">
                     <text>{record.date}</text>
                     <text className="text-xs">{record.time}</text>
                   </div>
@@ -45,12 +45,12 @@ function RecordTable({ records }) {
                 <td className={`px-4 py-2 ${isCancelled ? "text-gray" : ""}`}>
                   <div className="flex flex-col justify-center items-center">
                     <text>{record.stadium}</text>
-                    <text className="text-xs">{record.venue}</text>
+                    <text className="text-xs whitespace-nowrap">{record.venue}</text>
                   </div>
                 </td>
 
-                <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>{record.status}</td>
-                <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>{record.numOfPeople}</td>
+                <td className={`px-4 py-2 text-center whitespace-nowrap ${isCancelled ? "text-gray" : ""}`}>{record.status}</td>
+                <td className={`px-4 py-2 text-center whitespace-nowrap ${isCancelled ? "text-gray" : ""}`}>{record.numOfPeople}</td>
                 <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>
                   {record.members.map((member, index) => (
                     <Tooltip placement="top" title={member.email}>{member.name}{index < record.members.length - 1 && ","} </Tooltip>

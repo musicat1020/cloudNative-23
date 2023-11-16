@@ -59,7 +59,7 @@ function NavBar() {
           {t("Stadium Matching System")}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
+        <Navbar.Collapse id="responsive-navbar-nav" className="flex justify-end mt-1 border-b-white">
           <Nav className="me-auto" />
           <Nav>
             <Nav.Link href="/admin">

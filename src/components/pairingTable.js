@@ -18,7 +18,7 @@ function PairingTable({ records }) {
 
   return (
 
-    <div className="rounded-xl  overflow-hidden border border-cream">
+    <div className="overflow-auto rounded-xl border border-cream">
       <table className="table-auto" style={{ width: "100%" }}>
         <thead>
           <tr className="bg-cream justify-center items-center">
@@ -37,7 +37,7 @@ function PairingTable({ records }) {
             return (
               <tr className="border-t border-cream ">
                 <td className={`px-4 py-2 ${isCancelled ? "text-gray" : ""}`}>
-                  <div className="flex flex-col justify-center items-center">
+                  <div className="flex flex-col justify-center items-center whitespace-nowrap">
                     <text>{record.date}</text>
                     <text className="text-xs">{record.time}</text>
                   </div>
@@ -50,9 +50,9 @@ function PairingTable({ records }) {
                   </div>
                 </td>
 
-                <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>{record.status}</td>
-                <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>{record.numOfPeople}</td>
-                <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>
+                <td className={`px-4 py-2 text-center whitespace-nowrap ${isCancelled ? "text-gray" : ""}`}>{record.status}</td>
+                <td className={`px-4 py-2 text-center whitespace-nowrap ${isCancelled ? "text-gray" : ""}`}>{record.numOfPeople}</td>
+                <td className={`px-4 py-2 text-center whitespace-nowrap ${isCancelled ? "text-gray" : ""}`}>
                   <Tooltip placement="top" title={record.renter.email}>{record.renter.name}</Tooltip>
                 </td>
                 <td className={`px-4 py-2 text-center ${isCancelled ? "text-gray" : ""}`}>
