@@ -66,6 +66,17 @@
 	margin: 10px 20px 10px 0px;
 }
 
+.rentSuccAttrTitle {
+	display: inline-block;
+	width: 150px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 0px;
+	padding: 5px 10px;
+	border: 1px solid #14274C;
+	border-radius: 50px;
+}
+
 .confirmButton {
 	color: #FFFFFF;
 	background-color: #14274C;
