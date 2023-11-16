@@ -153,7 +153,7 @@ function SubVenueTable({ windowSize }) {
 		const data = {
 			"people": peopleUsed,
 			"allowMatching": allowMatching,
-			"peopleMatching": peopleMatching,
+			"peopleMatching": allowMatching ? peopleMatching: 0,
 			"levels": levelChecked,
 		};
 
