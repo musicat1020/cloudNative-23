@@ -8,10 +8,10 @@ function UserMenu({ data, isDropdownVisible, handleMouseEnter, handleMouseLeave,
     const { t } = useTranslation();
 
     return (
-        <div className="relative group flex justify-end" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <div className="relative group flex" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <button className="relative">
                 <Image
-                    src={data.user.image}
+                    src={data.user.picture}
                     alt={`${data.user.name} photo`}
                     width={50}
                     height={50}

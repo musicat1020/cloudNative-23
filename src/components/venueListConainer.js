@@ -39,7 +39,11 @@ function VenueListConainer({ isAdmin }) {
       </Row>
       <div
         className="grid gap-4 mt-5"
-        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, auto))" }}
+        style={{
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gridAutoRows: "1fr"
+
+        }}
       >
         {venueList.map((venue) => (
           <VenueItem
@@ -52,7 +56,7 @@ function VenueListConainer({ isAdmin }) {
             isAdmin={isAdmin}
           />
         ))}
-        {isAdmin && (<AddVeuneItem />)}
+        {isAdmin && <AddVeuneItem />}
       </div>
     </Container>
   );
@@ -138,7 +142,7 @@ function AddVeuneItem() {
 
   return (
     <Link
-      className={styles.addVenueItem}
+      className={`self-stretch ${styles.addVenueItem}`}
       href="/admin/newVenue"
     >
       <LiaPlusSolid size={40} />
