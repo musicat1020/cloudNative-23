@@ -8,32 +8,29 @@ import { useEffect, useState } from "react";
 import NavBar from "../../components/navbarAdmin";
 import VenueDetail from "../../components/venueDetail";
 import styles from "../../styles/venue.module.css";
-import { mockVenueList } from "../../../mockData/mockData";
+import axios from "../../utils/axios";
+import { mockVenueList, mockVenueDetail } from "../../../mockData/mockData";
+import EditVenueModal from "@/components/editVenueModal";
 // import Image from 'react-bootstrap/Image';
 
-function Venue() {
+function EditVenue() {
 
 	const router = useRouter();
 	// the index is assigned the value of router.query.venue
 	const { venue: index } = router.query;
-	const [venueInfo, setVenueInfo] = useState();
+	const [venueInfo, setVenueInfo] = useState(mockVenueDetail[0]);
+	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 	const { t } = useTranslation();
 
-	useEffect(() => {
-		const fetchVenues = async () => {
-			try {
-				// TODO:
-				// const response = await fetch('/stadium/list');
-				// const data = await response.json();
-				// setVenues(data);
-				const data = mockVenueList[index - 1];
-				setVenueInfo(data);
-			} catch (error) {
-				throw new Error(error);
-			}
+	const fetchVenueDetail = async (id) => {
+		const params = {
+			stadium_id: 1,
 		};
-		fetchVenues();
-	}, []);
+		const res = await axios.post("/api/v1/stadium/info", {}, { params });
+		console.log(res.data);
+	};
+	fetchVenueDetail();	
+	
 
 	const theme = createTheme({
 		palette: {
@@ -70,28 +67,46 @@ function Venue() {
 				<div className="flex justify-center items-center">
 					<img
 						className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
-						src={venueInfo?.imgUrl}
+						src={venueInfo?.stadium?.imgUrl}
 						alt="Picture of the venue"
 					/>
 				</div>
 
 				<Row>
 					<Col xs={{ span: 10, offset: 1 }}>
-						<VenueDetail />
+						<VenueDetail info={venueInfo} setInfo={setVenueInfo} />
 					</Col>
 				</Row>
 
 				<Row className='flex'>
 					<Col className="text-center ">
 						<div spacing={2} direction="row" className='space-x-7'>
-							<Button variant="outlined" color="secondary">{t("修改")}</Button>
-							<Button variant="outlined" color="secondary">{t("取消")}</Button>
+							<Button
+								variant="outlined"
+								color="secondary"
+								onClick={() => setShowEditVenueModal(true)}
+							>
+								{t("修改")}
+							</Button>
+							<Button
+								variant="outlined"
+								color="secondary"
+							>
+								{t("取消")}
+							</Button>
 						</div>
 					</Col>
 				</Row>
 			</Container>
+			<EditVenueModal
+				show={showEditVenueModal}
+				setShow={setShowEditVenueModal}
+				handleClose={() => setShowEditVenueModal(false)}
+				title={t("新增場地")}
+				info={venueInfo} />
+
 		</ThemeProvider>
 	);
 }
 
-export default Venue;
+export default EditVenue;
