@@ -27,7 +27,12 @@
     background-color: #f0f0f0;
     border-color: #AD5625;
     color: #AD5625;
-    /* change this to the color you want */
+}
+
+.cancelButton:active {
+    background-color: #AD5625 !important;
+    border-color: #AD5625 !important;
+    color: #AD5625;
 }
 
 .cancelButton:disabled,

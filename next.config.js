@@ -12,7 +12,8 @@ const nextConfig = {
 		timeZone: process.env.TIMEZONE,
 	},
 	images: {
-		domains: ["via.placeholder.com", "rent.pe.ntu.edu.tw"],
+		domains: ["rent.pe.ntu.edu.tw", "lh3.googleusercontent.com"],
+
 	},
 };
 
