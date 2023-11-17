@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { useTranslation } from "react-i18next";
-import React from "react";
+import { useState, useRef, useEffect } from "react";
 import Button from "@mui/material/Button";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Grow from "@mui/material/Grow";
@@ -10,12 +10,16 @@ import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DeleteVenueModal from "./deleteVenueModal";
+import DeleteVenueSessionModal from "./deleteVenueSessionModal";
 
 
-function ButtonDeleteVenue() {
+function ButtonDeleteVenue({ info }) {
   const { t } = useTranslation();
-  const [openSubButtons, setOpenSubButtons] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const [openSubButtons, setOpenSubButtons] = useState(false);
+  const [showDeleteVenueModal, setShowDeleteVenueModal] = useState(false);
+  const [showDeleteSessionVenueModal, setShowDeleteSessionVenueModal] = useState(false);
+  const anchorRef = useRef(null);
 
   const handleToggle = () => {
     setOpenSubButtons((prevOpen) => !prevOpen);
@@ -37,8 +41,8 @@ function ButtonDeleteVenue() {
     }
   };
 
-  const prevOpen = React.useRef(openSubButtons);
-  React.useEffect(() => {
+  const prevOpen = useRef(openSubButtons);
+  useEffect(() => {
     if (prevOpen.current === true && openSubButtons === false) {
       anchorRef.current.focus();
     }
@@ -78,19 +82,34 @@ function ButtonDeleteVenue() {
             <Paper>
               <ClickAwayListener onClickAway={handleSubButtonsClose}>
                 <MenuList
-                  autoFocusItem={open}
+                  autoFocusItem={true}
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleSubButtonsClose}>{t("刪除場地")}</MenuItem>
-                  <MenuItem onClick={handleSubButtonsClose}>{t("下架特定時段場地")}</MenuItem>
+                  <MenuItem onClick={() => setShowDeleteVenueModal(true)}>{t("刪除場地")}</MenuItem>
+                  <MenuItem onClick={() => setShowDeleteSessionVenueModal(true)}>{t("下架特定時段場地")}</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
           </Grow>
         )}
       </Popper>
+      <DeleteVenueModal 
+				show={showDeleteVenueModal}
+				setShow = {setShowDeleteVenueModal}
+				handleClose={() => setShowDeleteVenueModal(false)}
+				title={t("刪除場地")}
+        info={info}
+      />
+      <DeleteVenueSessionModal
+        show={showDeleteSessionVenueModal}
+				setShow = {setShowDeleteSessionVenueModal}
+				handleClose={() => setShowDeleteSessionVenueModal(false)}
+				title={t("下架特定時段場地")}
+        info={info}
+        />
+
     </>    
   );
 }
