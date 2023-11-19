@@ -6,8 +6,8 @@
 
 .tableTitle {
 	background-color: #14274C;
-	color: #FFFFFF;
-	text-align: center;
+	color: #FFFFFF !important;
+	text-align: center !important;
 	padding: 7px 0px;
 	border-style: solid;
 	border-color: #FFFFFF;
@@ -18,7 +18,7 @@
 .tableCell {
 	border: 0.5px solid #14274C;
 	padding: 10px 0px;
-	text-align: center;
+	text-align: center !important;
 }
 
 .level {

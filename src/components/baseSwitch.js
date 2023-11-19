@@ -13,6 +13,7 @@ const switchTheme = (theme) => createTheme({
 
 const CustomedSwitch = styled(Switch)(({ theme }) => ({
 	padding: 8,
+	margin: 17,
 	"& .MuiSwitch-track": {
 		borderRadius: 22 / 2,
 		"&:before, &:after": {
@@ -48,7 +49,6 @@ function BaseSwitch({ checked, handleChange }) {
 	return (
 		<ThemeProvider theme={switchTheme}>
 			<FormControlLabel
-				className='ml-2'
 				control={<CustomedSwitch checked={checked} onChange={(e) => handleChange(e.target.checked)} />}
 			/>
 		</ThemeProvider>

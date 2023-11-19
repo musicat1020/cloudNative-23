@@ -1,6 +1,8 @@
 import Head from "next/head";
+import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import axios from "../../utils/axios";
 import NavBar from "../../components/navbar";
 import VenueTab from "../../components/venueTab";
 import styles from "../../styles/venue.module.css";
@@ -8,8 +10,29 @@ import styles from "../../styles/venue.module.css";
 function Venue() {
 
 	const { t } = useTranslation();
+	const [venueIsReady, setVenueIsReady] = useState(false);
+	const [venueInfo, setVenueInfo] = useState(null);
 
-	return (
+	const fetchVenueInfo = async (id) => {
+		const params = {
+			stadium_id: id,
+		};
+		const res = await axios.post("/api/v1/stadium/info", {}, { params });
+		
+		setVenueInfo(res.data);
+		setVenueIsReady(true);
+	};
+
+	useEffect(() => {
+		const { search } = window.location;
+		const searchParams = new URLSearchParams(search);
+		const id = searchParams.get("venue");
+		if (id) {
+			fetchVenueInfo(id);
+		}
+    }, []);
+
+	return venueIsReady ? (
 		<>
 			<Head>
 				<title>{ t("Stadium Matching System") }</title>
@@ -30,26 +53,26 @@ function Venue() {
 				{/* Section */}
 				<Row>
 					<Col className="text-center my-2">
-						<h1>{ t("桌球室") }</h1>
+						<h1>{ venueInfo?.name }</h1>
 					</Col>
 				</Row>
 
 				{/* Description */}
 				<Row>
 					<Col className="text-center">
-						<p>{ t("共有15桌球桌，若該租借時段借用桌數小於六桌，將會調整至B109室使用。借用面號僅為示意不等於現場使用面號。") }</p>
+						<p>{ venueInfo?.description}</p>
 					</Col>
 				</Row>
 
 				{/* Tab */}
 				<Row>
 					<Col xs={{span: 10, offset: 1}}>
-						<VenueTab/>
+						<VenueTab venueInfo={venueInfo}/>
 					</Col>
 				</Row>
 			</Container>
 		</>
-	);
+	): null;
 }
 
 export default Venue;

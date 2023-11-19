@@ -18,7 +18,7 @@ import axios from "../utils/axios";
 import BaseModal from "./baseModal";
 import BaseSwitch from "./baseSwitch";
 import BaseCheckbox from "./baseCheckbox";
-import styles from "../styles/subvenue.module.css";
+import styles from "../styles/court.module.css";
 
 const {
 	publicRuntimeConfig: {
@@ -31,7 +31,7 @@ function createData(id, venue, renter, people, levels, status) {
 	return { id, venue, renter, people, levels, status };
 }
 
-function SubVenueTable({ windowSize }) {
+function CourtTable({ venueInfo, windowSize, people }) {
 
 	const { t } = useTranslation();
 
@@ -44,7 +44,7 @@ function SubVenueTable({ windowSize }) {
 	const [showJoin, setShowJoin] = useState(false);
 	const [showRent, setShowRent] = useState(false);
 	const [showRentRes, setShowRentRes] = useState(false);
-	const [peopleUsed, setPeopleUsed] = useState(0);
+	const [peopleUsed, setPeopleUsed] = useState(people);
 	const [allowMatching, setAllowMatching] = useState(false);
 	const [peopleMatching, setPeopleMatching] = useState(0);
 	const [levelChecked, setLevelChecked] = useState([]);
@@ -52,6 +52,7 @@ function SubVenueTable({ windowSize }) {
 	const [joinModalWidth, setJoinModalWidth] = useState("35vw");
 	const [rentModalWidth, setRentModalWidth] = useState("45vw");
 	const [rentSuccessModalWidth, setRentSuccessModalWidth] = useState("45vw");
+	const [courtData, setCourtData] = useState([]);
 
 	/** handle modal width based on window size */
 	useEffect(() => {
@@ -77,14 +78,28 @@ function SubVenueTable({ windowSize }) {
 		}
 	}, [windowSize]);
 
-	// TODO: get data from backend
-	const rows = [
-		createData(1, "A場", "丁丁", "2/4", ["intermediate", "advanced"], t("加入")),
-		createData(2, "B場", "星星","3/6", ["beginner"], t("加入")),
-		createData(3, "C場", "容容","4/4", ["advanced"], t("已滿")),
-		createData(4, "D場", "安安","2/5", [], t("加入")),
-		createData(5, "E場", "無","0", [], t("租借")),
-	];
+	const fetchCourtInfo = async (venueId) => {
+		// const params = { stadium_id: venueId };
+		// const res = await axios.post(
+		// 	`${apiRoot}/api/v1/stadium-court/rent-info`,
+		// 	{ params }
+		// );
+		// setCourtData(res.data);
+
+		// TODO: get data from backend
+		const rows = [
+			createData(1, "A場", "丁丁", "2/4", ["intermediate", "advanced"], t("加入")),
+			createData(2, "B場", "星星","3/6", ["beginner"], t("加入")),
+			createData(3, "C場", "容容","4/4", ["advanced"], t("已滿")),
+			createData(4, "D場", "安安","2/5", [], t("加入")),
+			createData(5, "E場", "無","0", [], t("租借")),
+		];
+		setCourtData(rows);
+	};
+
+	useEffect(() => {
+		fetchCourtInfo(venueInfo.id);
+	}, [venueInfo]);
 
 	// TODO: get data from backend
 	const joinData = {
@@ -127,25 +142,27 @@ function SubVenueTable({ windowSize }) {
 	};
 
 	const checkRentInput = (data) => {
+		let flag = true; 
+		const text = [];
+
 		if (data.people <= 0) {
-			Swal.fire({
-				icon: "error",
-				title: "Error",
-				text: t("使用人數不可為0"),
-				confirmButtonColor: "#14274C"
-			});
-			return false;
+			text.push(t("使用人數不可為0"));
+			flag = false;
 		}
 		if (data.allowMatching && data.peopleMatching <= 0) {
+			text.push(t("可加入人數不可為0"));
+			flag = false;
+		}
+
+		if (!flag) {
 			Swal.fire({
 				icon: "error",
 				title: "Error",
-				text: t("可加入人數不可為0"),
-				confirmButtonColor: "#14274C"
+				html: text.join(",<br>"),
+				confirmButtonColor: "#14274C",
 			});
-			return false;
 		}
-		return true;
+		return flag;
 	};
 
 	const handleRent = async () => {
@@ -353,7 +370,7 @@ function SubVenueTable({ windowSize }) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-					{rows.map((row) => (
+					{courtData && courtData.map((row) => (
 						<TableRow
 							key={row.id}
 						>
@@ -427,4 +444,4 @@ function SubVenueTable({ windowSize }) {
 	);
 }
 
-export default SubVenueTable;
+export default CourtTable;

@@ -65,7 +65,7 @@ function a11yProps(index) {
 	};
 }
 
-function VenueTab() {
+function VenueTab({ venueInfo }) {
 
 	const { t } = useTranslation();
 
@@ -98,17 +98,17 @@ function VenueTab() {
 					<Row>
 						<Col>
 							<p>
-								<span className='text-lg'>{ t("場館地點：臺北市羅斯福路四段一號") }</span>
+								<span className='text-lg'>{ `${t("場館地址")}：${venueInfo?.address}` }</span>
 								<Link href='https://www.google.com/maps/place/NTU+Sports+Center/@25.0216636,121.5352783,15z/data=!4m2!3m1!1s0x0:0x861db0f2b5ef52a3?sa=X&ved=2ahUKEwj_yNTW2LGCAxWIe_UHHbiTAVcQ_BJ6BAhJEAA'>
 									<IconButton>
 										<RoomIcon fontSize='inherit' color='secondary'/>
 									</IconButton>
 								</Link>
 							</p>
-							<p className='text-lg'>{ t("單一場地容納人數：2 人") }</p>
-							<p className='text-lg'>{ t("場地數量：5 場") }</p>
-							<p className='text-lg'>{ t("場地面積：50 m2") }</p>
-							<p className='text-lg'>{ t("開放時間：08 : 00 至 22 : 00") }</p>
+							<p className='text-lg'>{ `${t("單一場地可容納人數")}：${venueInfo?.max_number_of_people} ${t("人")}` }</p>
+							<p className='text-lg'>{ `${t("場地數量")}：${venueInfo?.number_of_court} ${t("場")}` }</p>
+							<p className='text-lg'>{`${t("場地面積")}：${venueInfo?.area} ${t("Square Meter")}`}</p>
+							<p className='text-lg'>{ `${t("開放時間")}：08 : 00 至 22 : 00` }</p>
 						</Col>
 						<Col>
 							<Carousel>
@@ -163,7 +163,7 @@ function VenueTab() {
 						</Col>
 					</Row>
 					<Row className='my-3'>
-						<TimeTable/>
+						<TimeTable people={people} venueInfo={venueInfo}/>
 					</Row>
 				</Container>
 			</CustomTabPanel>
