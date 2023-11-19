@@ -90,6 +90,7 @@ i18n.use(initReactI18next).init({
 				"Logout": "Logout",
 				"Cancel Rental": "Cancel",
 				"Confirm Cancellation?": "Confirm Cancellation?",
+				"Location": "Location",
 			}
 		},
 		zh: {
@@ -177,6 +178,7 @@ i18n.use(initReactI18next).init({
 				"Logout": "登出",
 				"Cancel Rental": "取消租借",
 				"Confirm Cancellation?": "確定要取消預約嗎?",
+				"Location": "場館地點",
 			}
 		},
 	},

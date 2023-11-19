@@ -11,6 +11,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import { useTranslation } from "react-i18next";
 import TimeTable from "./timetable";
+import styles from "../styles/venuetab.module.css";
 
 const theme = createTheme({
 	palette: {
@@ -96,21 +97,34 @@ function VenueTab({ venueInfo }) {
 			<CustomTabPanel value={value} index={0}>
 				<Container>
 					<Row>
-						<Col>
-							<p>
-								<span className='text-lg'>{ `${t("場館地址")}：${venueInfo?.address}` }</span>
+						<Col lg={12} xl={6}>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("Location")}</span>
+								<span>{venueInfo?.address}</span>
 								<Link href='https://www.google.com/maps/place/NTU+Sports+Center/@25.0216636,121.5352783,15z/data=!4m2!3m1!1s0x0:0x861db0f2b5ef52a3?sa=X&ved=2ahUKEwj_yNTW2LGCAxWIe_UHHbiTAVcQ_BJ6BAhJEAA'>
 									<IconButton>
 										<RoomIcon fontSize='inherit' color='secondary'/>
 									</IconButton>
 								</Link>
 							</p>
-							<p className='text-lg'>{ `${t("單一場地可容納人數")}：${venueInfo?.max_number_of_people} ${t("人")}` }</p>
-							<p className='text-lg'>{ `${t("場地數量")}：${venueInfo?.number_of_court} ${t("場")}` }</p>
-							<p className='text-lg'>{`${t("場地面積")}：${venueInfo?.area} ${t("Square Meter")}`}</p>
-							<p className='text-lg'>{ `${t("開放時間")}：08 : 00 至 22 : 00` }</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("單一場地可容納人數")}</span>
+								<span>{`${venueInfo?.max_number_of_people} ${t("人")}`}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("場地數量")}</span>
+								<span>{`${venueInfo?.number_of_court} ${t("場")}`}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("場地面積")}</span>
+								<span>{`${venueInfo?.area} ${t("Square Meter")}`}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("開放時間")}</span>
+								<span>08 : 00 ~ 22 : 00</span>
+							</p>
 						</Col>
-						<Col>
+						<Col lg={12} xl={6}>
 							<Carousel>
 								<Carousel.Item>
 									<img 
