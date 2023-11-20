@@ -142,7 +142,9 @@ export const mockVenueDetail = [{
     picture: "base64 image",
     area: 50,
     description: "8.1公尺國際標準壁球室。",
-    created_user: 0
+    created_user: 0,
+    location_link:"https://www.google.com/maps/place/NTU+Sports+Center/@25.0216636,121.5352783,15z/data=!4m2!3m1!1s0x0:0x861db0f2b5ef52a3?sa=X&ved=2ahUKEwj_yNTW2LGCAxWIe_UHHbiTAVcQ_BJ6BAhJEAA",
+
   },
   stadium_courts: [
     "A桌", "B桌"
@@ -165,7 +167,8 @@ export const mockVenueDetail = [{
     picture: "",
     area: 0,
     description: "",
-    created_user: 0
+    created_user: 0,
+    location_link:"",
   },
   stadium_courts: []
 }

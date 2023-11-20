@@ -1,28 +1,32 @@
 import Head from "next/head";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+// import { useRouter } from "next/router";
+import { useState } from "react";
+// import Image from "next/image";
+
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+
 import Button from "@mui/material/Button";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import NavBar from "../../components/navbarAdmin";
 import VenueDetail from "../../components/venueDetail";
 import styles from "../../styles/venue.module.css";
 import axios from "../../utils/axios";
-import { mockVenueList, mockVenueDetail } from "../../../mockData/mockData";
+import { mockVenueDetail } from "../../../mockData/mockData";
 import EditVenueModal from "@/components/editVenueModal";
 // import Image from 'react-bootstrap/Image';
 
 function EditVenue() {
 
-	const router = useRouter();
+	// const router = useRouter();
 	// the index is assigned the value of router.query.venue
-	const { venue: index } = router.query;
+	// const { venue: index } = router.query;
 	const [venueInfo, setVenueInfo] = useState(mockVenueDetail[0]);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 	const { t } = useTranslation();
 
-	const fetchVenueDetail = async (id) => {
+	const fetchVenueDetail = async () => {
 		const params = {
 			stadium_id: 1,
 		};
@@ -68,7 +72,7 @@ function EditVenue() {
 					<img
 						className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
 						src={venueInfo?.stadium?.imgUrl}
-						alt="Picture of the venue"
+						alt="Venue here"
 					/>
 				</div>
 

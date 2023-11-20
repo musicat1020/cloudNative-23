@@ -96,6 +96,13 @@ i18n.use(initReactI18next).init({
 				"Confirm Cancellation?": "Confirm Cancellation?",
 				"Location": "Location",
 				"休館日": "Closing day",
+				"場館地點": "Location",
+				"場地數量": "Number of courts",
+				"場地面積": "Area",
+				"開放時間": "Open time",
+				"開放日": "Open days",
+				"單一場地容納人數": "Capacity per court",
+				"位置連結": "Location Link",
 			}
 		},
 		zh: {
@@ -189,6 +196,14 @@ i18n.use(initReactI18next).init({
 				"Confirm Cancellation?": "確定要取消預約嗎?",
 				"Location": "場館地點",
 				"休館日": "休館日",
+				"場館地點": "場館地點",
+				"場地數量": "場地數量",
+				"場地面積": "場地面積",
+				"開放時間": "開放時間",
+				"開放日": "開放日",
+				"單一場地容納人數": "單一場地容納人數",
+				"位置連結": "位置連結",
+
 			}
 		},
 	},

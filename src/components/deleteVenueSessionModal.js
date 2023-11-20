@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import Modal from "@mui/material/Modal";
 import Divider from "@mui/material/Divider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+
 import styles from "../styles/modal.module.css";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 const useStyles = makeStyles({
   modal: {
@@ -34,7 +34,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
   // TODO
   const handleConfirm = () => {
     handleClose();
-  }
+  };
 
   return (
     <>
@@ -89,7 +89,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
                 <div className="mb-3">{t("開始日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker className="mr-5" label="date" />
-                  <TimePicker views={['hours']} />
+                  <TimePicker views={["hours"]} />
                 </LocalizationProvider>
               </Col>
             </Row>
@@ -100,7 +100,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
                 <div className="mb-3">{t("結束日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker className="mr-5" label="date" />
-                  <TimePicker views={['hours']} />
+                  <TimePicker views={["hours"]} />
                 </LocalizationProvider>
               </Col>
             </Row>

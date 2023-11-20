@@ -1,17 +1,19 @@
 import Head from "next/head";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+// import Image from "next/image";
+
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import PublishIcon from "@mui/icons-material/Publish";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
+
 import styles from "../../styles/venue.module.css";
 import VenueInput from "../../components/venueInput";
 import NavBar from "../../components/navbarAdmin";
-import NewVenueModal from "@/components/newVenueModal"; // reuse edit venue modal
-import EditVenueModal from "@/components/editVenueModal";
 import { mockVenueDetail } from "../../../mockData/mockData";
+import EditVenueModal from "@/components/editVenueModal";
 
 function NewVenue() {
 	const [venueInfo, setVenueInfo] = useState(mockVenueDetail[1]);
@@ -80,7 +82,7 @@ function NewVenue() {
 			<NavBar />
 
 			<Container className={styles.container}>
-				{venueInfo?.stadium?.imgBase64 == "" ? (
+				{venueInfo?.stadium?.imgBase64 === "" ? (
 					<Row className='flex'>
 						<Col className="text-center">
 							<div className='rounded-6 items-center'>
@@ -102,7 +104,7 @@ function NewVenue() {
 						<img
 							className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
 							src={venueInfo?.stadium?.imgBase64}
-							alt="Picture of the venue"
+							alt="Venue here"
 						/>
 					</div>
 				)}
