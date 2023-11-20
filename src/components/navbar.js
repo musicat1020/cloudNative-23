@@ -13,6 +13,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "../styles/navbar.module.css";
 import i18n from "../utils/i18n";
 import UserMenu from "./buttonUserMenu";
+import getAccessToken from "../hooks/getAccessToken";
 
 const {
   publicRuntimeConfig: {
@@ -47,10 +48,24 @@ function NavBar() {
     }, 100);
   };
 
+  const handleLogout = () => {
+    signOut();
+    localStorage.removeItem("accessToken");
+  };
+
 
   useEffect(() => () => {
     clearTimeout(timeoutRef.current);
   }, []);
+
+  useEffect(() => {
+
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken === null && data?.user?.name !== undefined) {
+      getAccessToken(data?.user);
+    }
+  }, [data?.user]);
+
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="light-cream">
@@ -74,7 +89,7 @@ function NavBar() {
                 isDropdownVisible={isDropdownVisible}
                 handleMouseEnter={handleMouseEnter}
                 handleMouseLeave={handleMouseLeave}
-                signOut={signOut}
+                signOut={handleLogout}
               />
             ) : (
               <button className={styles.navLink} onClick={() => signIn("google")}>

@@ -1,8 +1,8 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { useTranslation } from "react-i18next";
-import React, { useRef } from "react";
-import Tab from "@mui/material/Tab";
+import { useState, useRef } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
@@ -12,52 +12,164 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Stack from "@mui/joy/Stack";
-import { Button, Col, Row, Form } from "react-bootstrap";
+import { Col, Row, Form } from "react-bootstrap";
+import Tab from "@mui/material/Tab";
+import dayjs from "dayjs";
 
-function VenueDetail() {
+function VenueInput({ info, setInfo }) {
   const { t } = useTranslation();
-  const [openAddModal, setOpenAddModal] = React.useState(false);
-  const [courtList, setCourtList] = React.useState(["A桌", "B桌"]);
-  const [weekDays, setWeekDays] = React.useState(() => ["mon", "tue", "wed", "thu", "fri"]);
-  const newCourtRef = useRef(null);
+  const [openAddModal, setOpenAddModal] = useState(false);
 
+  const handleAddressChange = (newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        address: newValue
+      }
+    }));
+  };
 
-  const handleWeekdays = (event, newWeekDays) => {
-    setWeekDays(newWeekDays);
+  const handleStadiumNameChange = (newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        stadium_name: newValue
+      }
+    }));
+  };
+
+  const handleVenueNameChange = (newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        name: newValue
+      }
+    }));
+  };
+
+  const handleCapacityChange = (newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        max_number_of_people: newValue
+      }
+    }));
   };
 
   function handleListDelete(courtToDelete) {
-    const updatedCourtList = courtList.filter((court) => court !== courtToDelete);
-    setCourtList(updatedCourtList);
-  }
+    const updatedCourtList = info?.stadium_courts?.filter((court) => court !== courtToDelete);
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium_courts: updatedCourtList
+    }));
+  };
 
   function handleAddCourt() {
     try {
       const newCourt = newCourtRef.current.value;
       if (newCourt.trim() !== "") {
-        setCourtList([...courtList, newCourt]);
+        setInfo((prevInfo) => ({
+          ...prevInfo,
+          stadium_courts: [...prevInfo.stadium_courts, newCourt]
+        }));
         setOpenAddModal(false);
       } else {
-        // Handle the case where the input value is empty (optional)
         alert("Please enter a valid court name.");
       }
     } catch (error) {
       console.log(error);
       alert("Error: failed to add new court");
     }
-  }
+  };
 
   const handleClose = () => {
     setOpenAddModal(false);
   };
 
+  const handleAreaChange = (newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        area: newValue
+      }
+    }));
+  };
+
+  const handleOpenDayChange = (event, newOpenDay) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        open_day: newOpenDay.map(Number)
+      }
+    }));
+  };
+
+  const handleDecriptionChange = (newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        description: newValue
+      }
+    }));
+  };
+
+  const handleStartTimeChange = (newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        start_time: newValue
+      }
+    }));
+  };
+
+  const handleEndTimeChange = (newValue) => {
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      stadium: {
+        ...prevInfo.stadium,
+        end_time: newValue
+      }
+    }));
+  };
+
+  const newCourtRef = useRef(null);
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#AD5625",
+      },
+      secondary: {
+        main: "#14274C",
+      },
+      text: {
+        primary: "#14274C",
+        secondary: "#14274C",
+      },
+      divider: "#BEC8DD",
+    },
+    typography: {
+      fontFamily:
+        "\"Palatino\", sans-serif",
+    },
+  });
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Row style={{ padding: "20px" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tab label={t("場地資訊")} textColor='primary' />
@@ -70,7 +182,12 @@ function VenueDetail() {
               {t("場館地址")}
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="address" placeholder={t("場館地址")} />
+              <Form.Control
+                type="address"
+                placeholder={t("場館地址")}
+                value={info?.stadium?.address}
+                onChange={(e) => handleAddressChange(e.target.value)}
+              />
             </Col>
           </Form.Group>
 
@@ -79,7 +196,12 @@ function VenueDetail() {
               {t("場館名稱")}
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="stadium-name" placeholder={t("場館名稱")} />
+              <Form.Control
+                type="stadium-name"
+                placeholder={t("場館名稱")}
+                value={info?.stadium?.stadium_name}
+                onChange={(e) => handleStadiumNameChange(e.target.value)}
+              />
             </Col>
           </Form.Group>
 
@@ -88,7 +210,12 @@ function VenueDetail() {
               {t("場地名稱")}
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="court-type" placeholder={t("場地名稱")} />
+              <Form.Control
+                type="court-type"
+                placeholder={t("場地名稱")}
+                value={info?.stadium?.name}
+                onChange={(e) => handleVenueNameChange(e.target.value)}
+              />
             </Col>
           </Form.Group>
 
@@ -97,8 +224,12 @@ function VenueDetail() {
               {t("單一場地可容納人數")}
             </Form.Label>
             <Col sm="10" className='content-left'>
-              <Form.Control type="capacity" style={{ width: "80px" }} />
-              {/* <span>{t('人')}</span> */}
+              <Form.Control
+                type="capacity"
+                style={{ width: "80px" }}
+                value={info?.stadium?.max_number_of_people}
+                onChange={(e) => handleCapacityChange(e.target.value)}
+              />
             </Col>
           </Form.Group>
 
@@ -108,11 +239,17 @@ function VenueDetail() {
             </Form.Label>
             <Col sm="10">
               <Stack direction="row" spacing={1}>
-                {courtList.map((court) => (
-                  <Chip label={court} key={court} variant="outlined" color='secondary' onDelete={() => handleListDelete(court)} />
+                {info?.stadium_courts?.map((court) => (
+                  <Chip
+                    label={court}
+                    key={court}
+                    variant="outlined"
+                    color='secondary'
+                    onDelete={() => handleListDelete(court)} />
                 ))}
                 <Chip
-                  variant="outlined" color='secondary'
+                  variant="outlined"
+                  color='secondary'
                   key="addCourt"
                   label={t("新增")}
                   onClick={() => setOpenAddModal(true)}
@@ -127,7 +264,12 @@ function VenueDetail() {
               {t("場地面積")}
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="room" style={{ width: "80px" }} />
+              <Form.Control
+                type="area"
+                style={{ width: "80px" }}
+                value={info?.stadium?.area}
+                onChange={(e) => handleAreaChange(e.target.value)}
+              />
             </Col>
           </Form.Group>
 
@@ -136,18 +278,20 @@ function VenueDetail() {
               {t("開放時間")}
             </Form.Label>
             <Col sm="10" style={{ display: "flex", alignItems: "center" }} className='space-x-4'>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimePicker 
-                  // label="Controlled picker" 
-                  views={["hours"]} 
-                  color='secondary' 
-                  slotProps={{ textField: { size: "small" } }}  />
+              <LocalizationProvider dateAdapter={AdapterDayjs} color='secondary'>
+                <TimePicker
+                  color='secondary'
+                  value={dayjs(info?.stadium?.start_time, "HH:mm")}
+                  onChange={(newValue) => handleStartTimeChange(newValue.format("HH:mm"))}
+                  views={["hours"]}
+                  slotProps={{ textField: { size: "small", color: "secondary" } }} />
                 <span>{t("至")}</span>
-                <TimePicker 
-                  // label="Controlled picker" 
-                  views={["hours"]} 
-                  color='secondary' 
-                  slotProps={{ textField: { size: "small" } }}  />
+                <TimePicker
+                  color='secondary'
+                  value={dayjs(info?.stadium?.end_time, "HH:mm")}
+                  onChange={(newValue) => handleEndTimeChange(newValue.format("HH:mm"))}
+                  views={["hours"]}
+                  slotProps={{ textField: { size: "small", color: "secondary" } }} />
               </LocalizationProvider>
             </Col>
           </Form.Group>
@@ -158,30 +302,30 @@ function VenueDetail() {
             </Form.Label>
             <Col sm="10">
               <ToggleButtonGroup
-                value={weekDays}
-                onChange={handleWeekdays}
+                value={info?.stadium?.open_day.map(String)}
+                onChange={handleOpenDayChange}
                 aria-label="open day setting"
                 size="small"
               >
-                <ToggleButton value="mon" aria-label="mon" >
+                <ToggleButton value="1" aria-label="mon" >
                   {t("週一")}
                 </ToggleButton>
-                <ToggleButton value="tue" aria-label="tue">
+                <ToggleButton value="2" aria-label="tue">
                   {t("週二")}
                 </ToggleButton>
-                <ToggleButton value="wed" aria-label="wed">
+                <ToggleButton value="3" aria-label="wed">
                   {t("週三")}
                 </ToggleButton>
-                <ToggleButton value="thu" aria-label="thu">
+                <ToggleButton value="4" aria-label="thu">
                   {t("週四")}
                 </ToggleButton>
-                <ToggleButton value="fri" aria-label="fri">
+                <ToggleButton value="5" aria-label="fri">
                   {t("週五")}
                 </ToggleButton>
-                <ToggleButton value="sat" aria-label="sat">
+                <ToggleButton value="6" aria-label="sat">
                   {t("週六")}
                 </ToggleButton>
-                <ToggleButton value="sun" aria-label="sun">
+                <ToggleButton value="7" aria-label="sun">
                   {t("週日")}
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -193,7 +337,12 @@ function VenueDetail() {
               {t("說明")}
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="discription" placeholder={t("說明")} />
+              <Form.Control
+                type="discription"
+                placeholder={t("說明")}
+                value={info?.stadium?.description}
+                onChange={(e) => handleDecriptionChange(e.target.value)}
+              />
             </Col>
           </Form.Group>
         </Form>
@@ -217,8 +366,8 @@ function VenueDetail() {
           <Button onClick={handleAddCourt} color="secondary" >{t("新增")} </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </ThemeProvider>
   );
 }
 
-export default VenueDetail;
+export default VenueInput;
