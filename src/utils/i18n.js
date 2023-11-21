@@ -66,6 +66,8 @@ i18n.use(initReactI18next).init({
 				"刪除場地": "Delete whole venue",
 				"下架特定時段場地": "Delete sessions for the venue",
 				"已加入隊伍": "Joined Successfully",
+				"下架特定時段場地": "Disable venue sessions",
+				"已加入隊伍": "Joined Success",
 				"租借成功": "Rental Successfully",
 				"允許配對球友?": "Teammates Matching Needed?",
 				"想再找幾名球友?": "Number of Teammates Needed?",
@@ -103,7 +105,9 @@ i18n.use(initReactI18next).init({
 				"開放日": "Open days",
 				"單一場地容納人數": "Capacity per court",
 				"位置連結": "Location Link",
-				"上架特定時段場地": "Add sessions for the venue",
+				"上架特定時段場地": "Enable venue sessions",
+				"上架場地": "Add venue sessions",
+				"下架場地": "Disable venue sessions",
 			}
 		},
 		zh: {
@@ -205,7 +209,7 @@ i18n.use(initReactI18next).init({
 				"單一場地容納人數": "單一場地容納人數",
 				"位置連結": "位置連結",
 				"上架特定時段場地": "上架特定時段場地",
-
+				"上架場地": "上架場地",
 			}
 		},
 	},

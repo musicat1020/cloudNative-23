@@ -12,6 +12,7 @@ import MenuList from "@mui/material/MenuList";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteVenueModal from "./deleteVenueModal";
 import DeleteVenueSessionModal from "./deleteVenueSessionModal";
+import EnableVenueSessionModal from "./enableVenueSessionModal";
 
 
 function ButtonDeleteVenue({ info }) {
@@ -21,6 +22,8 @@ function ButtonDeleteVenue({ info }) {
   const [openSubButtons, setOpenSubButtons] = useState(false);
   const [showDeleteVenueModal, setShowDeleteVenueModal] = useState(false);
   const [showDeleteSessionVenueModal, setShowDeleteSessionVenueModal] = useState(false);
+  const [showEnableSessionVenueModal, setShowEnableSessionVenueModal] = useState(false);
+  
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
@@ -91,7 +94,7 @@ function ButtonDeleteVenue({ info }) {
                 >
                   <MenuItem onClick={() => setShowDeleteVenueModal(true)}>{t("刪除場地")}</MenuItem>
                   <MenuItem onClick={() => setShowDeleteSessionVenueModal(true)}>{t("下架特定時段場地")}</MenuItem>
-                  <MenuItem onClick={() => setShowDeleteSessionVenueModal(true)}>{t("上架特定時段場地")}</MenuItem>
+                  <MenuItem onClick={() => setShowEnableSessionVenueModal(true)}>{t("上架特定時段場地")}</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -112,7 +115,13 @@ function ButtonDeleteVenue({ info }) {
 				title={t("下架特定時段場地")}
         info={info}
         />
-
+      <EnableVenueSessionModal
+        show={showEnableSessionVenueModal}
+        setShow = {setShowEnableSessionVenueModal}
+        handleClose={() => setShowEnableSessionVenueModal(false)}
+        title={t("上架特定時段場地")}
+        info={info}
+        />
     </>    
   );
 }

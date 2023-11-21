@@ -165,7 +165,7 @@ function EditVenue() {
 					</Box>
 				</div>
 
-				{/* first tab content */}
+				{/* info tab content */}
 				<CustomTabPanel value={value} index={0}>
 					<Container>
 						<Row>
@@ -195,7 +195,7 @@ function EditVenue() {
 					</Container>
 				</CustomTabPanel>
 
-				{/* second tab content */}
+				{/* timetable tab content */}
 				<CustomTabPanel value={value} index={1}>
 					<Container className="flex justify-center ">
 						<Row className="w-4/5">
