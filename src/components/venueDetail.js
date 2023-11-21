@@ -7,7 +7,6 @@ import { useState, useRef } from "react";
 import { Col, Row, Form } from "react-bootstrap";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -23,10 +22,31 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Stack from "@mui/joy/Stack";
 
-import ButtonDeleteVenue from "./buttonDeleteVenue";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#AD5625",
+    },
+    secondary: {
+      main: "#14274C",
+    },
+    text: {
+      primary: "#14274C",
+      secondary: "#14274C",
+    },
+    divider: "#BEC8DD",
+  },
+  typography: {
+    fontFamily:
+      "\"Palatino\", sans-serif",
+  },
+});
 
 function VenueDetail({ info, setInfo }) {
+
   const { t } = useTranslation();
+
   const [openAddModal, setOpenAddModal] = useState(false);
   const newCourtRef = useRef(null);
 
@@ -160,41 +180,8 @@ function VenueDetail({ info, setInfo }) {
     }));
   };
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#AD5625",
-      },
-      secondary: {
-        main: "#14274C",
-      },
-      text: {
-        primary: "#14274C",
-        secondary: "#14274C",
-      },
-      divider: "#BEC8DD",
-    },
-    typography: {
-      fontFamily:
-        "\"Palatino\", sans-serif",
-    },
-  });
-
   return (
     <ThemeProvider theme={theme}>
-      <Row>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }} >
-          <div className='flex justify-between mt-4'>
-            <div className='flex-none pl-5'>
-              {t("場地資訊")}
-            </div>
-            <div className='flex-none'>
-              <ButtonDeleteVenue info={info} />
-            </div>
-          </div>
-        </Box>
-      </Row>
-
       <Row style={{ padding: "20px" }}>
         <Form>
           <Form.Group as={Row} className="mb-3" controlId="address">

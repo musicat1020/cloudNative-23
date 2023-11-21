@@ -62,7 +62,7 @@ i18n.use(initReactI18next).init({
 				"取消": "Cancel",
 				"確認": "Confirm",
 				"修改": "Edit",
-				"下架場地": "Delete venue",
+				"上下架場地": "Delete/add venue sessions",
 				"刪除場地": "Delete whole venue",
 				"下架特定時段場地": "Delete sessions for the venue",
 				"已加入隊伍": "Joined Successfully",
@@ -103,6 +103,7 @@ i18n.use(initReactI18next).init({
 				"開放日": "Open days",
 				"單一場地容納人數": "Capacity per court",
 				"位置連結": "Location Link",
+				"上架特定時段場地": "Add sessions for the venue",
 			}
 		},
 		zh: {
@@ -203,6 +204,7 @@ i18n.use(initReactI18next).init({
 				"開放日": "開放日",
 				"單一場地容納人數": "單一場地容納人數",
 				"位置連結": "位置連結",
+				"上架特定時段場地": "上架特定時段場地",
 
 			}
 		},

@@ -137,9 +137,6 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("開放日")}</span>
-                {/* {info?.stadium?.open_day.map((day) => (
-                  <span key={day}>{dayMap[day]}</span>
-                ))} */}
                 {info?.stadium?.open_day.map((day, index) => (
                   <span key={day}>
                     {dayMap[day]}

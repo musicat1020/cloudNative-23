@@ -15,7 +15,9 @@ import DeleteVenueSessionModal from "./deleteVenueSessionModal";
 
 
 function ButtonDeleteVenue({ info }) {
+
   const { t } = useTranslation();
+
   const [openSubButtons, setOpenSubButtons] = useState(false);
   const [showDeleteVenueModal, setShowDeleteVenueModal] = useState(false);
   const [showDeleteSessionVenueModal, setShowDeleteSessionVenueModal] = useState(false);
@@ -61,7 +63,7 @@ function ButtonDeleteVenue({ info }) {
         onClick={handleToggle}
         endIcon={<ExpandMoreIcon />}
       >
-        {t("下架場地")}
+        {t("上下架場地")}
       </Button>
       <Popper
         open={openSubButtons}
@@ -89,6 +91,7 @@ function ButtonDeleteVenue({ info }) {
                 >
                   <MenuItem onClick={() => setShowDeleteVenueModal(true)}>{t("刪除場地")}</MenuItem>
                   <MenuItem onClick={() => setShowDeleteSessionVenueModal(true)}>{t("下架特定時段場地")}</MenuItem>
+                  <MenuItem onClick={() => setShowDeleteSessionVenueModal(true)}>{t("上架特定時段場地")}</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
