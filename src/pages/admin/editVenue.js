@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useRef } from "react";
 // import Image from "next/image";
 
 import { Container, Row, Col } from "react-bootstrap";
@@ -84,45 +84,74 @@ function EditVenue() {
 	const [venueInfo, setVenueInfo] = useState(mockVenueDetail[0]);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
-
 	// the index is assigned the value of router.query.venue
 	const router = useRouter();
 	const { venue: index } = router.query;
 
 	// useEffect(() => {
-  //   const fetchVenueDetail = async () => {
-  //     try {
-  //       // TODO:
-  //       const accessToken = localStorage.getItem("accessToken");
-  //       console.log("accessToken", accessToken);
-  //       const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/info/`;
-  //       const headers = {
-  //         "Accept": "application/json",
-  //         "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-  //       };
+	//   const fetchVenueDetail = async () => {
+	//     try {
+	//       // TODO:
+	//       const accessToken = localStorage.getItem("accessToken");
+	//       console.log("accessToken", accessToken);
+	//       const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/info/`;
+	//       const headers = {
+	//         "Accept": "application/json",
+	//         "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+	//       };
 	// 			const request = {
 	// 				stadium_id: index,
 	// 			};
 
-  //       const venueDetail = await axios.post(url, { request }, { headers })
-  //         .then(response => {
-  //           console.log("Response:", response.data);
-  //           return response.data;
-  //         })
-  //         .catch(error => {
-  //           console.error("Error:", error.message);
-  //         });
-  //       setVenueInfo(venueDetail);
-  //     } catch (error) {
-  //       throw new Error(error);
-  //     }
-  //   };
-  //   fetchVenueDetail();
-  // }, []);
+	//       const venueDetail = await axios.post(url, { request }, { headers })
+	//         .then(response => {
+	//           console.log("Response:", response.data);
+	//           return response.data;
+	//         })
+	//         .catch(error => {
+	//           console.error("Error:", error.message);
+	//         });
+	//       setVenueInfo(venueDetail);
+	//     } catch (error) {
+	//       throw new Error(error);
+	//     }
+	//   };
+	//   fetchVenueDetail();
+	// }, []);
 
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+	};
+
+	// Create a reference to the hidden file input element
+	const hiddenFileInput = useRef();
+
+	// Programatically click the hidden file input element
+	// when the Button component is clicked
+	const handleImageClick = () => {
+		hiddenFileInput.current.click();
+		console.log("handleImageClick");
+	};
+
+	// handle the user-selected file 
+	const handleInputChange = (event) => {
+		console.log("handleInputChange");
+		const fileUploaded = event.target.files[0];
+		console.log("fileUploaded", fileUploaded);
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			const base64Image = reader.result;
+			console.log("base64Image", base64Image);
+			setVenueInfo(prevInfo => ({
+				...prevInfo,
+				stadium: {
+					...prevInfo.stadium,
+					imgBase64: base64Image,
+				},
+			}));
+		};
+		reader.readAsDataURL(fileUploaded);
+	};
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -137,10 +166,19 @@ function EditVenue() {
 
 			<Container className={`${styles.container}`}>
 				<div className="flex justify-center items-center">
+
 					<img
 						className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
-						src={venueInfo?.stadium?.imgUrl}
+						// src={venueInfo?.stadium?.imgUrl}
+						src={venueInfo?.stadium?.imgBase64}
 						alt="Venue here"
+						onClick={handleImageClick}
+					/>
+										<input
+						type="file"
+						onChange={handleInputChange}
+						ref={hiddenFileInput}
+						style={{ display: 'none' }} // Make the file input element invisible
 					/>
 				</div>
 
@@ -159,7 +197,9 @@ function EditVenue() {
 									<Tab label={t("場地資訊")} {...a11yProps(0)} />
 									<Tab label={t("場地時段")} {...a11yProps(1)} />
 								</Tabs>
-								<ButtonDeleteVenue info={venueInfo} />
+								<ButtonDeleteVenue
+									info={venueInfo}
+								/>
 							</div>
 						</Box>
 					</Box>

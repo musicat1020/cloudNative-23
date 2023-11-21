@@ -3,7 +3,7 @@ import Head from "next/head";
 
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import PublishIcon from "@mui/icons-material/Publish";
 import IconButton from "@mui/material/IconButton";
@@ -20,8 +20,14 @@ function NewVenue() {
 	const [showNewVenueModal, setShowNewVenueModal] = useState(false);
 	const { t } = useTranslation();
 
+	const hiddenFileInput = useRef();
 
-	const handleFileChange = (event) => {
+	const handleImageClick = () => {
+		hiddenFileInput.current.click();
+		// console.log("handleImageClick");
+	};
+
+	const handleInputChange = (event) => {
 		const file = event.target.files[0]; // Get the first selected file
 		const reader = new FileReader();
 		reader.onloadend = () => {
@@ -57,19 +63,6 @@ function NewVenue() {
 		},
 	});
 
-	const VisuallyHiddenInput = styled("input")({
-		clip: "rect(0 0 0 0)",
-		clipPath: "inset(50%)",
-		height: 1,
-		overflow: "hidden",
-		position: "absolute",
-		bottom: 0,
-		left: 0,
-		whiteSpace: "nowrap",
-		width: 1,
-	});
-
-
 	return (
 		<ThemeProvider theme={theme}>
 			<Head>
@@ -89,9 +82,11 @@ function NewVenue() {
 								<Col className="text-center" style={{ padding: "100px" }}>
 									<IconButton component="label" aria-label="delete">
 										<PublishIcon sx={{ fontSize: 30 }} />
-										<VisuallyHiddenInput
+										<input
 											type="file"
-											onChange={handleFileChange}
+											onChange={handleInputChange}
+											ref={hiddenFileInput}
+											style={{ display: 'none' }} // Make the file input element invisible
 										/>
 									</IconButton>
 									<p>{t("點擊上傳圖片")}</p>
@@ -105,6 +100,13 @@ function NewVenue() {
 							className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
 							src={venueInfo?.stadium?.imgBase64}
 							alt="Venue here"
+							onClick={handleImageClick}
+						/>
+						<input
+							type="file"
+							onChange={handleInputChange}
+							ref={hiddenFileInput}
+							style={{ display: 'none' }} // Make the file input element invisible
 						/>
 					</div>
 				)}
