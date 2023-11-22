@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 // import Image from "next/image";
 
 import { Container, Row, Col } from "react-bootstrap";
@@ -88,35 +88,31 @@ function EditVenue() {
 	const router = useRouter();
 	const { venue: index } = router.query;
 
+	// fetch venue detail
 	// useEffect(() => {
-	//   const fetchVenueDetail = async () => {
-	//     try {
-	//       // TODO:
-	//       const accessToken = localStorage.getItem("accessToken");
-	//       console.log("accessToken", accessToken);
-	//       const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/info/`;
-	//       const headers = {
-	//         "Accept": "application/json",
-	//         "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-	//       };
-	// 			const request = {
+	// 	const fetchVenueDetail = async () => {
+	// 		try {
+	// 			const accessToken = localStorage.getItem("accessToken");
+	// 			const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/info/`;
+	// 			const headers = {
+	// 				"Accept": "application/json",
+	// 				"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+	// 			};
+	// 			const params = {
 	// 				stadium_id: index,
 	// 			};
 
-	//       const venueDetail = await axios.post(url, { request }, { headers })
-	//         .then(response => {
-	//           console.log("Response:", response.data);
-	//           return response.data;
-	//         })
-	//         .catch(error => {
-	//           console.error("Error:", error.message);
-	//         });
-	//       setVenueInfo(venueDetail);
-	//     } catch (error) {
-	//       throw new Error(error);
-	//     }
-	//   };
-	//   fetchVenueDetail();
+	// 			const res = await axios.post(url, null, { params, headers }).then((response) => {
+	// 				console.log(response.data);
+	// 				return response.data;
+	// 			});
+	// 			setVenueInfo(res);
+	// 		} catch (error) {
+	// 			throw new Error(error);
+	// 		}
+	// 	};
+	// 	fetchVenueDetail(index);
+	// 	console.log("venueInfo", venueInfo);
 	// }, []);
 
 	const handleChange = (event, newValue) => {
@@ -130,18 +126,14 @@ function EditVenue() {
 	// when the Button component is clicked
 	const handleImageClick = () => {
 		hiddenFileInput.current.click();
-		console.log("handleImageClick");
 	};
 
 	// handle the user-selected file 
 	const handleInputChange = (event) => {
-		console.log("handleInputChange");
 		const fileUploaded = event.target.files[0];
-		console.log("fileUploaded", fileUploaded);
 		const reader = new FileReader();
 		reader.onloadend = () => {
 			const base64Image = reader.result;
-			console.log("base64Image", base64Image);
 			setVenueInfo(prevInfo => ({
 				...prevInfo,
 				stadium: {
@@ -174,7 +166,7 @@ function EditVenue() {
 						alt="Venue here"
 						onClick={handleImageClick}
 					/>
-										<input
+					<input
 						type="file"
 						onChange={handleInputChange}
 						ref={hiddenFileInput}

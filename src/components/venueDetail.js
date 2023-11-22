@@ -44,6 +44,7 @@ const theme = createTheme({
 });
 
 function VenueDetail({ info, setInfo }) {
+  console.log(info?.address);
 
   const { t } = useTranslation();
 
@@ -192,7 +193,8 @@ function VenueDetail({ info, setInfo }) {
               <Form.Control
                 type="address"
                 placeholder={t("場館地址")}
-                value={info?.stadium?.address}
+                // value={info?.stadium?.address}
+                value={info?.address}
                 onChange={(e) => handleAddressChange(e.target.value)}
               />
             </Col>
