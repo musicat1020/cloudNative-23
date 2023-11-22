@@ -100,7 +100,7 @@ function VenueTab({ venueInfo }) {
 	const getCloseWeekdays = () => {
 		const weekdays = Array.from({length: 7}, (_, i) => i + 1);
 		const openWeekdays = venueInfo?.available_times?.weekdays;
-		const closeWeekdays = weekdays.filter((weekday) => !openWeekdays.includes(weekday)).map((x) => mapWeekday[x]);
+		const closeWeekdays = weekdays.filter((weekday) => !openWeekdays?.includes(weekday)).map((x) => mapWeekday[x]);
 		const result = [];
 		if (closeWeekdays.length === 0) {
 			result.push(<span className={styles.courtListCell}>{t("無")}</span>);
