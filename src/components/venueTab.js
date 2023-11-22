@@ -10,7 +10,7 @@ import { Link } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import { useTranslation } from "react-i18next";
-import TimeTable from "./timetable";
+import TimeTable from "./timeTable";
 import styles from "../styles/venuetab.module.css";
 
 const theme = createTheme({
@@ -75,8 +75,42 @@ function VenueTab({ venueInfo }) {
 	const [people, setPeople] = useState(2);
 	const [level, setLevel] = useState(levelList[1]);
 
+	const mapWeekday = {
+		1: t("週一"),
+		2: t("週二"),
+		3: t("週三"),
+		4: t("週四"),
+		5: t("週五"),
+		6: t("週六"),
+		7: t("週日"),
+	};
+
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
+	};
+
+	const getCourtList = () => {
+		const courtList = [];
+		venueInfo?.stadium_courts?.forEach((court) => {
+			courtList.push(<span className={styles.courtListCell}>{court?.name}</span>);
+		});
+		return courtList;
+	};
+
+	const getCloseWeekdays = () => {
+		const weekdays = Array.from({length: 7}, (_, i) => i + 1);
+		const openWeekdays = venueInfo?.available_times?.weekdays;
+		const closeWeekdays = weekdays.filter((weekday) => !openWeekdays.includes(weekday)).map((x) => mapWeekday[x]);
+		const result = [];
+		if (closeWeekdays.length === 0) {
+			result.push(<span className={styles.courtListCell}>{t("無")}</span>);
+		}
+		else {
+			closeWeekdays?.forEach((weekday) => {
+				result.push(<span className={styles.courtListCell}>{weekday}</span>);
+			});
+		}
+		return result;
 	};
 
 	return (
@@ -108,20 +142,28 @@ function VenueTab({ venueInfo }) {
 								</Link>
 							</p>
 							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("場地面積")}</span>
+								<span>{`${venueInfo?.area} ${t("Square Meter")}`}</span>
+							</p>
+							<p className="text-lg">
 								<span className={styles.infoAttr}>{t("單一場地可容納人數")}</span>
 								<span>{`${venueInfo?.max_number_of_people} ${t("人")}`}</span>
 							</p>
 							<p className="text-lg">
 								<span className={styles.infoAttr}>{t("場地數量")}</span>
-								<span>{`${venueInfo?.number_of_court} ${t("場")}`}</span>
+								<span>{`${venueInfo?.stadium_courts?.length} ${t("場")}`}</span>
 							</p>
 							<p className="text-lg">
-								<span className={styles.infoAttr}>{t("場地面積")}</span>
-								<span>{`${venueInfo?.area} ${t("Square Meter")}`}</span>
+								<span className={styles.infoAttr}>{t("場地列表")}</span>
+								<span>{getCourtList()}</span>
 							</p>
 							<p className="text-lg">
 								<span className={styles.infoAttr}>{t("開放時間")}</span>
-								<span>08 : 00 ~ 22 : 00</span>
+								<span>{`${venueInfo?.available_times?.start_time}:00 ~ ${venueInfo?.available_times?.end_time}:00`}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("休館日")}</span>
+								<span>{getCloseWeekdays()}</span>
 							</p>
 						</Col>
 						<Col lg={12} xl={6}>

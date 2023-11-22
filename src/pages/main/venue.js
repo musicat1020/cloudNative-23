@@ -46,14 +46,14 @@ function Venue() {
 				{/* Subsection */}
 				<Row>
 					<Col className="text-center">
-						<h3>{ t("綜合體育館") }</h3>
+						<h3>{ venueInfo?.name }</h3>
 					</Col>
 				</Row>
 
 				{/* Section */}
 				<Row>
 					<Col className="text-center my-2">
-						<h1>{ venueInfo?.name }</h1>
+						<h1>{ venueInfo?.venue_name }</h1>
 					</Col>
 				</Row>
 

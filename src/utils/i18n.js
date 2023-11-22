@@ -95,6 +95,7 @@ i18n.use(initReactI18next).init({
 				"Cancel Rental": "Cancel",
 				"Confirm Cancellation?": "Confirm Cancellation?",
 				"Location": "Location",
+				"休館日": "Closing day",
 			}
 		},
 		zh: {
@@ -187,6 +188,7 @@ i18n.use(initReactI18next).init({
 				"Cancel Rental": "取消租借",
 				"Confirm Cancellation?": "確定要取消預約嗎?",
 				"Location": "場館地點",
+				"休館日": "休館日",
 			}
 		},
 	},

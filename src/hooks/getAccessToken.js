@@ -1,4 +1,11 @@
 import axios from "axios";
+import getConfig from "next/config";
+
+const {
+	publicRuntimeConfig: {
+		apiRoot,
+	},
+} = getConfig();
 
 const getAccessToken = async (user) => {
     const requestData = {
@@ -6,7 +13,7 @@ const getAccessToken = async (user) => {
         email: user?.email
     };
 
-    const apiUrl = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/auth/sso-login/`;
+    const apiUrl = `${apiRoot}/api/v1/auth/sso-login/`;
 
     const accessToken = await axios.post(apiUrl, requestData, {
         headers: {

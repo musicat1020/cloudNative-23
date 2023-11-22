@@ -26,24 +26,18 @@ function TimeTable({ people, venueInfo }) {
 
 	const [windowSize, setWindowSize] = useState([(typeof window !== "undefined") ? [window.innerWidth, window.innerHeight] : [0, 0]]);
 
-	const getTimeTable = async (id, queryDate) => {
-
+	const fetchTimeTable = async (id, queryDate) => {
 		const params = {
 			stadium_id: id,
 			query_date: queryDate.format("YYYY-MM-DD")
 		};
-
-		const res = await axios.get(
-			"/api/v1/stadium/timetable",
-			{ params }
-		);
-
+		const res = await axios.post("/api/v1/stadium/timetable", {}, { params });
 		setTimeTableData(res.data);
 	};
 
 	// init time table data
 	useEffect(() => {
-		getTimeTable(venueInfo.id, startDate);
+		fetchTimeTable(venueInfo?.id, startDate);
 	}, [startDate, venueInfo]);
 
 	/** handle window resize */
