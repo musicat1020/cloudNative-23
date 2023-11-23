@@ -14,11 +14,11 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 import getConfig from "next/config";
-import axios from "../utils/axios";
-import BaseModal from "./baseModal";
-import BaseSwitch from "./baseSwitch";
-import BaseCheckbox from "./baseCheckbox";
-import styles from "../styles/court.module.css";
+import axios from "../../../utils/axios";
+import BaseModal from "../../../components/baseModal";
+import BaseSwitch from "../../../components/baseSwitch";
+import BaseCheckbox from "../../../components/baseCheckbox";
+import styles from "@/styles/court.module.css";
 
 const {
 	publicRuntimeConfig: {

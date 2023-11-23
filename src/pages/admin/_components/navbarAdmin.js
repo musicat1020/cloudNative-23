@@ -8,8 +8,8 @@ import { getCookie, setCookie } from "cookies-next";
 import getConfig from "next/config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
-import i18n from "../utils/i18n";
-import styles from "../styles/navbar.module.css";
+import i18n from "../../../utils/i18n";
+import styles from "@/styles/navbar.module.css";
 
 const {
   publicRuntimeConfig: {

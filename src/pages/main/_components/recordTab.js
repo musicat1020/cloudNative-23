@@ -7,7 +7,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Container } from "react-bootstrap";
 import { useTranslation } from "next-i18next";
 import RecordTable from "./recordTable";
-import { mockRentalRecords, mockPairingRecords } from "../../mockData/mockData";
+import { mockRentalRecords, mockPairingRecords } from "../../../../mockData/mockData";
 import PairingTable from "./pairingTable";
 
 const theme = createTheme({
