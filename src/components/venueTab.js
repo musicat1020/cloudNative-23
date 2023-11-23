@@ -167,26 +167,11 @@ function VenueTab({ venueInfo }) {
 							</p>
 						</Col>
 						<Col lg={12} xl={6}>
-							<Carousel>
-								<Carousel.Item>
-									<img 
-										src='/venue-1.jpg'
-										className='d-block w-100 h-80'
-										alt='image 1'/>
-								</Carousel.Item>
-								<Carousel.Item>
-									<img 
-										src='/venue-2.jpg'
-										className='d-block w-100 h-80'
-										alt='image 2'/>
-								</Carousel.Item>
-								<Carousel.Item>
-									<img 
-										src='/venue-3.jpg'
-										className='d-block w-100 h-80'
-										alt='image 3'/>
-								</Carousel.Item>
-							</Carousel>
+								<img 
+									src='/venue-1.jpg'
+									className='d-block w-100 h-80'
+									alt='image 1'
+								/>
 						</Col>
 					</Row>
 				</Container>
