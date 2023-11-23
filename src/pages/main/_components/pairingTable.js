@@ -2,7 +2,7 @@ import { useTranslation } from "next-i18next";
 import { Button } from "react-bootstrap";
 import Tooltip from "@mui/material/Tooltip";
 import { useState } from "react";
-import styles from "../styles/record.module.css";
+import styles from "@/styles/record.module.css";
 import CancelResvationModel from "./cancelReservationModel";
 
 function PairingTable({ records }) {

@@ -1,8 +1,8 @@
 
 import { useTranslation } from "react-i18next";
 import { Container, Row, Col } from "react-bootstrap";
-import BaseModal from "./baseModal";
-import styles from "../styles/subvenue.module.css";
+import BaseModal from "../../../components/baseModal";
+import styles from "@/styles/court.module.css";
 
 function CancelInfoDetail({ setShow, record }) {
     const { t } = useTranslation();

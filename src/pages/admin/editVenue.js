@@ -13,14 +13,14 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import NavBar from "../../components/navbarAdmin";
-import VenueDetail from "../../components/venueDetail";
+import NavBar from "./_components/navbarAdmin";
+import VenueDetail from "./_components/venueDetail";
 import styles from "../../styles/venue.module.css";
 import axios from "../../utils/axios";
 import { mockVenueDetail } from "../../../mockData/mockData";
-import EditVenueModal from "@/components/editVenueModal";
-import ButtonDeleteVenue from "@/components/buttonDeleteVenue";
-import AdminTimeTable from "@/components/timetableAdmin";
+import EditVenueModal from "@/pages/admin/_components/editVenueModal";
+import ButtonDeleteVenue from "@/pages/main/_components/buttonDeleteVenue";
+import AdminTimeTable from "@/pages/admin/_components/timetableAdmin";
 import { create } from "@mui/material/styles/createTransitions";
 // import Image from 'react-bootstrap/Image';
 
@@ -89,7 +89,7 @@ function EditVenue() {
 	const router = useRouter();
 	const { venue: index } = router.query;
 
-	// // fetch venue detail
+	// fetch venue detail
 	// useEffect(() => {
 	// 	// POST /api/v1/stadium/info/
 	// 	const fetchVenueDetail = async () => {
@@ -165,11 +165,7 @@ function EditVenue() {
 		setValue(newValue);
 	};
 
-	// Create a reference to the hidden file input element
 	const hiddenFileInput = useRef();
-
-	// Programatically click the hidden file input element
-	// when the Button component is clicked
 	const handleImageClick = () => {
 		hiddenFileInput.current.click();
 	};

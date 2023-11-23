@@ -10,10 +10,10 @@ import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 
 import styles from "../../styles/venue.module.css";
-import VenueInput from "../../components/venueInput";
-import NavBar from "../../components/navbarAdmin";
+import VenueInput from "./_components/venueInput";
+import NavBar from "./_components/navbarAdmin";
 import { mockVenueDetail } from "../../../mockData/mockData";
-import EditVenueModal from "@/components/editVenueModal";
+import EditVenueModal from "@/pages/admin/_components/editVenueModal";
 
 function NewVenue() {
 	const [venueInfo, setVenueInfo] = useState(mockVenueDetail[1]);
