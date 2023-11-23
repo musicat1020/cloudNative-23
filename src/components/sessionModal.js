@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import BaseModal from "./baseModal";
 import CourtTable from "./courtTable";
 
-function SessionModal({ venueInfo, date, startTime, endTime, show, setShow, windowSize, people }) {
+function SessionModal({ venueInfo, date, startTime, endTime, show, setShow, windowSize, people, level }) {
 
 	const { t } = useTranslation();
 
@@ -24,12 +24,19 @@ function SessionModal({ venueInfo, date, startTime, endTime, show, setShow, wind
 
 	return (
 		<BaseModal 
-			venue={`${t("綜合體育館")} ${venueInfo?.name}`}
-			session={`${date ? date.replaceAll("-", "/"): date} ${startTime}-${endTime}`}
+			venue={`${venueInfo?.name} ${venueInfo?.venue_name}`}
+			session={`${date ? date.replaceAll("-", "/"): date} ${startTime}:00 - ${endTime}:00`}
 			show={show} 
 			handleClose={() => setShow(false)} 
 			title={t("租借場地")}
-			content={<CourtTable venueInfo={venueInfo} windowSize={windowSize} people={people}/>}
+			content={<CourtTable 
+				venueInfo={venueInfo} 
+				date={date} 
+				startTime={startTime} 
+				windowSize={windowSize} 
+				people={people}
+				level={level}/>
+			}
 			customStyles={{width: modalWidth}}
 		/>
 	);

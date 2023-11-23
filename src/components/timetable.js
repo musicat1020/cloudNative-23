@@ -9,7 +9,7 @@ import SessionModal from "./sessionModal";
 import axios from "../utils/axios";
 import styles from "../styles/timetable.module.css";
 
-function TimeTable({ people, venueInfo }) {
+function TimeTable({ people, level, venueInfo }) {
 	const { t } = useTranslation();
 
 	const curDate = dayjs();
@@ -26,10 +26,12 @@ function TimeTable({ people, venueInfo }) {
 
 	const [windowSize, setWindowSize] = useState([(typeof window !== "undefined") ? [window.innerWidth, window.innerHeight] : [0, 0]]);
 
-	const fetchTimeTable = async (id, queryDate) => {
+	const fetchTimeTable = async (headcount, levelRequirement, id, queryDate) => {
 		const params = {
 			stadium_id: id,
-			query_date: queryDate.format("YYYY-MM-DD")
+			query_date: queryDate.format("YYYY-MM-DD"),
+			headcount,
+			level_requirement: levelRequirement,
 		};
 		const res = await axios.post("/api/v1/stadium/timetable", {}, { params });
 		setTimeTableData(res.data);
@@ -37,8 +39,8 @@ function TimeTable({ people, venueInfo }) {
 
 	// init time table data
 	useEffect(() => {
-		fetchTimeTable(venueInfo?.id, startDate);
-	}, [startDate, venueInfo]);
+		fetchTimeTable(people, level, venueInfo?.id, startDate);
+	}, [people, level, startDate, venueInfo]);
 
 	/** handle window resize */
 	useEffect(() => {
@@ -82,7 +84,7 @@ function TimeTable({ people, venueInfo }) {
 		return newDate;
 	};
 
-	const convertTimeFormat = (time) => time.format("HH:mm");
+	const convertTimeFormat = (time) => time.format("HH");
 
 	/** handle time table dates based on startDate and dayDuration */
 	useEffect(() => {
@@ -108,7 +110,7 @@ function TimeTable({ people, venueInfo }) {
 		/** get session time */
 		const FormatSessionStart = convertTimeFormat(sessionStart);
 		const FormatSessionEnd = convertTimeFormat(sessionEnd);
-		const sessionTime = `${FormatSessionStart} - ${FormatSessionEnd}`;
+		const sessionTime = `${FormatSessionStart}:00 - ${FormatSessionEnd}:00`;
 		timeCols.push(<Col key={-1} className={styles.timeTableSessionCell}>{sessionTime}</Col>);
 
 		/** get time columns */
@@ -224,6 +226,7 @@ function TimeTable({ people, venueInfo }) {
 				date={clickCellDate}
 				startTime={clickCellStartTime}
 				endTime={clickCellEndTime}
+				level={level}
 				show={showSessionModal} 
 				setShow={setShowSessionModal} 
 				windowSize={windowSize} 
