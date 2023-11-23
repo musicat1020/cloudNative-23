@@ -9,8 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import { Link } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import TimeTable from "./timeTable";
-import LevelEnum from '../utils/levelEnum';
+import TimeTable from "./timetable";
+import LevelEnum from "../utils/levelEnum";
 import styles from "../styles/venuetab.module.css";
 
 const theme = createTheme({
@@ -167,26 +167,11 @@ function VenueTab({ venueInfo }) {
 							</p>
 						</Col>
 						<Col lg={12} xl={6}>
-							<Carousel>
-								<Carousel.Item>
-									<img 
-										src='/venue-1.jpg'
-										className='d-block w-100 h-80'
-										alt='image 1'/>
-								</Carousel.Item>
-								<Carousel.Item>
-									<img 
-										src='/venue-2.jpg'
-										className='d-block w-100 h-80'
-										alt='image 2'/>
-								</Carousel.Item>
-								<Carousel.Item>
-									<img 
-										src='/venue-3.jpg'
-										className='d-block w-100 h-80'
-										alt='image 3'/>
-								</Carousel.Item>
-							</Carousel>
+								<img 
+									src='/venue-1.jpg'
+									className='d-block w-100 h-80'
+									alt='image 1'
+								/>
 						</Col>
 					</Row>
 				</Container>
