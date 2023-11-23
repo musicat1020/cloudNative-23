@@ -9,8 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import { Link } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import TimeTable from "./timeTable";
-import LevelEnum from '../utils/levelEnum';
+import TimeTable from "./timetable";
+import LevelEnum from "../utils/levelEnum";
 import styles from "../styles/venuetab.module.css";
 
 const theme = createTheme({
