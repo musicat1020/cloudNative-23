@@ -27,7 +27,6 @@ const {
 function NavBar() {
   const { t } = useTranslation();
   const { data, status } = useSession();
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const timeoutRef = useRef(null);
 
   const handleLanguage = () => {
@@ -37,38 +36,30 @@ function NavBar() {
     i18n.changeLanguage(newLang);
   };
 
-  const handleMouseEnter = () => {
-    clearTimeout(timeoutRef.current);
-    setIsDropdownVisible(true);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setIsDropdownVisible(false);
-    }, 100);
-  };
-
   const handleLogout = () => {
     signOut();
     localStorage.removeItem("accessToken");
   };
-
 
   useEffect(() => () => {
     clearTimeout(timeoutRef.current);
   }, []);
 
   useEffect(() => {
-
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken === null && data?.user?.name !== undefined) {
       getAccessToken(data?.user);
     }
   }, [data?.user]);
 
+  const [expanded, setExpanded] = useState(false);
+
+  const setToggle = () => {
+    setExpanded(true);
+  };
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="light-cream">
+    <Navbar collapseOnSelect expand="lg" bg="light-cream" onToggle={setToggle}>
       <Container className="m-2">
         <Navbar.Brand href="/main" bsPrefix="text-2xl no-underline" className="text-dark-blue">
           {t("Stadium Matching System")}
@@ -84,13 +75,14 @@ function NavBar() {
               {t("Home")}
             </Nav.Link>
             {status === "authenticated" ? (
-              <UserMenu
-                data={data}
-                isDropdownVisible={isDropdownVisible}
-                handleMouseEnter={handleMouseEnter}
-                handleMouseLeave={handleMouseLeave}
-                signOut={handleLogout}
-              />
+              <>
+                {/* Check if the Navbar is collapsed */}
+                <UserMenu
+                  data={data}
+                  signOut={handleLogout}
+                  expanded={expanded}
+                />
+              </>
             ) : (
               <button className={styles.navLink} onClick={() => signIn("google")}>
                 {t("Login")}
@@ -103,7 +95,7 @@ function NavBar() {
           </Nav>
         </Navbar.Collapse>
       </Container>
-    </Navbar>
+    </Navbar >
   );
 }
 

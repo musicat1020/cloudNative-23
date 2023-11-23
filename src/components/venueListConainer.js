@@ -26,7 +26,7 @@ function VenueListConainer({ isAdmin }) {
 
         const venusList = await axios.post(url, null, { headers })
           .then(response => {
-            console.log("Response:", response.data.stadium);
+            console.log("Response:", response.data);
             return response.data.stadium;
           })
           .catch(error => {
@@ -50,19 +50,22 @@ function VenueListConainer({ isAdmin }) {
       <div
         className="grid gap-4 mt-5"
         style={{
+          display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gridAutoRows: "1fr"
-
+          gridAutoRows: "1fr",
+          justifyContent: "start",
+          gap: "1vw",
         }}
       >
         {venueList && venueList.map((venue) => (
           <VenueItem
             id={venue.id}
-            name={venue.name}
-            picture={venue.picture ?? "/venue-1.jpg"}
-            area={venue.area ?? 0}
-            userCount={venue.userCount ?? 0}
-            userMax={venue.userMax ?? 0}
+            stadium={venue.name}
+            venue={venue.venue_name}
+            picture={venue.picture}
+            area={venue.area}
+            userCount={venue.current_people_count}
+            userMax={venue.max_number_of_people}
             isAdmin={isAdmin}
           />
         ))}
@@ -74,7 +77,8 @@ function VenueListConainer({ isAdmin }) {
 
 function VenueItem({
   id,
-  name,
+  stadium,
+  venue,
   picture,
   area,
   userCount,
@@ -85,7 +89,6 @@ function VenueItem({
   const router = useRouter();
 
   const handleEditClick = () => {
-    // Redirect to the edit page with the corresponding venue index
     router.push(`/admin/editVenue?venue=${id} `);
   };
 
@@ -94,21 +97,21 @@ function VenueItem({
   };
 
   return (
-    <button className="bg-white rounded-xl shadow m-2" onClick={isAdmin ? handleEditClick : handleRentClick}>
-      <div className="relative">
+    <button className="w-80 bg-white rounded-xl shadow m-2" onClick={isAdmin ? handleEditClick : handleRentClick}>
+      < div className="relative" >
         <div className="bg-black rounded-t-xl">
-          <Image
+          <img
             src={picture}
             alt="Venue Image"
-            width={500}
-            height={300}
-            className="opacity-40 rounded-t-xl"
+            // width={500}
+            height="100%"
+            className="opacity-40 rounded-t-xl object-cover w-80 h-60"
           />
         </div>
 
         <div className={styles.absoluteCenter}>
-          <p className="text-xl text-white text-center">{t("Sport Center")}</p>
-          <p className="text-2xl text-white text-center">{t(name)}</p>
+          <p className="text-xl text-white text-center">{t(stadium)}</p>
+          <p className="text-2xl text-white text-center">{t(venue)}</p>
         </div>
 
         <div className="flex flex-row justify-between m-3 px-2">
@@ -129,8 +132,8 @@ function VenueItem({
             </text>
           </div>
         </div>
-      </div>
-    </button>
+      </div >
+    </button >
 
   );
 }
