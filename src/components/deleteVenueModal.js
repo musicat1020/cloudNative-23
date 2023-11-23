@@ -28,7 +28,7 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
   // TODO
   const handleConfirm = () => {
     handleClose();
-  }
+  };
 
   return (
     <>

@@ -1,25 +1,33 @@
 import Head from "next/head";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+// import Image from "next/image";
+
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import PublishIcon from "@mui/icons-material/Publish";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
+
 import styles from "../../styles/venue.module.css";
 import VenueInput from "../../components/venueInput";
 import NavBar from "../../components/navbarAdmin";
-import NewVenueModal from "@/components/newVenueModal"; // reuse edit venue modal
-import EditVenueModal from "@/components/editVenueModal";
 import { mockVenueDetail } from "../../../mockData/mockData";
+import EditVenueModal from "@/components/editVenueModal";
 
 function NewVenue() {
 	const [venueInfo, setVenueInfo] = useState(mockVenueDetail[1]);
 	const [showNewVenueModal, setShowNewVenueModal] = useState(false);
 	const { t } = useTranslation();
 
+	const hiddenFileInput = useRef();
 
-	const handleFileChange = (event) => {
+	const handleImageClick = () => {
+		hiddenFileInput.current.click();
+		// console.log("handleImageClick");
+	};
+
+	const handleInputChange = (event) => {
 		const file = event.target.files[0]; // Get the first selected file
 		const reader = new FileReader();
 		reader.onloadend = () => {
@@ -55,19 +63,6 @@ function NewVenue() {
 		},
 	});
 
-	const VisuallyHiddenInput = styled("input")({
-		clip: "rect(0 0 0 0)",
-		clipPath: "inset(50%)",
-		height: 1,
-		overflow: "hidden",
-		position: "absolute",
-		bottom: 0,
-		left: 0,
-		whiteSpace: "nowrap",
-		width: 1,
-	});
-
-
 	return (
 		<ThemeProvider theme={theme}>
 			<Head>
@@ -80,16 +75,18 @@ function NewVenue() {
 			<NavBar />
 
 			<Container className={styles.container}>
-				{venueInfo?.stadium?.imgBase64 == "" ? (
+				{venueInfo?.stadium?.imgBase64 === "" ? (
 					<Row className='flex'>
 						<Col className="text-center">
 							<div className='rounded-6 items-center'>
 								<Col className="text-center" style={{ padding: "100px" }}>
 									<IconButton component="label" aria-label="delete">
 										<PublishIcon sx={{ fontSize: 30 }} />
-										<VisuallyHiddenInput
+										<input
 											type="file"
-											onChange={handleFileChange}
+											onChange={handleInputChange}
+											ref={hiddenFileInput}
+											style={{ display: 'none' }} // Make the file input element invisible
 										/>
 									</IconButton>
 									<p>{t("點擊上傳圖片")}</p>
@@ -102,7 +99,14 @@ function NewVenue() {
 						<img
 							className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
 							src={venueInfo?.stadium?.imgBase64}
-							alt="Picture of the venue"
+							alt="Venue here"
+							onClick={handleImageClick}
+						/>
+						<input
+							type="file"
+							onChange={handleInputChange}
+							ref={hiddenFileInput}
+							style={{ display: 'none' }} // Make the file input element invisible
 						/>
 					</div>
 				)}

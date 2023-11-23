@@ -1,8 +1,14 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+
 import { makeStyles } from "@mui/styles";
 import Modal from "@mui/material/Modal";
 import Divider from "@mui/material/Divider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+
 import styles from "../styles/modal.module.css";
 
 const useStyles = makeStyles({
@@ -21,25 +27,15 @@ const useStyles = makeStyles({
   }
 });
 
-function NewVenueModal({ show, handleClose, title, info, customStyles }) {
+function EnableVenueSessionModal({ show, handleClose, title, info, customStyles }) {
 
   const modalStyles = useStyles();
   const { t } = useTranslation();
 
-  const dayMap = {
-    1: t("週一"),
-    2: t("週二"),
-    3: t("週三"),
-    4: t("週四"),
-    5: t("週五"),
-    6: t("週六"),
-    7: t("週日"),
-  };
-
   // TODO
   const handleConfirm = () => {
     handleClose();
-  }
+  };
 
   return (
     <>
@@ -65,21 +61,6 @@ function NewVenueModal({ show, handleClose, title, info, customStyles }) {
               </Col>
             </Row>
 
-            {/** Divider */}
-            <Row className='my-3'>
-              <Col>
-                <Divider />
-              </Col>
-            </Row>
-
-            {/** Location */}
-            <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("場館地址")}</span>
-                <span>{info?.stadium?.address}</span>
-              </Col>
-            </Row>
-
             {/** stadium name */}
             <Row className='mt-3'>
               <Col>
@@ -92,60 +73,41 @@ function NewVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場地名稱")}</span>
-                <span>{t("name name")}</span>
+                <span>{info?.stadium?.name}</span>
               </Col>
             </Row>
 
-            {/** capacity */}
-            <Row className='mt-3'>
+            {/** Divider */}
+            <Row className='my-3'>
               <Col>
-                <span className={styles.modalAttribute}>{t("容納人數")}</span>
-                <span>n {t("人")}</span>
+                <Divider />
               </Col>
             </Row>
 
-            {/** court list */}
-            <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("場地列表")}</span>
-                <span>{t("A, B")}</span>
+            {/** start date/time */}
+            <Row className='my-3'>
+              <Col className="ml-8">
+                <div className="mb-3">{t("開始日期/時間")}</div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker className="mr-5" label="date" />
+                  <TimePicker views={["hours"]} />
+                </LocalizationProvider>
               </Col>
             </Row>
 
-            {/** area */}
-            <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("場地面積")}</span>
-                <span>n {t("平方公尺")}</span>
-              </Col>
-            </Row>
-
-            {/** open time */}
-            <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("開放時間")}</span>
-                <span>{t("1. ~ 2.")}</span>
-              </Col>
-            </Row>
-
-            {/** open day */}
-            <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("開放日")}</span>
-                <span>n {t("週一 週二")}</span>
-              </Col>
-            </Row>
-
-            {/** description */}
-            <Row className='mt-3 mb-10'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("說明")}</span>
-                <span>{t("說明說明")}</span>
+            {/** end date/time */}
+            <Row className='my-4'>
+              <Col className="ml-8">
+                <div className="mb-3">{t("結束日期/時間")}</div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker className="mr-5" label="date" />
+                  <TimePicker views={["hours"]} />
+                </LocalizationProvider>
               </Col>
             </Row>
 
             {/* Button */}
-            <Row className='mt-3'>
+            <Row className='mt-5'>
               <Col className='text-center' >
                 <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
               </Col>
@@ -160,4 +122,4 @@ function NewVenueModal({ show, handleClose, title, info, customStyles }) {
   );
 }
 
-export default NewVenueModal;
+export default EnableVenueSessionModal;

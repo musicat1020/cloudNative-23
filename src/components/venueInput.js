@@ -1,7 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import dayjs from "dayjs";
+
 import { useTranslation } from "react-i18next";
 import { useState, useRef } from "react";
+import { Col, Row, Form } from "react-bootstrap";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -18,13 +22,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Stack from "@mui/joy/Stack";
-import { Col, Row, Form } from "react-bootstrap";
 import Tab from "@mui/material/Tab";
-import dayjs from "dayjs";
 
 function VenueInput({ info, setInfo }) {
   const { t } = useTranslation();
   const [openAddModal, setOpenAddModal] = useState(false);
+  const newCourtRef = useRef(null);
 
   const handleAddressChange = (newValue) => {
     setInfo((prevInfo) => ({
@@ -145,8 +148,6 @@ function VenueInput({ info, setInfo }) {
       }
     }));
   };
-
-  const newCourtRef = useRef(null);
 
   const theme = createTheme({
     palette: {
@@ -341,6 +342,20 @@ function VenueInput({ info, setInfo }) {
                 type="discription"
                 placeholder={t("說明")}
                 value={info?.stadium?.description}
+                onChange={(e) => handleDecriptionChange(e.target.value)}
+              />
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} className="mb-3" controlId="discription">
+            <Form.Label column sm="2">
+              {t("位置連結")}
+            </Form.Label>
+            <Col sm="10">
+              <Form.Control
+                type="discription"
+                placeholder={t("位置連結")}
+                value={info?.stadium?.location_link}
                 onChange={(e) => handleDecriptionChange(e.target.value)}
               />
             </Col>

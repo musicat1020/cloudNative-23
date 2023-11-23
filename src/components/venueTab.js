@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -8,7 +8,6 @@ import RoomIcon from "@mui/icons-material/Room";
 import IconButton from "@mui/material/IconButton";
 import { Link } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
-import Carousel from "react-bootstrap/Carousel";
 import { useTranslation } from "react-i18next";
 import TimeTable from "./timeTable";
 import LevelEnum from '../utils/levelEnum';
@@ -29,8 +28,8 @@ const theme = createTheme({
 		divider: "#BEC8DD",
 	},
 	typography: {
-		fontFamily: 
-		"\"Palatino\", sans-serif",
+		fontFamily:
+			"\"Palatino\", sans-serif",
 	},
 });
 
@@ -45,11 +44,11 @@ function CustomTabPanel(props) {
 			aria-labelledby={`simple-tab-${index}`}
 			{...other}
 		>
-		{value === index && (
-			<Box sx={{ p: 3 }}>
-				{children}
-			</Box>
-		)}
+			{value === index && (
+				<Box sx={{ p: 3 }}>
+					{children}
+				</Box>
+			)}
 		</div>
 	);
 }
