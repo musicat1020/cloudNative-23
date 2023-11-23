@@ -10,7 +10,9 @@ import { Link } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import { useTranslation } from "react-i18next";
-import TimeTable from "./timetable";
+import TimeTable from "./timeTable";
+import LevelEnum from '../utils/levelEnum';
+import styles from "../styles/venuetab.module.css";
 
 const theme = createTheme({
 	palette: {
@@ -65,17 +67,51 @@ function a11yProps(index) {
 	};
 }
 
-function VenueTab() {
+function VenueTab({ venueInfo }) {
 
 	const { t } = useTranslation();
 
-	const levelList = ["beginner", "intermediate", "advanced"];
+	// 1 初級, 2 初＋中, 3 中, 4 初＋中＋高, 5 中＋高, 6 高
 	const [value, setValue] = useState(1);
 	const [people, setPeople] = useState(2);
-	const [level, setLevel] = useState(levelList[1]);
+	const [level, setLevel] = useState(LevelEnum.beginner);
+
+	const mapWeekday = {
+		1: t("週一"),
+		2: t("週二"),
+		3: t("週三"),
+		4: t("週四"),
+		5: t("週五"),
+		6: t("週六"),
+		7: t("週日"),
+	};
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
+	};
+
+	const getCourtList = () => {
+		const courtList = [];
+		venueInfo?.stadium_courts?.forEach((court) => {
+			courtList.push(<span className={styles.courtListCell}>{court?.name}</span>);
+		});
+		return courtList;
+	};
+
+	const getCloseWeekdays = () => {
+		const weekdays = Array.from({length: 7}, (_, i) => i + 1);
+		const openWeekdays = venueInfo?.available_times?.weekdays;
+		const closeWeekdays = weekdays.filter((weekday) => !openWeekdays?.includes(weekday)).map((x) => mapWeekday[x]);
+		const result = [];
+		if (closeWeekdays.length === 0) {
+			result.push(<span className={styles.courtListCell}>{t("無")}</span>);
+		}
+		else {
+			closeWeekdays?.forEach((weekday) => {
+				result.push(<span className={styles.courtListCell}>{weekday}</span>);
+			});
+		}
+		return result;
 	};
 
 	return (
@@ -96,21 +132,42 @@ function VenueTab() {
 			<CustomTabPanel value={value} index={0}>
 				<Container>
 					<Row>
-						<Col>
-							<p>
-								<span className='text-lg'>{ t("場館地點：臺北市羅斯福路四段一號") }</span>
+						<Col lg={12} xl={6}>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("Location")}</span>
+								<span>{venueInfo?.address}</span>
 								<Link href='https://www.google.com/maps/place/NTU+Sports+Center/@25.0216636,121.5352783,15z/data=!4m2!3m1!1s0x0:0x861db0f2b5ef52a3?sa=X&ved=2ahUKEwj_yNTW2LGCAxWIe_UHHbiTAVcQ_BJ6BAhJEAA'>
 									<IconButton>
 										<RoomIcon fontSize='inherit' color='secondary'/>
 									</IconButton>
 								</Link>
 							</p>
-							<p className='text-lg'>{ t("單一場地容納人數：2 人") }</p>
-							<p className='text-lg'>{ t("場地數量：5 場") }</p>
-							<p className='text-lg'>{ t("場地面積：50 m2") }</p>
-							<p className='text-lg'>{ t("開放時間：08 : 00 至 22 : 00") }</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("場地面積")}</span>
+								<span>{`${venueInfo?.area} ${t("Square Meter")}`}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("單一場地可容納人數")}</span>
+								<span>{`${venueInfo?.max_number_of_people} ${t("人")}`}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("場地數量")}</span>
+								<span>{`${venueInfo?.stadium_courts?.length} ${t("場")}`}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("場地列表")}</span>
+								<span>{getCourtList()}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("開放時間")}</span>
+								<span>{`${venueInfo?.available_times?.start_time}:00 ~ ${venueInfo?.available_times?.end_time}:00`}</span>
+							</p>
+							<p className="text-lg">
+								<span className={styles.infoAttr}>{t("休館日")}</span>
+								<span>{getCloseWeekdays()}</span>
+							</p>
 						</Col>
-						<Col>
+						<Col lg={12} xl={6}>
 							<Carousel>
 								<Carousel.Item>
 									<img 
@@ -156,14 +213,14 @@ function VenueTab() {
 								value={level}
 								onChange={(e) => setLevel(e.target.value)}
 							>
-								<option value={levelList[0]}>{ t("初級") }</option>
-								<option value={levelList[1]}>{ t("中級") }</option>
-								<option value={levelList[2]}>{ t("高級") }</option>
+								<option value={LevelEnum.beginner}>{ t("初級") }</option>
+								<option value={LevelEnum.intermediate}>{ t("中級") }</option>
+								<option value={LevelEnum.advanced}>{ t("高級") }</option>
 							</select>
 						</Col>
 					</Row>
 					<Row className='my-3'>
-						<TimeTable/>
+						<TimeTable people={people} level={level} venueInfo={venueInfo}/>
 					</Row>
 				</Container>
 			</CustomTabPanel>

@@ -1,4 +1,4 @@
-import React, { useState, useReact, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
@@ -41,7 +41,7 @@ function ButtonField(props) {
 	);
 }
 
-function ButtonDatePicker(props) {
+function ButtonDatePicker({ ...props }) {
 	const interval = 7;
 	const [open, setOpen] = useState(false);
 	const [navigateBeforeDisable, setNavigateBeforeDisable] = useState(false);
@@ -62,8 +62,8 @@ function ButtonDatePicker(props) {
 		}
 	}, [props.date, props.maxDate, props.minDate]);
 
-	const handleDateNavigate = (interval) => {
-		let newDate = props.date.clone().add(interval, "days");
+	const handleDateNavigate = (move) => {
+		let newDate = props.date.clone().add(move, "days");
 
 		if (newDate.isBefore(props.minDate, "days")) {
 			newDate = props.minDate;

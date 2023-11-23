@@ -18,7 +18,7 @@ import axios from "../utils/axios";
 import BaseModal from "./baseModal";
 import BaseSwitch from "./baseSwitch";
 import BaseCheckbox from "./baseCheckbox";
-import styles from "../styles/subvenue.module.css";
+import styles from "../styles/court.module.css";
 
 const {
 	publicRuntimeConfig: {
@@ -26,12 +26,7 @@ const {
 	},
 } = getConfig();
 
-// TODO: get data from backend
-function createData(id, venue, renter, people, levels, status) {
-	return { id, venue, renter, people, levels, status };
-}
-
-function SubVenueTable({ windowSize }) {
+function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 	const { t } = useTranslation();
 
@@ -40,11 +35,16 @@ function SubVenueTable({ windowSize }) {
 		"intermediate": t("中級"),
 		"advanced": t("高級"),
 	};
+	const statusList = {
+		"join": "加入",
+		"rent": "租借",
+		"full": "已滿",
+	};
 
 	const [showJoin, setShowJoin] = useState(false);
 	const [showRent, setShowRent] = useState(false);
 	const [showRentRes, setShowRentRes] = useState(false);
-	const [peopleUsed, setPeopleUsed] = useState(0);
+	const [peopleUsed, setPeopleUsed] = useState(people);
 	const [allowMatching, setAllowMatching] = useState(false);
 	const [peopleMatching, setPeopleMatching] = useState(0);
 	const [levelChecked, setLevelChecked] = useState([]);
@@ -52,6 +52,7 @@ function SubVenueTable({ windowSize }) {
 	const [joinModalWidth, setJoinModalWidth] = useState("35vw");
 	const [rentModalWidth, setRentModalWidth] = useState("45vw");
 	const [rentSuccessModalWidth, setRentSuccessModalWidth] = useState("45vw");
+	const [courtData, setCourtData] = useState([]);
 
 	/** handle modal width based on window size */
 	useEffect(() => {
@@ -77,14 +78,21 @@ function SubVenueTable({ windowSize }) {
 		}
 	}, [windowSize]);
 
-	// TODO: get data from backend
-	const rows = [
-		createData(1, "A場", "丁丁", "2/4", ["intermediate", "advanced"], t("加入")),
-		createData(2, "B場", "星星","3/6", ["beginner"], t("加入")),
-		createData(3, "C場", "容容","4/4", ["advanced"], t("已滿")),
-		createData(4, "D場", "安安","2/5", [], t("加入")),
-		createData(5, "E場", "無","0", [], t("租借")),
-	];
+	const fetchCourtInfo = async () => {
+		const params = { 
+			stadium_id: venueInfo.id, 
+			date,
+			start_time: parseInt(startTime, 10),
+			headcount: people,
+			level_requirement: level,
+		};
+		const res = await axios.post("/api/v1/stadium-court/rent-info", {}, { params });
+		setCourtData(res.data);
+	};
+
+	useEffect(() => {
+		fetchCourtInfo();
+	}, []);
 
 	// TODO: get data from backend
 	const joinData = {
@@ -127,25 +135,27 @@ function SubVenueTable({ windowSize }) {
 	};
 
 	const checkRentInput = (data) => {
+		let flag = true; 
+		const text = [];
+
 		if (data.people <= 0) {
-			Swal.fire({
-				icon: "error",
-				title: "Error",
-				text: t("使用人數不可為0"),
-				confirmButtonColor: "#14274C"
-			});
-			return false;
+			text.push(t("使用人數不可為0"));
+			flag = false;
 		}
 		if (data.allowMatching && data.peopleMatching <= 0) {
+			text.push(t("可加入人數不可為0"));
+			flag = false;
+		}
+
+		if (!flag) {
 			Swal.fire({
 				icon: "error",
 				title: "Error",
-				text: t("可加入人數不可為0"),
-				confirmButtonColor: "#14274C"
+				html: text.join(",<br>"),
+				confirmButtonColor: "#14274C",
 			});
-			return false;
 		}
-		return true;
+		return flag;
 	};
 
 	const handleRent = async () => {
@@ -353,18 +363,18 @@ function SubVenueTable({ windowSize }) {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-					{rows.map((row) => (
+					{courtData && courtData.map((row) => (
 						<TableRow
-							key={row.id}
+							key={row.stadium_court_id}
 						>
 							<TableCell component='th' scope='row' className={styles.tableCell}>
-								{row.venue}
+								{row.name}
 							</TableCell>
-							<TableCell className={styles.tableCell}>{row.renter}</TableCell>
-							<TableCell className={styles.tableCell}>{row.people}</TableCell>
+							<TableCell className={styles.tableCell}>{row.renter_name ?? t("無")}</TableCell>
+							<TableCell className={styles.tableCell}>{`${row.current_member_number ?? 0}/${row.max_number_of_member ?? venueInfo.max_number_of_people}`}</TableCell>
 							<TableCell className={styles.tableCell}>
 								{
-									(row.levels.length > 0 && row.levels.map((item, index) => (
+									(row.level_requirement?.length > 0 && row.level_requirement.map((item, index) => (
 										<span key={index} className={styles.level}>{levelList[item]}</span>
 									)))
 									|| 
@@ -373,15 +383,15 @@ function SubVenueTable({ windowSize }) {
 							</TableCell>
 							<TableCell className={styles.tableCell}>
 								{
-									row.status === t("加入") &&
+									row.status === statusList.join &&
 									<button onClick={handleOpenJoin} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
 								}
 								{
-									row.status === t("租借") &&
+									row.status === statusList.rent &&
 									<button onClick={handleOpenRent} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
 								}
 								{
-									row.status !== t("加入") && row.status !== t("租借") &&
+									row.status !== statusList.join && row.status !== statusList.rent &&
 									<span className='text-gray cursor-default'>{row.status}</span>
 								}
 							</TableCell>
@@ -427,4 +437,4 @@ function SubVenueTable({ windowSize }) {
 	);
 }
 
-export default SubVenueTable;
+export default CourtTable;
