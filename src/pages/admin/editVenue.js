@@ -21,6 +21,7 @@ import { mockVenueDetail } from "../../../mockData/mockData";
 import EditVenueModal from "@/components/editVenueModal";
 import ButtonDeleteVenue from "@/components/buttonDeleteVenue";
 import AdminTimeTable from "@/components/timetableAdmin";
+import { create } from "@mui/material/styles/createTransitions";
 // import Image from 'react-bootstrap/Image';
 
 const theme = createTheme({
@@ -88,8 +89,9 @@ function EditVenue() {
 	const router = useRouter();
 	const { venue: index } = router.query;
 
-	// fetch venue detail
+	// // fetch venue detail
 	// useEffect(() => {
+	// 	// POST /api/v1/stadium/info/
 	// 	const fetchVenueDetail = async () => {
 	// 		try {
 	// 			const accessToken = localStorage.getItem("accessToken");
@@ -99,11 +101,11 @@ function EditVenue() {
 	// 				"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
 	// 			};
 	// 			const params = {
-	// 				stadium_id: index,
+	// 				stadium_id: 1,
 	// 			};
 
 	// 			const res = await axios.post(url, null, { params, headers }).then((response) => {
-	// 				console.log(response.data);
+	// 				console.log("get info response", response.data);
 	// 				return response.data;
 	// 			});
 	// 			setVenueInfo(res);
@@ -111,9 +113,53 @@ function EditVenue() {
 	// 			throw new Error(error);
 	// 		}
 	// 	};
+
+	// 	// POST /api/v1/stadium/create/
+	// 	const createVenue = async () => {
+	// 		try {
+	// 			const accessToken = localStorage.getItem("accessToken");
+	// 			const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/create/`;
+	// 			const headers = {
+	// 				"Accept": "application/json",
+	// 				"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+	// 			};
+				
+	// 			const body = {
+	// 				stadium: {
+	// 					// id: 0,
+	// 					name: "test name",
+	// 					venue_name: "test venue_name",
+	// 					address: "test_address",
+	// 					picture: "string",
+	// 					area: 1000,
+	// 					description: "test_description",
+	// 					max_number_of_people: 10000,
+	// 				},
+	// 				stadium_available_times: {
+	// 					// id: 0,
+	// 					weekday: [1, 2, 3],
+	// 					start_time: 8,
+	// 					end_time: 22,
+	// 				},
+	// 				stadium_court_name: [
+	// 					"test_court_name1", "test_court_name2"
+	// 				]
+	// 			};
+
+	// 			const res = await axios.post(url, null, { params, headers }).then((response) => {
+	// 				console.log("create response:", response);
+	// 				return response.data;
+	// 			})
+	// 		} catch (error) {
+	// 		throw new Error(error);
+	// 	}
+	// };
+	// 	createVenue();
 	// 	fetchVenueDetail(index);
 	// 	console.log("venueInfo", venueInfo);
 	// }, []);
+
+	
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
