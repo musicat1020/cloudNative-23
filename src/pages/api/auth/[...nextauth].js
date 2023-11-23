@@ -1,7 +1,5 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import jwt from "jsonwebtoken";
-import axios from "axios";
 
 export const authOptions = {
 

@@ -7,8 +7,8 @@ import Link from "next/link";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
+import axios from "axios";
 import styles from "../styles/venueItem.module.css";
-import { mockVenueList } from "../../mockData/mockData";
 
 function VenueListConainer({ isAdmin }) {
   const { t } = useTranslation();
@@ -17,12 +17,22 @@ function VenueListConainer({ isAdmin }) {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        // TODO:
-        // const response = await fetch('/stadium/list');
-        // const data = await response.json();
-        // setVenues(data);
-        const data = mockVenueList;
-        setVenueList(data);
+        const accessToken = localStorage.getItem("accessToken");
+        const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/stadium-list/`;
+        const headers = {
+          "Accept": "application/json",
+          "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+        };
+
+        const venusList = await axios.post(url, null, { headers })
+          .then(response => {
+            console.log("Response:", response.data.stadium);
+            return response.data.stadium;
+          })
+          .catch(error => {
+            console.error("Error:", error.message);
+          });
+        setVenueList(venusList);
       } catch (error) {
         throw new Error(error);
       }
@@ -45,14 +55,14 @@ function VenueListConainer({ isAdmin }) {
 
         }}
       >
-        {venueList.map((venue) => (
+        {venueList && venueList.map((venue) => (
           <VenueItem
-            index={venue.index}
+            id={venue.id}
             name={venue.name}
-            imgUrl={venue.imgUrl}
-            space={venue.space}
-            userCount={venue.userCount}
-            userMax={venue.userMax}
+            picture={venue.picture ?? "/venue-1.jpg"}
+            area={venue.area ?? 0}
+            userCount={venue.userCount ?? 0}
+            userMax={venue.userMax ?? 0}
             isAdmin={isAdmin}
           />
         ))}
@@ -63,10 +73,10 @@ function VenueListConainer({ isAdmin }) {
 }
 
 function VenueItem({
-  index,
+  id,
   name,
-  imgUrl,
-  space,
+  picture,
+  area,
   userCount,
   userMax,
   isAdmin
@@ -76,19 +86,19 @@ function VenueItem({
 
   const handleEditClick = () => {
     // Redirect to the edit page with the corresponding venue index
-    router.push(`/admin/editVenue?venue=${index}`);
+    router.push(`/admin/editVenue?venue=${id} `);
   };
 
   const handleRentClick = () => {
-    router.push(`/main/venue?venue=${index}`);
+    router.push(`/main/venue?venue=${id} `);
   };
 
   return (
-    <div className="bg-white rounded-xl shadow m-2">
+    <button className="bg-white rounded-xl shadow m-2" onClick={isAdmin ? handleEditClick : handleRentClick}>
       <div className="relative">
         <div className="bg-black rounded-t-xl">
           <Image
-            src={imgUrl}
+            src={picture}
             alt="Venue Image"
             width={500}
             height={300}
@@ -113,26 +123,14 @@ function VenueItem({
           <div className="flex flex-row space-x-2 items-center text-dark-blue">
             <RxBorderAll fill="#14274C" />
             <text>
-              {space}
+              {area}
               {" "}
               {t("Square Meter")}
             </text>
           </div>
-          <div className="flex flex-row items-center">
-            {isAdmin && (
-              <button onClick={handleEditClick} className={styles.rentLink}>
-                {t("修改")}
-              </button>
-            )}
-            {!isAdmin &&
-              <button onClick={handleRentClick} className={styles.rentLink}>
-                {t("Rent")}
-              </button>
-            }
-          </div>
         </div>
       </div>
-    </div>
+    </button>
 
   );
 }
