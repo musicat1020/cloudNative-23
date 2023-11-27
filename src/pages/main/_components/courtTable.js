@@ -404,15 +404,15 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 							<TableCell className={styles.tableCell}>
 								{
 									row.status === statusList.join &&
-									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenJoin(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
+									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenJoin(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
 								}
 								{
 									row.status === statusList.rent &&
-									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenRent(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
+									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenRent(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
 								}
 								{
 									row.status !== statusList.join && row.status !== statusList.rent &&
-									<span className='text-gray cursor-default'>{row.status}</span>
+									<span className='text-gray cursor-default'>{t(row.status)}</span>
 								}
 							</TableCell>
 						</TableRow>
