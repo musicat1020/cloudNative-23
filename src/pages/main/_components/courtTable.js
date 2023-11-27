@@ -13,7 +13,6 @@ import {
 	TableRow 
 } from "@mui/material";
 import Swal from "sweetalert2";
-import getConfig from "next/config";
 import axios from "@/utils/axios";
 import BaseModal from "@/components/baseModal";
 import BaseSwitch from "@/components/baseSwitch";
@@ -21,13 +20,7 @@ import BaseCheckbox from "@/components/baseCheckbox";
 import InputEmail from "@/pages/main/_components/inputEmail";
 import styles from "@/styles/court.module.css";
 
-const {
-	publicRuntimeConfig: {
-		apiRoot,
-	},
-} = getConfig();
-
-function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
+function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, level }) {
 
 	const { t } = useTranslation();
 
@@ -55,6 +48,7 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 	const [rentModalWidth, setRentModalWidth] = useState("45vw");
 	const [rentSuccessModalWidth, setRentSuccessModalWidth] = useState("45vw");
 	const [courtData, setCourtData] = useState([]);
+	const [currCourtInfo, setCurrCourtInfo] = useState({});
 
 	/** handle modal width based on window size */
 	useEffect(() => {
@@ -114,28 +108,34 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 		setLevelChecked([]);
 	};
 
-	const handleOpenJoin = () => {
-
-		// TODO: Send request to backend
-
+	const handleOpenJoin = (e) => {
+		const courtId = e.target.id;
+		const courtInfo = courtData.find((item) => item.stadium_court_id === parseInt(courtId, 10));
+		setCurrCourtInfo(courtInfo);
 		setShowJoin(true);
 	};
 
-	const handleOpenRent = () => {
+	const handleOpenRent = (e) => {
+		const courtId = e.target.id;
+		const courtInfo = courtData.find((item) => item.stadium_court_id === parseInt(courtId, 10));
+		setCurrCourtInfo(courtInfo);
 		setShowRent(true);
 	};
 
 	const handleCloseJoin = () => {
+		setCurrCourtInfo({});
 		setShowJoin(false);
 	};
 
 	const handleCloseRent = () => {
 		clearRentInput();
+		setCurrCourtInfo({});
 		setShowRent(false);
 	};
 
 	const handleCloseRentRes = () => {
 		setRentResponse({});
+		setCurrCourtInfo({});
 		setShowRentRes(false);
 	};
 
@@ -182,7 +182,7 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 		// TODO: send request to backend
 		const res = await axios.get(
-			`${apiRoot}/api/healthchecker`
+			"/api/healthchecker"
 		);
 
 		// Show success message
@@ -364,6 +364,8 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			</Row>
 		</Container>
 	);
+
+	const getModalVenueName = () => `${venueInfo?.name} ${venueInfo?.venue_name} ${currCourtInfo?.name}`;
 	
 	return (
 		<>
@@ -402,11 +404,11 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 							<TableCell className={styles.tableCell}>
 								{
 									row.status === statusList.join &&
-									<button onClick={handleOpenJoin} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
+									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenJoin(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
 								}
 								{
 									row.status === statusList.rent &&
-									<button onClick={handleOpenRent} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
+									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenRent(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
 								}
 								{
 									row.status !== statusList.join && row.status !== statusList.rent &&
@@ -421,8 +423,10 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 			{/* Modal for joined */}
 			<BaseModal 
-				venue={t("綜合體育館 一樓多功能球場 A場")}
-				session={t("2021/10/20 14:00 - 16:00")}
+				venue={getModalVenueName()}
+				date={date}
+				startTime={startTime}
+				endTime={endTime}
 				show={showJoin}
 				handleClose={handleCloseJoin}
 				title={t("已加入隊伍")}
@@ -432,8 +436,10 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 			{/* Modal for rental */}
 			<BaseModal 
-				venue={t("綜合體育館 一樓多功能球場 A場")}
-				session={t("2021/10/20 14:00 - 16:00")}
+				venue={getModalVenueName()}
+				date={date}
+				startTime={startTime}
+				endTime={endTime}
 				show={showRent}
 				handleClose={handleCloseRent}
 				title={t("租借場地")}
@@ -443,8 +449,10 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 			{/* Modal for rental successfully */}
 			<BaseModal 
-				venue={t("綜合體育館 一樓多功能球場 A場")}
-				session={t("2021/10/20 14:00 - 16:00")}
+				venue={getModalVenueName()}
+				date={date}
+				startTime={startTime}
+				endTime={endTime}
 				show={showRentRes}
 				handleClose={() => setShowRentRes(false)}
 				title={t("租借成功")}

@@ -25,7 +25,9 @@ function SessionModal({ venueInfo, date, startTime, endTime, show, setShow, wind
 	return (
 		<BaseModal 
 			venue={`${venueInfo?.name} ${venueInfo?.venue_name}`}
-			session={`${date ? date.replaceAll("-", "/"): date} ${startTime}:00 - ${endTime}:00`}
+			date={date ? date.replaceAll("-", "/") : date}
+			startTime={startTime}
+			endTime={endTime}
 			show={show} 
 			handleClose={() => setShow(false)} 
 			title={t("租借場地")}
@@ -33,6 +35,7 @@ function SessionModal({ venueInfo, date, startTime, endTime, show, setShow, wind
 				venueInfo={venueInfo} 
 				date={date} 
 				startTime={startTime} 
+				endTime={endTime}
 				windowSize={windowSize} 
 				people={people}
 				level={level}/>
