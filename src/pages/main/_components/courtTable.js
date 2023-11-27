@@ -18,6 +18,7 @@ import axios from "@/utils/axios";
 import BaseModal from "@/components/baseModal";
 import BaseSwitch from "@/components/baseSwitch";
 import BaseCheckbox from "@/components/baseCheckbox";
+import InputEmail from "@/pages/main/_components/inputEmail";
 import styles from "@/styles/court.module.css";
 
 const {
@@ -45,6 +46,7 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 	const [showRent, setShowRent] = useState(false);
 	const [showRentRes, setShowRentRes] = useState(false);
 	const [peopleUsed, setPeopleUsed] = useState(people);
+	const [emails, setEmails] = useState([]);
 	const [allowMatching, setAllowMatching] = useState(false);
 	const [peopleMatching, setPeopleMatching] = useState(0);
 	const [levelChecked, setLevelChecked] = useState([]);
@@ -89,6 +91,8 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 		const res = await axios.post("/api/v1/stadium-court/rent-info", {}, { params });
 		setCourtData(res.data);
 	};
+	
+
 
 	useEffect(() => {
 		fetchCourtInfo();
@@ -104,6 +108,7 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 	const clearRentInput = () => {
 		setPeopleUsed(people);
+		setEmails([]);
 		setAllowMatching(true);
 		setPeopleMatching(0);
 		setLevelChecked([]);
@@ -162,6 +167,7 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 		const data = {
 			"people": peopleUsed,
+			"emails": emails?.map((item) => item.email),
 			"allowMatching": allowMatching,
 			"peopleMatching": allowMatching ? peopleMatching: 0,
 			"levels": levelChecked,
@@ -186,6 +192,10 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 		handleCloseRent();
 
 		setShowRentRes(true);
+	};
+
+	const handleEmailChange = (value) => {
+		setEmails(value);
 	};
 
 	const getJoinContent = (data) => (
@@ -243,6 +253,14 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 						onChange={(e) => setPeopleUsed(e.target.value)}
 					/>
 					<span>{ t("人") }</span>
+				</Col>
+			</Row>
+
+			{/* Temmates Email */}
+			<Row>
+				<Col className="flex items-center mt-2">
+					<span className={styles.rentAttrTitle}>{t("隊友Email")}</span>
+					<InputEmail emails={emails} onChange={handleEmailChange}/>
 				</Col>
 			</Row>
 
