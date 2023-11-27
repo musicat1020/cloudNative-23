@@ -11,9 +11,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
 import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "@/styles/navbar.module.css";
-import i18n from "../../../utils/i18n";
-import UserMenu from "../../../components/buttonUserMenu";
-import getAccessToken from "../../../hooks/getAccessToken";
+import i18n from "@/utils/i18n";
+import UserMenu from "@/components/buttonUserMenu";
+import getAccessToken from "@/hooks/getAccessToken";
 
 const {
   publicRuntimeConfig: {

@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
-// import Image from "next/image";
 
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -19,10 +18,8 @@ import styles from "../../styles/venue.module.css";
 import axios from "../../utils/axios";
 import { mockVenueDetail } from "../../../mockData/mockData";
 import EditVenueModal from "@/pages/admin/_components/editVenueModal";
-import ButtonDeleteVenue from "@/pages/main/_components/buttonDeleteVenue";
+import ButtonDeleteVenue from "@/pages/admin/_components/buttonDeleteVenue";
 import AdminTimeTable from "@/pages/admin/_components/timetableAdmin";
-import { create } from "@mui/material/styles/createTransitions";
-// import Image from 'react-bootstrap/Image';
 
 const theme = createTheme({
 	palette: {
@@ -273,7 +270,7 @@ function EditVenue() {
 				<CustomTabPanel value={value} index={1}>
 					<Container className="flex justify-center ">
 						<Row className="w-4/5">
-							<AdminTimeTable />
+							<AdminTimeTable venueInfo={venueInfo}/>
 						</Row>
 					</Container>
 				</CustomTabPanel>

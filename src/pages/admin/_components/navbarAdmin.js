@@ -1,24 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import {
-  Navbar, Nav, Container
-} from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import { useTranslation } from "next-i18next";
 import { getCookie, setCookie } from "cookies-next";
-import getConfig from "next/config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
-import i18n from "../../../utils/i18n";
+import i18n from "@/utils/i18n";
 import styles from "@/styles/navbar.module.css";
-
-const {
-  publicRuntimeConfig: {
-    apiRoot,
-    frontendRoot,
-    accessTokenMaxAge,
-    refreshTokenMaxAge,
-  }
-} = getConfig();
 
 function NavBar() {
   const { t } = useTranslation();

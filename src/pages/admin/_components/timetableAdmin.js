@@ -1,22 +1,15 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import getConfig from "next/config";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import ButtonDatePicker from "../../../components/buttonDatePicker";
-import axios from "../../../utils/axios";
+import ButtonDatePicker from "@/components/buttonDatePicker";
+import axios from "@/utils/axios";
 import styles from "@/styles/timetable.module.css";
-import AdminSessionModal from "./adminSessionModal";
+import AdminSessionModal from "@/pages/admin/_components/adminSessionModal";
 
-const {
-	publicRuntimeConfig: {
-		apiRoot,
-	},
-} = getConfig();
-
-function AdminTimeTable() {
+function AdminTimeTable({ venueInfo }) {
 	const { t } = useTranslation();
 
 	const curDate = dayjs();
@@ -29,132 +22,23 @@ function AdminTimeTable() {
 
 	const [windowSize, setWindowSize] = useState([(typeof window !== "undefined") ? [window.innerWidth, window.innerHeight] : [0, 0]]);
 
-	const getTimeTable = async () => {
-		// const params = {
-		// 	stadium_id: 1,
-		// 	query_date: "2023-11-30T00:00:00"
-		// };
-		// const res = await axios.get(
-		// 	`${apiRoot}/api/v1/stadium/timetable`,
-		// 	{ params }
-		// );
-
-		// TODO: Remove this after backend is done
-    // 3 status: Available, Booked, Disable
-		const res = {
-			status: 200,
+	const getTimeTable = async (queryDate) => {
+		const params = {
 			stadium_id: 1,
-			query_date: "2023-11-30T00:00:00",
-			message: "success",
-			data: [
-				{
-					day_1: {
-						"9":"Available",
-						"10":"Aavailable",
-						"11":"Available",
-						"12":"Available",
-						"13":"Available",
-						"14":"Available",
-						"15":"Available",
-						"16":"Available",
-						"17":"Available",
-						"18":"Available",
-					}
-				},
-				{
-					day_2: {
-						"9":"Disable",
-						"10":"Aavailable",
-						"11":"Booked",
-						"12":"Available",
-						"13":"Available",
-						"14":"Available",
-						"15":"Available",
-						"16":"Available",
-						"17":"Available",
-						"18":"Available",
-					}
-				},
-				{
-					day_3: {
-						"9":"Disable",
-						"10":"Aavailable",
-						"11":"Booked",
-						"12":"Available",
-						"13":"Available",
-						"14":"Available",
-						"15":"Available",
-						"16":"Available",
-						"17":"Available",
-						"18":"Available",
-					}
-				},
-				{
-					day_4: {
-						"9":"Disable",
-						"10":"Aavailable",
-						"11":"Booked",
-						"12":"Available",
-						"13":"Available",
-						"14":"Available",
-						"15":"Available",
-						"16":"Available",
-						"17":"Available",
-						"18":"Available",
-					}
-				},
-				{
-					day_5: {
-						"9":"Disable",
-						"10":"Aavailable",
-						"11":"Booked",
-						"12":"Available",
-						"13":"Available",
-						"14":"Available",
-						"15":"Available",
-						"16":"Available",
-						"17":"Available",
-						"18":"Available",
-					}
-				},
-				{
-					day_6: {
-						"9":"Disable",
-						"10":"Aavailable",
-						"11":"Booked",
-						"12":"Available",
-						"13":"Available",
-						"14":"Available",
-						"15":"Available",
-						"16":"Available",
-						"17":"Available",
-						"18":"Available",
-					}
-				},
-				{
-					day_7: {
-						"9":"Disable",
-						"10":"Aavailable",
-						"11":"Booked",
-						"12":"Available",
-						"13":"Available",
-						"14":"Available",
-						"15":"Available",
-						"16":"Available",
-						"17":"Available",
-						"18":"Available",
-					}
-				},
-			]
+			query_date: queryDate.format("YYYY-MM-DD")
 		};
+
+		const res = await axios.post(
+			"/api/v1/stadium/providertimetable/", {}, { params }
+		);
 
 		setTimeTableData(res.data);
 	};
 
 	// init time table data
 	useEffect(() => {
-		getTimeTable();
-	}, []);
+		getTimeTable(startDate);
+	}, [startDate]);
 
 	/** handle window resize */
 	useEffect(() => {
@@ -233,7 +117,7 @@ function AdminTimeTable() {
 			const status = timeTableData[i][`day_${i+1}`][hour];
 
 			let col;
-			if (status === "Available") {
+			if (status === "no_order") {
 				col = 
 				<Col 
 					key={i}
@@ -254,10 +138,10 @@ function AdminTimeTable() {
 						data-start={FormatSessionStart}
 						data-end={FormatSessionEnd}
 						// aria-disabled
-            onClick={handleSessionClick} 
+            			onClick={handleSessionClick} 
 						className={styles.timeTableSessionCell}
 					>
-						{ (status === "Booked") ? t("Booked") : t("Disabled") }
+						{ (status === "has_order") ? t("Booked") : t("Disabled") }
 					</Col>;
 			}
 
@@ -290,7 +174,7 @@ function AdminTimeTable() {
 		timeTable.push(<Row key={-1}>{handleDateCols()}</Row>);
 
 		/** time table data is empty */
-		if (timeTableData.length === 0) {
+		if (!timeTableData || timeTableData.length === 0) {
 			return timeTable;
 		}
 

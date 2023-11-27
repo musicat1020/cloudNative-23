@@ -1,7 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import BaseModal from "../../../components/baseModal";
+import BaseModal from "@/components/baseModal";
 
 import styles from "@/styles/modal.module.css";
 

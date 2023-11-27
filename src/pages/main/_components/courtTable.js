@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 import getConfig from "next/config";
-import axios from "../../../utils/axios";
-import BaseModal from "../../../components/baseModal";
-import BaseSwitch from "../../../components/baseSwitch";
-import BaseCheckbox from "../../../components/baseCheckbox";
+import axios from "@/utils/axios";
+import BaseModal from "@/components/baseModal";
+import BaseSwitch from "@/components/baseSwitch";
+import BaseCheckbox from "@/components/baseCheckbox";
 import styles from "@/styles/court.module.css";
 
 const {
@@ -103,7 +103,7 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 	};
 
 	const clearRentInput = () => {
-		setPeopleUsed(0);
+		setPeopleUsed(people);
 		setAllowMatching(true);
 		setPeopleMatching(0);
 		setLevelChecked([]);

@@ -25,10 +25,7 @@ function VenueListConainer({ isAdmin }) {
         };
 
         const venusList = await axios.post(url, null, { headers })
-          .then(response => {
-            console.log("Response:", response.data);
-            return response.data.stadium;
-          })
+          .then(response => response.data.stadium)
           .catch(error => {
             console.error("Error:", error.message);
           });

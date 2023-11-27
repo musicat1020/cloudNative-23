@@ -1,7 +1,7 @@
 import { useState , useEffect} from "react";
 import { useTranslation } from "react-i18next";
-import BaseModal from "../../../components/baseModal";
-import CourtTable from "./courtTable";
+import BaseModal from "@/components/baseModal";
+import CourtTable from "@/pages/main/_components/courtTable";
 
 function SessionModal({ venueInfo, date, startTime, endTime, show, setShow, windowSize, people, level }) {
 

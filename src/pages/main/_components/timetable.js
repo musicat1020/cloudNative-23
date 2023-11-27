@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import ButtonDatePicker from "../../../components/buttonDatePicker";
-import SessionModal from "./sessionModal";
-import axios from "../../../utils/axios";
+import ButtonDatePicker from "@/components/buttonDatePicker";
+import SessionModal from "@/pages/main/_components/sessionModal";
+import axios from "@/utils/axios";
 import styles from "@/styles/timetable.module.css";
 
 function TimeTable({ people, level, venueInfo }) {
