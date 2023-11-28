@@ -33,6 +33,7 @@ i18n.use(initReactI18next).init({
 				"時段": "Session",
 				"租借人": "Renter",
 				"使用人數": "People",
+				"目前人數": "Current People",
 				"球技要求": "Level Requirements",
 				"狀態": "Status",
 				"無": "None",
@@ -103,6 +104,7 @@ i18n.use(initReactI18next).init({
 				"上架場地": "Add venue sessions",
 				"下架場地": "Disable venue sessions",
 				"隊友Email": "Teammates Email",
+				"欲加入人數": "People Joining",
 			}
 		},
 		zh: {
@@ -130,6 +132,7 @@ i18n.use(initReactI18next).init({
 				"時段": "時段",
 				"租借人": "租借人",
 				"使用人數": "使用人數",
+				"目前人數": "目前人數",
 				"球技要求": "球技要求",
 				"狀態": "狀態",
 				"無": "無",
@@ -202,6 +205,7 @@ i18n.use(initReactI18next).init({
 				"上架特定時段場地": "上架特定時段場地",
 				"上架場地": "上架場地",
 				"隊友Email": "隊友Email",
+				"欲加入人數": "欲加入人數",
 			}
 		},
 	},

@@ -39,7 +39,7 @@ function InputEmail({ emails, onChange }) {
 				getOptionLabel={(option) => option.email}
 				filterSelectedOptions
 				onChange={handleChange}
-				defaultValue={emails}
+				value={emails}
 				renderInput={(params) => (
 					<TextField 
 						{...params}
