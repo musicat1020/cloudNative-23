@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import Modal from "@mui/material/Modal";
 import Divider from "@mui/material/Divider";
 import styles from "@/styles/modal.module.css";
+import axios from "@/utils/axios";
 
 const useStyles = makeStyles({
   modal: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles({
   }
 });
 
-function EditVenueModal({ show, handleClose, title, info, customStyles }) {
+export default function EditVenueModal({ show, handleClose, title, info, customStyles }) {
 
   const modalStyles = useStyles();
   const { t } = useTranslation();
@@ -36,9 +37,49 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
     7: t("週日"),
   };
 
+  // PUT api/v1/stadium/
+  const updateVenue = async () => {
+    console.log("update venue info");
+    const accessToken = localStorage.getItem("accessToken");
+		const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/`;
+		const headers = {
+			"Accept": "application/json",
+			"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+		};
+		// const body = {
+    //   info,
+		// };
+    // console.log("body", body);
+    const res = await axios.put(url, info, { headers }).then((response) => {
+			console.log("get info response", response.data);
+			return response;
+		});
+
+    console.log(res.message);
+    console.log(res.data);
+  };
+
   // TODO
   const handleConfirm = () => {
     handleClose();
+    console.log(info);
+    updateVenue();
+  };
+
+  const getCourtList = () => {
+    const courtList = [];
+    info?.stadium_courts?.forEach((court) => {
+      courtList.push(<span className={styles.courtListCell}>{court?.name}</span>);
+    });
+    return courtList;
+  };
+
+  const getWeekdays = () => {
+    const weekdays = [];
+    info?.available_times?.weekdays?.forEach((weekday) => {
+      weekdays.push(<span className={styles.courtListCell}>{dayMap[weekday]}</span>);
+    });
+    return weekdays;
   };
 
   return (
@@ -76,7 +117,7 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場館地址")}</span>
-                <span>{info?.stadium?.address}</span>
+                <span>{info?.address}</span>
               </Col>
             </Row>
 
@@ -84,7 +125,7 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場館名稱")}</span>
-                <span>{info?.stadium?.stadium_name}</span>
+                <span>{info?.name}</span>
               </Col>
             </Row>
 
@@ -92,7 +133,7 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場地名稱")}</span>
-                <span>{info?.stadium?.name}</span>
+                <span>{info?.venue_name}</span>
               </Col>
             </Row>
 
@@ -100,7 +141,7 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("容納人數")}</span>
-                <span>{info?.stadium?.max_number_of_people}  {t("人")}</span>
+                <span>{info?.max_number_of_people}  {t("人")}</span>
               </Col>
             </Row>
 
@@ -108,12 +149,7 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場地列表")}</span>
-                {info?.stadium_courts?.map((court, index) => (
-                  <span key={court}>
-                    {court}
-                    {index !== info.stadium_courts.length - 1 && <>&nbsp;</>}
-                  </span>
-                ))}
+                <span>{getCourtList()}</span>
               </Col>
             </Row>
 
@@ -121,7 +157,7 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場地面積")}</span>
-                <span>{info?.stadium?.area} {t("平方公尺")}</span>
+                <span>{info?.area} {t("平方公尺")}</span>
               </Col>
             </Row>
 
@@ -129,7 +165,7 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("開放時間")}</span>
-                <span>{info?.stadium?.start_time} {t("至")} {info?.stadium?.end_time}</span>
+                <span>{`${info?.available_times?.start_time}:00 ~ ${info?.available_times?.end_time}:00`}</span>
               </Col>
             </Row>
 
@@ -137,22 +173,34 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("開放日")}</span>
-                {info?.stadium?.open_day.map((day, index) => (
-                  <span key={day}>
-                    {dayMap[day]}
-                    {index !== info.stadium.open_day.length - 1 && <>&nbsp;</>}
-                  </span>
-                ))}
+                {getWeekdays()}
               </Col>
             </Row>
 
             {/** description */}
             <Row className='mt-3 mb-10'>
-              <Col>
+              <Col xs={3}>
                 <span className={styles.modalAttribute}>{t("說明")}</span>
-                <span>{info?.stadium?.description}</span>
+              </Col>
+              <Col>
+                <span>{info?.description}</span>
               </Col>
             </Row>
+
+            {/* link */}
+            <Row className='mt-3 mb-10'>
+              <Col xs={3}>
+                <span className={styles.modalAttribute}>{t("地圖連結")}</span>
+              </Col>
+              <Col>
+                {info?.google_map_url && (
+                  <a className="w-2/3" href={info.google_map_url} target="_blank" rel="noopener noreferrer">
+                    {info.google_map_url}
+                  </a>
+                )}
+              </Col>
+            </Row>
+
 
             {/* Button */}
             <Row className='mt-3'>
@@ -169,5 +217,3 @@ function EditVenueModal({ show, handleClose, title, info, customStyles }) {
     </>
   );
 }
-
-export default EditVenueModal;

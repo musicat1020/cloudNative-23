@@ -24,7 +24,7 @@ function VenueListConainer({ isAdmin }) {
           "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
         };
 
-        const venusList = await axios.post(url, null, { headers })
+        const venusList = await axios.get(url, null, { headers })
           .then(response => {
             console.log("Response:", response.data);
             return response.data.stadium;

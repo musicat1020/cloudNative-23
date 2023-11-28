@@ -108,6 +108,8 @@ i18n.use(initReactI18next).init({
 				"上架特定時段場地": "Enable venue sessions",
 				"上架場地": "Add venue sessions",
 				"下架場地": "Disable venue sessions",
+				"地圖連結": "Location Link",
+				"修改場地資訊": "Update Venue Info",
 			}
 		},
 		zh: {
@@ -210,6 +212,8 @@ i18n.use(initReactI18next).init({
 				"位置連結": "位置連結",
 				"上架特定時段場地": "上架特定時段場地",
 				"上架場地": "上架場地",
+				"地圖連結": "地圖連結",
+				"修改場地資訊": "修改場地資訊",
 			}
 		},
 	},
