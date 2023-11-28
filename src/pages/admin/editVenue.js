@@ -80,86 +80,45 @@ function a11yProps(index) {
 function EditVenue() {
 
 	const { t } = useTranslation();
-
+	const [venueIsReady, setVenueIsReady] = useState(false);
+	// const [venueInfo, setVenueInfo] = useState(mockVenueDetail[0]);
+	const [venueInfo, setVenueInfo] = useState(null);
 	const [value, setValue] = useState(1);
-	const [venueInfo, setVenueInfo] = useState(mockVenueDetail[0]);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 
-	// the index is assigned the value of router.query.venue
-	const router = useRouter();
-	const { venue: index } = router.query;
+
+	const fetchVenueInfo = async (id) => {
+		console.log("fetching venue info");
+		const accessToken = localStorage.getItem("accessToken");
+		const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/info`;
+		const headers = {
+			"Accept": "application/json",
+			"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+		};
+		const params = {
+			stadium_id: id,
+		};
+
+		// const res = await axios.post("/api/v1/stadium/info", {}, { params });
+		const res = await axios.post(url, {}, { params, headers }).then((response) => {
+			console.log("get info response", response.data);
+			return response.data;
+		});
+
+		setVenueInfo(res);
+		setVenueIsReady(true);
+	};
 
 	// fetch venue detail
-	// useEffect(() => {
-	// 	// POST /api/v1/stadium/info/
-	// 	const fetchVenueDetail = async () => {
-	// 		try {
-	// 			const accessToken = localStorage.getItem("accessToken");
-	// 			const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/info/`;
-	// 			const headers = {
-	// 				"Accept": "application/json",
-	// 				"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-	// 			};
-	// 			const params = {
-	// 				stadium_id: 1,
-	// 			};
-
-	// 			const res = await axios.post(url, null, { params, headers }).then((response) => {
-	// 				console.log("get info response", response.data);
-	// 				return response.data;
-	// 			});
-	// 			setVenueInfo(res);
-	// 		} catch (error) {
-	// 			throw new Error(error);
-	// 		}
-	// 	};
-
-	// 	// POST /api/v1/stadium/create/
-	// 	const createVenue = async () => {
-	// 		try {
-	// 			const accessToken = localStorage.getItem("accessToken");
-	// 			const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/create/`;
-	// 			const headers = {
-	// 				"Accept": "application/json",
-	// 				"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-	// 			};
-				
-	// 			const body = {
-	// 				stadium: {
-	// 					// id: 0,
-	// 					name: "test name",
-	// 					venue_name: "test venue_name",
-	// 					address: "test_address",
-	// 					picture: "string",
-	// 					area: 1000,
-	// 					description: "test_description",
-	// 					max_number_of_people: 10000,
-	// 				},
-	// 				stadium_available_times: {
-	// 					// id: 0,
-	// 					weekday: [1, 2, 3],
-	// 					start_time: 8,
-	// 					end_time: 22,
-	// 				},
-	// 				stadium_court_name: [
-	// 					"test_court_name1", "test_court_name2"
-	// 				]
-	// 			};
-
-	// 			const res = await axios.post(url, null, { params, headers }).then((response) => {
-	// 				console.log("create response:", response);
-	// 				return response.data;
-	// 			})
-	// 		} catch (error) {
-	// 		throw new Error(error);
-	// 	}
-	// };
-	// 	createVenue();
-	// 	fetchVenueDetail(index);
-	// 	console.log("venueInfo", venueInfo);
-	// }, []);
-
-	
+	useEffect(() => {
+		const { search } = window.location;
+		const searchParams = new URLSearchParams(search);
+		const id = searchParams.get("venue");
+		// const id = 1;
+		if (id) {
+			fetchVenueInfo(id);
+		}
+	}, []);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -178,16 +137,13 @@ function EditVenue() {
 			const base64Image = reader.result;
 			setVenueInfo(prevInfo => ({
 				...prevInfo,
-				stadium: {
-					...prevInfo.stadium,
-					imgBase64: base64Image,
-				},
+				picture: base64Image,
 			}));
 		};
 		reader.readAsDataURL(fileUploaded);
 	};
 
-	return (
+	return venueIsReady ? (
 		<ThemeProvider theme={theme}>
 			<Head>
 				<title>{t("Stadium Matching System")}</title>
@@ -204,7 +160,7 @@ function EditVenue() {
 					<img
 						className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
 						// src={venueInfo?.stadium?.imgUrl}
-						src={venueInfo?.stadium?.imgBase64}
+						src={venueInfo?.picture}
 						alt="Venue here"
 						onClick={handleImageClick}
 					/>
@@ -260,6 +216,7 @@ function EditVenue() {
 									<Button
 										variant="outlined"
 										color="secondary"
+										onClick={() => window.history.back()}
 									>
 										{t("取消")}
 									</Button>
@@ -283,11 +240,11 @@ function EditVenue() {
 				show={showEditVenueModal}
 				setShow={setShowEditVenueModal}
 				handleClose={() => setShowEditVenueModal(false)}
-				title={t("新增場地")}
+				title={t("修改場地資訊")}
 				info={venueInfo} />
 
 		</ThemeProvider>
-	);
+	): null;
 }
 
 export default EditVenue;

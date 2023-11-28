@@ -16,3 +16,12 @@
 	padding: 7px 35px;
 	margin: 0px 20px;
 }
+
+.courtListCell {
+	font-size: 15px;
+	color: #14274C;
+	border-radius: 20px;
+	margin: 0px 3px;
+	padding: 5px 10px;
+	border: 1px solid #14274C;
+}

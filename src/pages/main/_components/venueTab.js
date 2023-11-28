@@ -135,7 +135,7 @@ function VenueTab({ venueInfo }) {
 								<p className="text-lg">
 									<span className={styles.infoAttr}>{t("Location")}</span>
 									<span>{venueInfo?.address}</span>
-									<Link href='https://www.google.com/maps/place/NTU+Sports+Center/@25.0216636,121.5352783,15z/data=!4m2!3m1!1s0x0:0x861db0f2b5ef52a3?sa=X&ved=2ahUKEwj_yNTW2LGCAxWIe_UHHbiTAVcQ_BJ6BAhJEAA'>
+									<Link href={venueInfo?.google_map_url}>
 										<IconButton>
 											<RoomIcon fontSize='inherit' color='secondary' />
 										</IconButton>
