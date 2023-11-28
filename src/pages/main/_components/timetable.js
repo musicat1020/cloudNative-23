@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ButtonDatePicker from "@/components/buttonDatePicker";
+import Loading from "@/components/loading";
 import SessionModal from "@/pages/main/_components/sessionModal";
 import axios from "@/utils/axios";
 import styles from "@/styles/timetable.module.css";
@@ -18,6 +19,7 @@ function TimeTable({ people, level, venueInfo }) {
 	const [timeTableDates, setTimeTableDates] = useState([]);
 	const [timeTableData, setTimeTableData] = useState([]);
 	const [dayDuration, setDayDuration] = useState(7);
+	const [loading, setLoading] = useState(false);
 
 	const [showSessionModal, setShowSessionModal] = useState(false);
 	const [clickCellDate, setClickCellDate] = useState(null);
@@ -27,6 +29,8 @@ function TimeTable({ people, level, venueInfo }) {
 	const [windowSize, setWindowSize] = useState([(typeof window !== "undefined") ? [window.innerWidth, window.innerHeight] : [0, 0]]);
 
 	const fetchTimeTable = async (headcount, levelRequirement, id, queryDate) => {
+		setLoading(true);
+
 		const params = {
 			stadium_id: id,
 			query_date: queryDate.format("YYYY-MM-DD"),
@@ -34,7 +38,9 @@ function TimeTable({ people, level, venueInfo }) {
 			level_requirement: levelRequirement,
 		};
 		const res = await axios.post("/api/v1/stadium/timetable", {}, { params });
+
 		setTimeTableData(res.data);
+		setLoading(false);
 	};
 
 	// init time table data
@@ -205,6 +211,7 @@ function TimeTable({ people, level, venueInfo }) {
 
 	return (
 		<>
+			{loading && <Loading/>}
 			<Container className='bg-cream'>
 				<Row>
 					<Col className='text-center py-1'>

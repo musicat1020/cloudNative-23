@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ButtonDatePicker from "@/components/buttonDatePicker";
+import Loading from "@/components/loading";
 import axios from "@/utils/axios";
 import styles from "@/styles/timetable.module.css";
 import AdminSessionModal from "@/pages/admin/_components/adminSessionModal";
@@ -19,10 +20,12 @@ function AdminTimeTable({ venueInfo }) {
 	const [timeTableData, setTimeTableData] = useState([]);
 	const [dayDuration, setDayDuration] = useState(7);
 	const [showSessionModal, setShowSessionModal] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const [windowSize, setWindowSize] = useState([(typeof window !== "undefined") ? [window.innerWidth, window.innerHeight] : [0, 0]]);
 
 	const getTimeTable = async (queryDate) => {
+		setLoading(true);
 		const params = {
 			stadium_id: 1,
 			query_date: queryDate.format("YYYY-MM-DD")
@@ -33,6 +36,7 @@ function AdminTimeTable({ venueInfo }) {
 		);
 
 		setTimeTableData(res.data);
+		setLoading(false);
 	};
 
 	// init time table data
@@ -201,6 +205,7 @@ function AdminTimeTable({ venueInfo }) {
 
 	return (
 		<>
+			{loading && <Loading/>}
 			<Container className='bg-cream'>
 				<Row>
 					<Col className='text-center py-1'>
