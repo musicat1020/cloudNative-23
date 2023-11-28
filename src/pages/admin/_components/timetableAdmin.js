@@ -207,6 +207,7 @@ function AdminTimeTable({ venueInfo }) {
 						<LocalizationProvider dateAdapter={AdapterDayjs}>
 							<ButtonDatePicker
 								label={startDate == null ? null : startDate.format("YYYY/MM/DD")}
+								interval={dayDuration}
 								date={startDate}
 								minDate={curDate}
 								maxDate={maxDate}
