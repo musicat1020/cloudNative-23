@@ -46,7 +46,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
     const formattedStartTime = formatTime(startTime);
     const formattedEndDate = formatDate(endDate);
     const formattedEndTime = formatTime(endTime);
-    handleDisableSession(2, formattedStartDate, formattedStartTime, formattedEndTime);
+    handleDisableSession(info.id, formattedStartDate, formattedStartTime, formattedEndTime);
 
     handleClose();
   };
