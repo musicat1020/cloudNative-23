@@ -44,7 +44,7 @@ const theme = createTheme({
 });
 
 function VenueDetail({ info, setInfo }) {
-  console.log(info?.address);
+  // console.log(info?.address);
 
   const { t } = useTranslation();
 
@@ -54,45 +54,33 @@ function VenueDetail({ info, setInfo }) {
   const handleAddressChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        address: newValue
-      }
+      address: newValue
     }));
   };
 
   const handleStadiumNameChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        stadium_name: newValue
-      }
+      name: newValue
     }));
   };
 
   const handleVenueNameChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        name: newValue
-      }
+      venue_name: newValue
     }));
   };
 
   const handleCapacityChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        max_number_of_people: newValue
-      }
+      max_number_of_people: newValue
     }));
   };
 
   function handleListDelete(courtToDelete) {
-    const updatedCourtList = info?.stadium_courts?.filter((court) => court !== courtToDelete);
+    const updatedCourtList = info?.stadium_courts?.filter((court) => court.name !== courtToDelete.name);
     setInfo((prevInfo) => ({
       ...prevInfo,
       stadium_courts: updatedCourtList
@@ -105,7 +93,11 @@ function VenueDetail({ info, setInfo }) {
       if (newCourt.trim() !== "") {
         setInfo((prevInfo) => ({
           ...prevInfo,
-          stadium_courts: [...prevInfo.stadium_courts, newCourt]
+          stadium_courts: 
+          [...prevInfo.stadium_courts, {
+            id: null,
+            name: newCourt
+          }]
         }));
         setOpenAddModal(false);
       } else {
@@ -121,22 +113,20 @@ function VenueDetail({ info, setInfo }) {
     setOpenAddModal(false);
   };
 
+
   const handleAreaChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        area: newValue
-      }
+      area: newValue
     }));
   };
 
   const handleOpenDayChange = (event, newOpenDay) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        open_day: newOpenDay.map(Number)
+      available_times: {
+        ...prevInfo.available_times,
+        weekdays: newOpenDay.map(Number)
       }
     }));
   };
@@ -144,19 +134,16 @@ function VenueDetail({ info, setInfo }) {
   const handleDecriptionChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        description: newValue
-      }
+      description: newValue
     }));
   };
 
   const handleStartTimeChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        start_time: newValue
+      available_times: {
+        ...prevInfo.available_times,
+        start_time: +newValue
       }
     }));
   };
@@ -164,20 +151,17 @@ function VenueDetail({ info, setInfo }) {
   const handleEndTimeChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.stadium,
-        end_time: newValue
+      available_times: {
+        ...prevInfo.available_times,
+        end_time: +newValue
       }
     }));
   };
-
+  
   const handleLocationLinkChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium: {
-        ...prevInfo.location_link,
-        description: newValue
-      }
+      google_map_url: newValue
     }));
   };
 
@@ -193,7 +177,6 @@ function VenueDetail({ info, setInfo }) {
               <Form.Control
                 type="address"
                 placeholder={t("場館地址")}
-                // value={info?.stadium?.address}
                 value={info?.address}
                 onChange={(e) => handleAddressChange(e.target.value)}
               />
@@ -208,7 +191,7 @@ function VenueDetail({ info, setInfo }) {
               <Form.Control
                 type="stadium-name"
                 placeholder={t("場館名稱")}
-                value={info?.stadium?.stadium_name}
+                value={info?.name}
                 onChange={(e) => handleStadiumNameChange(e.target.value)}
               />
             </Col>
@@ -222,7 +205,7 @@ function VenueDetail({ info, setInfo }) {
               <Form.Control
                 type="venue-name"
                 placeholder={t("場地名稱")}
-                value={info?.stadium?.name}
+                value={info?.venue_name}
                 onChange={(e) => handleVenueNameChange(e.target.value)}
               />
             </Col>
@@ -236,7 +219,7 @@ function VenueDetail({ info, setInfo }) {
               <Form.Control
                 type="capacity"
                 style={{ width: "80px" }}
-                value={info?.stadium?.max_number_of_people}
+                value={info?.max_number_of_people}
                 onChange={(e) => handleCapacityChange(e.target.value)}
               />
             </Col>
@@ -250,8 +233,8 @@ function VenueDetail({ info, setInfo }) {
               <Stack direction="row" spacing={1}>
                 {info?.stadium_courts?.map((court) => (
                   <Chip
-                    label={court}
-                    key={court}
+                    label={court.name}
+                    key={court.id}
                     variant="outlined"
                     color='secondary'
                     onDelete={() => handleListDelete(court)} />
@@ -276,7 +259,7 @@ function VenueDetail({ info, setInfo }) {
               <Form.Control
                 type="area"
                 style={{ width: "80px" }}
-                value={info?.stadium?.area}
+                value={info?.area}
                 onChange={(e) => handleAreaChange(e.target.value)}
               />
             </Col>
@@ -290,15 +273,15 @@ function VenueDetail({ info, setInfo }) {
               <LocalizationProvider dateAdapter={AdapterDayjs} color='secondary'>
                 <TimePicker
                   color='secondary'
-                  value={dayjs(info?.stadium?.start_time, "HH:mm")}
-                  onChange={(newValue) => handleStartTimeChange(newValue.format("HH:mm"))}
+                  value={dayjs(info?.available_times?.start_time?.toString(), "H")}
+                  onChange={(newValue) => handleStartTimeChange(newValue.format("H"))}
                   views={["hours"]}
                   slotProps={{ textField: { size: "small", color: "secondary" } }} />
                 <span>{t("至")}</span>
                 <TimePicker
                   color='secondary'
-                  value={dayjs(info?.stadium?.end_time, "HH:mm")}
-                  onChange={(newValue) => handleEndTimeChange(newValue.format("HH:mm"))}
+                  value={dayjs(info?.available_times?.end_time?.toString(), "H")}
+                  onChange={(newValue) => handleEndTimeChange(newValue.format("H"))}
                   views={["hours"]}
                   slotProps={{ textField: { size: "small", color: "secondary" } }} />
               </LocalizationProvider>
@@ -311,7 +294,7 @@ function VenueDetail({ info, setInfo }) {
             </Form.Label>
             <Col sm="10">
               <ToggleButtonGroup
-                value={info?.stadium?.open_day.map(String)}
+                value={info?.available_times?.weekdays?.map(String)}
                 onChange={handleOpenDayChange}
                 aria-label="open day setting"
                 size="small"
@@ -349,7 +332,7 @@ function VenueDetail({ info, setInfo }) {
               <Form.Control
                 type="discription"
                 placeholder={t("說明")}
-                value={info?.stadium?.description}
+                value={info?.description}
                 onChange={(e) => handleDecriptionChange(e.target.value)}
               />
             </Col>
@@ -363,7 +346,7 @@ function VenueDetail({ info, setInfo }) {
               <Form.Control
                 type="discription"
                 placeholder={t("位置連結")}
-                value={info?.stadium?.location_link}
+                value={info?.google_map_url}
                 onChange={(e) => handleLocationLinkChange(e.target.value)}
               />
             </Col>

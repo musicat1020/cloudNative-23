@@ -105,6 +105,8 @@ i18n.use(initReactI18next).init({
 				"下架場地": "Disable venue sessions",
 				"隊友Email": "Teammates Email",
 				"欲加入人數": "People Joining",
+				"地圖連結": "Location Link",
+				"修改場地資訊": "Update Venue Info",
 			}
 		},
 		zh: {
@@ -206,6 +208,8 @@ i18n.use(initReactI18next).init({
 				"上架場地": "上架場地",
 				"隊友Email": "隊友Email",
 				"欲加入人數": "欲加入人數",
+				"地圖連結": "地圖連結",
+				"修改場地資訊": "修改場地資訊",
 			}
 		},
 	},
