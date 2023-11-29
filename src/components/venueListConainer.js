@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
-import axios from "axios";
+import axios from "@/utils/axios";
 import styles from "../styles/venueItem.module.css";
 
 function VenueListConainer({ isAdmin }) {
@@ -17,22 +17,8 @@ function VenueListConainer({ isAdmin }) {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const accessToken = localStorage.getItem("accessToken");
-        const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/stadium-list/`;
-        const headers = {
-          "Accept": "application/json",
-          "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-        };
-
-        const venusList = await axios.get(url, null, { headers })
-          .then(response => {
-            console.log("Response:", response.data);
-            return response.data.stadium;
-          })
-          .catch(error => {
-            console.error("Error:", error.message);
-          });
-        setVenueList(venusList);
+        const res = await axios.post("/api/v1/stadium/stadium-list/", {}, {});
+        setVenueList(res.stadium);
       } catch (error) {
         throw new Error(error);
       }
