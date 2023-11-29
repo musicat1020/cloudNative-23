@@ -7,6 +7,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { useState } from "react";
+import { formatDate, formatTime } from "../../../utils/formatTime";
+import { handleDisableSession } from "../../../hooks/handleSessionStatus";
 
 import styles from "@/styles/modal.module.css";
 
@@ -30,13 +33,26 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
 
   const modalStyles = useStyles();
   const { t } = useTranslation();
+  const [startDate, setStartDate] = useState(new Date());
+  const [startTime, setStartTime] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
 
   // TODO
   const handleConfirm = () => {
+    console.log("end date", formatDate(endDate));
+    console.log("end time", formatTime(endTime));
+    const formattedStartDate = formatDate(startDate);
+    const formattedStartTime = formatTime(startTime);
+    const formattedEndDate = formatDate(endDate);
+    const formattedEndTime = formatTime(endTime);
+    handleDisableSession(2, formattedStartDate, formattedStartTime, formattedEndTime);
+
     handleClose();
   };
 
   return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       {show &&
         <Modal
@@ -64,7 +80,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場館名稱")}</span>
-                <span>{info?.stadium?.stadium_name}</span>
+                <span>{info?.name}</span>
               </Col>
             </Row>
 
@@ -72,7 +88,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場地名稱")}</span>
-                <span>{info?.stadium?.name}</span>
+                <span>{info?.venue_name}</span>
               </Col>
             </Row>
 
@@ -88,8 +104,11 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("開始日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className="mr-5" label="date" />
-                  <TimePicker views={["hours"]} />
+                  <DatePicker className="mr-5" label="date"
+                    onChange={(newValue) => setStartDate(new Date(newValue))} />
+                  <TimePicker views={["hours"]}
+                    onChange={(newValue) => setStartTime(new Date(newValue))}
+                  />
                 </LocalizationProvider>
               </Col>
             </Row>
@@ -99,8 +118,11 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("結束日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className="mr-5" label="date" />
-                  <TimePicker views={["hours"]} />
+                  <DatePicker className="mr-5" label="date"
+                    onChange={(newValue) => setEndDate(new Date(newValue))} />
+                  <TimePicker views={["hours"]}
+                    onChange={(newValue) => setEndTime(new Date(newValue))}
+                  />
                 </LocalizationProvider>
               </Col>
             </Row>
