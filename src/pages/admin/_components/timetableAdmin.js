@@ -21,7 +21,7 @@ function AdminTimeTable({ venueInfo }) {
 	const [dayDuration, setDayDuration] = useState(7);
 	const [showSessionModal, setShowSessionModal] = useState(false);
 	const [loading, setLoading] = useState(false);
-
+	const [clickEditData, setClickEditData] = useState(null);
 	const [windowSize, setWindowSize] = useState([(typeof window !== "undefined") ? [window.innerWidth, window.innerHeight] : [0, 0]]);
 
 	const getTimeTable = async (queryDate) => {
@@ -75,7 +75,7 @@ function AdminTimeTable({ venueInfo }) {
 		}
 	}, [windowSize]);
 
-	const convertDateFormat = (date, format="MM/DD (ddd)") => {
+	const convertDateFormat = (date, format = "MM/DD (ddd)") => {
 		const dateString = dayjs(date).format(format);
 		return dateString;
 	};
@@ -90,21 +90,23 @@ function AdminTimeTable({ venueInfo }) {
 	/** handle time table dates based on startDate and dayDuration */
 	useEffect(() => {
 		const newTimeTableDates = [];
-		for (let i=0; i<dayDuration; i+=1) {
+		for (let i = 0; i < dayDuration; i += 1) {
 			const newDate = addDate(startDate.clone(), i);
 			newTimeTableDates.push(newDate);
 		}
 		setTimeTableDates(newTimeTableDates);
 	}, [startDate, dayDuration]);
 
-	const handleSessionClick = (status) => {
+	const handleSessionClick = (e, status) => {
+		const { date, start, end } = e.target.dataset;
+		setClickEditData({ date, startTime: start.split(":")[0], endTime: end.split(":")[0], status });
 		setShowSessionModal(true);
 	};
 
 	const handleTimeCols = (sessionStart, sessionEnd) => {
-		
+
 		const timeCols = [];
-		
+
 		/** get session time */
 		const FormatSessionStart = convertTimeFormat(sessionStart);
 		const FormatSessionEnd = convertTimeFormat(sessionEnd);
@@ -118,34 +120,34 @@ function AdminTimeTable({ venueInfo }) {
 
 			/** get session status */
 			const hour = sessionStart.hour().toString();
-			const status = timeTableData[i][`day_${i+1}`][hour];
+			const status = timeTableData[i][`day_${i + 1}`][hour];
 
 			let col;
 			if (status === "no_order") {
-				col = 
-				<Col 
-					key={i}
-					data-date={convertDateFormat(date, "YYYY-MM-DD")}
-					data-start={FormatSessionStart}
-					data-end={FormatSessionEnd}
-					onClick={handleSessionClick} 
-					className={styles.timeTableSessionCell}
-				>
-					{ t("Available") }
-				</Col>;
+				col =
+					<Col
+						key={i}
+						data-date={convertDateFormat(date, "YYYY-MM-DD")}
+						data-start={FormatSessionStart}
+						data-end={FormatSessionEnd}
+						onClick={(e) => handleSessionClick(e, status)}
+						className={styles.timeTableSessionCell}
+					>
+						{t("Available")}
+					</Col>;
 			}
 			else {
-				col = 
-					<Col 
-						key={i} 
-						data-date={convertDateFormat(date, "YYYY-MM-DD")} 
+				col =
+					<Col
+						key={i}
+						data-date={convertDateFormat(date, "YYYY-MM-DD")}
 						data-start={FormatSessionStart}
 						data-end={FormatSessionEnd}
 						// aria-disabled
-            			onClick={handleSessionClick} 
+						onClick={(e) => handleSessionClick(e, status)}
 						className={styles.timeTableSessionCell}
 					>
-						{ (status === "has_order") ? t("Booked") : t("Disabled") }
+						{(status === "has_order") ? t("Booked") : t("Disabled")}
 					</Col>;
 			}
 
@@ -160,7 +162,7 @@ function AdminTimeTable({ venueInfo }) {
 		const dateCols = [];
 
 		/** get first cell */
-		dateCols.push(<Col key={-1} className={styles.timeTableDateCell}>{ t("Session") }</Col>);
+		dateCols.push(<Col key={-1} className={styles.timeTableDateCell}>{t("Session")}</Col>);
 
 		/** get date columns */
 		timeTableDates.forEach((date) => {
@@ -184,7 +186,7 @@ function AdminTimeTable({ venueInfo }) {
 
 		const sessions = Object.keys(timeTableData[0].day_1);
 		const openingHoursStart = Math.min(...sessions);
-		const openingHoursEnd = Math.max(...sessions)+1;
+		const openingHoursEnd = Math.max(...sessions) + 1;
 
 		const startTime = dayjs(`${openingHoursStart}:00`, "HH:mm");
 		const endTime = dayjs(`${openingHoursEnd}:00`, "HH:mm");
@@ -194,7 +196,7 @@ function AdminTimeTable({ venueInfo }) {
 		let sessionEnd = startTime.clone().add(1, "hour");
 
 		/** get time table body */
-		for (let i=0; i<timeIntervals; i+=1) {
+		for (let i = 0; i < timeIntervals; i += 1) {
 			timeTable.push(<Row key={i}>{handleTimeCols(sessionStart, sessionEnd)}</Row>);
 			sessionStart = sessionEnd;
 			sessionEnd = sessionStart.clone().add(1, "hour");
@@ -205,7 +207,7 @@ function AdminTimeTable({ venueInfo }) {
 
 	return (
 		<>
-			{loading && <Loading/>}
+			{loading && <Loading />}
 			<Container className='bg-cream'>
 				<Row>
 					<Col className='text-center py-1'>
@@ -223,7 +225,12 @@ function AdminTimeTable({ venueInfo }) {
 				</Row>
 				{handleTimeTable()}
 			</Container>
-			<AdminSessionModal show={showSessionModal} setShow={setShowSessionModal} windowSize={windowSize}/>
+			<AdminSessionModal
+				venueInfo={venueInfo}
+				clickEditData={clickEditData}
+				show={showSessionModal}
+				setShow={setShowSessionModal}
+				windowSize={windowSize} />
 		</>
 	);
 }

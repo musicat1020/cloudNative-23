@@ -1,7 +1,5 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
-
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
@@ -11,12 +9,11 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "@/utils/axios";
 
 import NavBar from "./_components/navbarAdmin";
 import VenueDetail from "./_components/venueDetail";
 import styles from "../../styles/venue.module.css";
-import axios from "../../utils/axios";
-import { mockVenueDetail } from "../../../mockData/mockData";
 import EditVenueModal from "@/pages/admin/_components/editVenueModal";
 import ButtonDeleteVenue from "@/pages/admin/_components/buttonDeleteVenue";
 import AdminTimeTable from "@/pages/admin/_components/timetableAdmin";
@@ -85,24 +82,15 @@ function EditVenue() {
 
 
 	const fetchVenueInfo = async (id) => {
-		console.log("fetching venue info");
-		const accessToken = localStorage.getItem("accessToken");
-		const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/info`;
-		const headers = {
-			"Accept": "application/json",
-			"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-		};
 		const params = {
 			stadium_id: id,
 		};
+		const res = await axios.post(
+			"/api/v1/stadium/info/", {}, { params }
+		);
 
-		// const res = await axios.post("/api/v1/stadium/info", {}, { params });
-		const res = await axios.post(url, {}, { params, headers }).then((response) => {
-			console.log("get info response", response.data);
-			return response.data;
-		});
-
-		setVenueInfo(res);
+		console.log("get info response", res);
+		setVenueInfo(res.data);
 		setVenueIsReady(true);
 	};
 
@@ -165,7 +153,7 @@ function EditVenue() {
 						type="file"
 						onChange={handleInputChange}
 						ref={hiddenFileInput}
-						style={{ display: 'none' }} // Make the file input element invisible
+						style={{ display: "none" }} // Make the file input element invisible
 					/>
 				</div>
 
@@ -227,7 +215,7 @@ function EditVenue() {
 				<CustomTabPanel value={value} index={1}>
 					<Container className="flex justify-center ">
 						<Row className="w-4/5">
-							<AdminTimeTable venueInfo={venueInfo}/>
+							<AdminTimeTable venueInfo={venueInfo} />
 						</Row>
 					</Container>
 				</CustomTabPanel>
@@ -241,7 +229,7 @@ function EditVenue() {
 				info={venueInfo} />
 
 		</ThemeProvider>
-	): null;
+	) : null;
 }
 
 export default EditVenue;
