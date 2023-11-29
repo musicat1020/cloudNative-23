@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState, useRef, useEffect } from "react";
-// import Image from "next/image";
 
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -17,12 +16,9 @@ import NavBar from "./_components/navbarAdmin";
 import VenueDetail from "./_components/venueDetail";
 import styles from "../../styles/venue.module.css";
 import axios from "../../utils/axios";
-import { mockVenueDetail } from "../../../mockData/mockData";
 import EditVenueModal from "@/pages/admin/_components/editVenueModal";
-import ButtonDeleteVenue from "@/pages/main/_components/buttonDeleteVenue";
+import ButtonDeleteVenue from "@/pages/admin/_components/buttonDeleteVenue";
 import AdminTimeTable from "@/pages/admin/_components/timetableAdmin";
-import { create } from "@mui/material/styles/createTransitions";
-// import Image from 'react-bootstrap/Image';
 
 const theme = createTheme({
 	palette: {
@@ -81,7 +77,6 @@ function EditVenue() {
 
 	const { t } = useTranslation();
 	const [venueIsReady, setVenueIsReady] = useState(false);
-	// const [venueInfo, setVenueInfo] = useState(mockVenueDetail[0]);
 	const [venueInfo, setVenueInfo] = useState(null);
 	const [value, setValue] = useState(1);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
@@ -97,11 +92,9 @@ function EditVenue() {
 		const params = {
 			stadium_id: id,
 		};
-		const res = await axios.post(url, {}, { params, headers }).then((response) => {
-			return response.data;
-		});
+		const res = await axios.post(url, {}, { params, headers })
 
-		setVenueInfo(res);
+		setVenueInfo(res.data);
 		setVenueIsReady(true);
 	};
 
@@ -151,19 +144,21 @@ function EditVenue() {
 
 			<Container className={`${styles.container}`}>
 				<div className="flex justify-center items-center">
-
+					
 					<img
 						className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
 						src={venueInfo?.picture}
 						alt="Venue here"
 						onClick={handleImageClick}
 					/>
+					
 					<input
 						type="file"
 						onChange={handleInputChange}
 						ref={hiddenFileInput}
-						style={{ display: 'none' }} // Make the file input element invisible
+						style={{ display: "none" }} // Make the file input element invisible
 					/>
+
 				</div>
 
 				{/* Tabs */}
@@ -235,10 +230,12 @@ function EditVenue() {
 				setShow={setShowEditVenueModal}
 				handleClose={() => setShowEditVenueModal(false)}
 				title={t("修改場地資訊")}
-				info={venueInfo} />
+				info={venueInfo}
+				type={"edit"}
+			/>
 
 		</ThemeProvider>
-	): null;
+	) : null;
 }
 
 export default EditVenue;

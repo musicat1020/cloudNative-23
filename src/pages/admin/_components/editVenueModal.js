@@ -3,8 +3,12 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import Modal from "@mui/material/Modal";
 import Divider from "@mui/material/Divider";
-import styles from "@/styles/modal.module.css";
 import axios from "@/utils/axios";
+import { useRouter } from "next/router";
+import { revalidatePath } from "next/cache";
+
+import styles from "@/styles/modal.module.css";
+
 
 const useStyles = makeStyles({
   modal: {
@@ -22,9 +26,10 @@ const useStyles = makeStyles({
   }
 });
 
-export default function EditVenueModal({ show, handleClose, title, info, customStyles }) {
+export default function EditVenueModal({ show, handleClose, title, info, customStyles, type }) {
 
   const modalStyles = useStyles();
+  const router = useRouter();
   const { t } = useTranslation();
 
   const dayMap = {
@@ -45,15 +50,58 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
 			"Accept": "application/json",
 			"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
 		};
-    const res = await axios.put(url, info, { headers }).then((response) => {
-			return response;
-		});
+    await axios.put(url, info, { headers });
+  };
 
+  // POST api/v1/stadium/create
+  const createVenue = async (data) => {
+    const accessToken = localStorage.getItem("accessToken");
+    const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/create`;
+    const headers = {
+      "Accept": "application/json",
+			"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+		};
+    await axios.post(url, data, { headers });
+  };
+
+  const transformData = (input) => {
+    const transformedData = {
+      stadium: {
+        id: input.id || 0,
+        name: input.name || "",
+        venue_name: input.venue_name || "",
+        address: input.address || "",
+        picture: input.picture || "",
+        area: parseInt(input.area) || 0,
+        description: input.description || "",
+        max_number_of_people: parseInt(input.max_number_of_people) || 0,
+        google_map_url: input.google_map_url || "",
+      },
+      stadium_available_times: {
+        // id: input.data.id || 0,
+        weekday: input.available_times.weekdays || [],
+        start_time: input.available_times.start_time || 0,
+        end_time: input.available_times.end_time || 0,
+      },
+      stadium_court_name: input.stadium_courts.map(court => court.name || ""),
+    };
+    return transformedData;
   };
 
   const handleConfirm = () => {
+    if (type === "new") {
+      // Create new venue
+      const transformedData = transformData(info);
+      createVenue(transformedData);
+    }
+    else if (type === "edit") {
+      // Update venue
+      updateVenue();
+    }
     handleClose();
-    updateVenue();
+    // redirect to venue list page
+    // revalidatePath("/admin/");
+    router.push("/admin/");
   };
 
   const getCourtList = () => {

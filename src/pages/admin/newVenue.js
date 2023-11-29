@@ -1,10 +1,8 @@
 import Head from "next/head";
-// import Image from "next/image";
-
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useState, useRef } from "react";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import PublishIcon from "@mui/icons-material/Publish";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
@@ -12,11 +10,28 @@ import Button from "@mui/material/Button";
 import styles from "../../styles/venue.module.css";
 import VenueInput from "./_components/venueInput";
 import NavBar from "./_components/navbarAdmin";
-import { mockVenueDetail } from "../../../mockData/mockData";
 import EditVenueModal from "@/pages/admin/_components/editVenueModal";
 
 function NewVenue() {
-	const [venueInfo, setVenueInfo] = useState(mockVenueDetail[1]);
+	const initialState = {
+		name: "",
+		venue_name: "",
+		address: "",
+		picture: "",
+		area: 0,
+		description: "",
+		created_user: 0,
+		max_number_of_people: 0,
+		google_map_url: "",
+		stadium_courts: [],
+		available_times: {
+			weekdays: [],
+			start_time: 0,
+			end_time: 0,
+		},
+	};
+
+	const [venueInfo, setVenueInfo] = useState(initialState);
 	const [showNewVenueModal, setShowNewVenueModal] = useState(false);
 	const { t } = useTranslation();
 
@@ -24,23 +39,19 @@ function NewVenue() {
 
 	const handleImageClick = () => {
 		hiddenFileInput.current.click();
-		// console.log("handleImageClick");
 	};
 
 	const handleInputChange = (event) => {
-		const file = event.target.files[0]; // Get the first selected file
+		const fileUploaded = event.target.files[0]; // Get the first selected file
 		const reader = new FileReader();
 		reader.onloadend = () => {
-			const base64String = reader.result; // Base64 representation of the image
-			setVenueInfo((prevInfo) => ({
+			const base64Image = reader.result; // Base64 representation of the image
+			setVenueInfo(prevInfo => ({
 				...prevInfo,
-				stadium: {
-					...prevInfo.stadium,
-					imgBase64: base64String
-				}
+				picture: base64Image,
 			}));
 		};
-		reader.readAsDataURL(file);
+		reader.readAsDataURL(fileUploaded);
 	};
 
 	const theme = createTheme({
@@ -75,7 +86,7 @@ function NewVenue() {
 			<NavBar />
 
 			<Container className={styles.container}>
-				{venueInfo?.stadium?.imgBase64 === "" ? (
+				{venueInfo?.picture === "" ? (
 					<Row className='flex'>
 						<Col className="text-center">
 							<div className='rounded-6 items-center'>
@@ -98,15 +109,15 @@ function NewVenue() {
 					<div className="flex justify-center items-center">
 						<img
 							className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
-							src={venueInfo?.stadium?.imgBase64}
-							alt="Venue here"
+							src={venueInfo?.picture}
+							alt="Click to upload image"
 							onClick={handleImageClick}
 						/>
 						<input
 							type="file"
 							onChange={handleInputChange}
 							ref={hiddenFileInput}
-							style={{ display: 'none' }} // Make the file input element invisible
+							style={{ display: "none" }} // Make the file input element invisible
 						/>
 					</div>
 				)}
@@ -143,6 +154,7 @@ function NewVenue() {
 				handleClose={() => setShowNewVenueModal(false)}
 				title={t("新增場地")}
 				info={venueInfo}
+				type={"new"}
 			/>
 		</ThemeProvider>
 

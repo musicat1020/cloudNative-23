@@ -12,9 +12,9 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import DeleteVenueModal from "../../admin/_components/deleteVenueModal";
-import DeleteVenueSessionModal from "../../admin/_components/deleteVenueSessionModal";
-import EnableVenueSessionModal from "../../admin/_components/enableVenueSessionModal";
+import DeleteVenueModal from "./deleteVenueModal";
+import DeleteVenueSessionModal from "./deleteVenueSessionModal";
+import EnableVenueSessionModal from "./enableVenueSessionModal";
 
 
 function ButtonDeleteVenue({ info }) {
@@ -93,7 +93,6 @@ function ButtonDeleteVenue({ info }) {
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
-                  // style={{ position: "relative", zIndex: 999 }}
                 >
                   <MenuItem onClick={() => setShowDeleteVenueModal(true)}>{t("刪除場地")}</MenuItem>
                   <MenuItem onClick={() => setShowDeleteSessionVenueModal(true)}>{t("下架特定時段場地")}</MenuItem>

@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import Modal from "@mui/material/Modal";
 import styles from "@/styles/modal.module.css";
+import axios from "@/utils/axios";
+import { useRouter } from "next/router";
+import { revalidatePath } from "next/cache";
 
 const useStyles = makeStyles({
   modal: {
@@ -24,10 +27,45 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
 
   const modalStyles = useStyles();
   const { t } = useTranslation();
+  const router = useRouter();
 
-  // TODO
+  // DELETE api/v1/stadium/delete
+  const deleteVenue = async (id) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/delete`;
+      const headers = {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+      };
+      const params = { stadium_id: id };
+      const response = await axios.delete(url, { headers, params });
+
+      return response; // or handle as needed
+    } catch (error) {
+      // Handle error
+      console.error("Error:", error);
+      throw new Error(error.message); // or handle as needed
+    }
+  };
+  
+
   const handleConfirm = () => {
+    const { search } = window.location;
+    const searchParams = new URLSearchParams(search);
+    const id = searchParams.get("venue");
+    if (id) {
+      deleteVenue(id)
+        .then((data) => {
+          console.log("Delete successful:", data);
+        })
+        .catch((error) => {
+          console.error("Delete failed:", error);
+        });
+    }
     handleClose();
+    // revalidatePath("/admin/");
+    router.push("/admin/");
   };
 
   return (
@@ -58,7 +96,7 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場館名稱")}</span>
-                <span>{info?.stadium?.stadium_name}</span>
+                <span>{info?.name}</span>
               </Col>
             </Row>
 
@@ -66,7 +104,7 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
             <Row className='mt-3 mb-4'>
               <Col>
                 <span className={styles.modalAttribute}>{t("場地名稱")}</span>
-                <span>{info?.stadium?.name}</span>
+                <span>{info?.venue_name}</span>
               </Col>
             </Row>
 
