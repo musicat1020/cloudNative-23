@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Container } from "react-bootstrap";
 import { useTranslation } from "next-i18next";
-import NavBar from "./_components/navbar";
+import NavBar from "@/pages/main/_components/navbar";
 import RecordTab from "@/pages/main/_components/recordTab";
 import styles from "@/styles/record.module.css";
 

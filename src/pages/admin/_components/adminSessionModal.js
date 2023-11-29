@@ -1,7 +1,7 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import BaseModal from "../../../components/baseModal";
+import BaseModal from "@/components/baseModal";
 
 import styles from "@/styles/modal.module.css";
 
@@ -56,7 +56,9 @@ function AdminSessionModal({ show, setShow, windowSize }) {
     // TODO: pass info to Content
     <BaseModal
       venue={venue}
-      session={formatDateTime(date, start_time)}
+      date={date}
+      startTime={start_time}
+      endTime={start_time + 1}
       show={show}
       handleClose={() => setShow(false)}
       title={formatTitle(status)}
