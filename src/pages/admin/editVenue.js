@@ -88,7 +88,6 @@ function EditVenue() {
 
 
 	const fetchVenueInfo = async (id) => {
-		console.log("fetching venue info");
 		const accessToken = localStorage.getItem("accessToken");
 		const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/info`;
 		const headers = {
@@ -98,10 +97,7 @@ function EditVenue() {
 		const params = {
 			stadium_id: id,
 		};
-
-		// const res = await axios.post("/api/v1/stadium/info", {}, { params });
 		const res = await axios.post(url, {}, { params, headers }).then((response) => {
-			console.log("get info response", response.data);
 			return response.data;
 		});
 
@@ -114,7 +110,6 @@ function EditVenue() {
 		const { search } = window.location;
 		const searchParams = new URLSearchParams(search);
 		const id = searchParams.get("venue");
-		// const id = 1;
 		if (id) {
 			fetchVenueInfo(id);
 		}
@@ -159,7 +154,6 @@ function EditVenue() {
 
 					<img
 						className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
-						// src={venueInfo?.stadium?.imgUrl}
 						src={venueInfo?.picture}
 						alt="Venue here"
 						onClick={handleImageClick}

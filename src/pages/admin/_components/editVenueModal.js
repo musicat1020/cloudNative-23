@@ -39,30 +39,20 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
 
   // PUT api/v1/stadium/
   const updateVenue = async () => {
-    console.log("update venue info");
     const accessToken = localStorage.getItem("accessToken");
 		const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/`;
 		const headers = {
 			"Accept": "application/json",
 			"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
 		};
-		// const body = {
-    //   info,
-		// };
-    // console.log("body", body);
     const res = await axios.put(url, info, { headers }).then((response) => {
-			console.log("get info response", response.data);
 			return response;
 		});
 
-    console.log(res.message);
-    console.log(res.data);
   };
 
-  // TODO
   const handleConfirm = () => {
     handleClose();
-    console.log(info);
     updateVenue();
   };
 
