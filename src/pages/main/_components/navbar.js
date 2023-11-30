@@ -60,7 +60,7 @@ function NavBar() {
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="light-cream" onToggle={setToggle}>
-      <Container className="m-2">
+      <Container className="m-2" style={{ maxWidth: "initial" }}>
         <Navbar.Brand href="/main" bsPrefix="text-2xl no-underline" className="text-dark-blue">
           {t("Stadium Matching System")}
         </Navbar.Brand>

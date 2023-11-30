@@ -93,7 +93,6 @@ function ButtonDeleteVenue({ info }) {
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
-                  // style={{ position: "relative", zIndex: 999 }}
                 >
                   <MenuItem onClick={() => setShowDeleteVenueModal(true)}>{t("刪除場地")}</MenuItem>
                   <MenuItem onClick={() => setShowDeleteSessionVenueModal(true)}>{t("下架特定時段場地")}</MenuItem>

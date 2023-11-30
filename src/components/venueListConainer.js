@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { IoPeople } from "react-icons/io5";
 import { RxBorderAll } from "react-icons/rx";
 import { LiaPlusSolid } from "react-icons/lia";
 import Link from "next/link";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
+import Grid from "@mui/material/Grid";
 import axios from "@/utils/axios";
 import styles from "../styles/venueItem.module.css";
 
@@ -27,22 +27,9 @@ function VenueListConainer({ isAdmin }) {
   }, []);
 
   return (
-    <Container>
-      <Row>
-        <Col className="text-center text-3xl">
-          <h1>{t("Venue")}</h1>
-        </Col>
-      </Row>
-      <div
-        className="grid gap-4 mt-5"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gridAutoRows: "1fr",
-          justifyContent: "start",
-          gap: "1vw",
-        }}
-      >
+    <Container className="flex flex-column">
+      <h1 className="justify-center text-center text-3xl">{t("Venue")}</h1>
+      <Grid container spacing={5} justifyContent="flex-start" className="mt-5">
         {venueList && venueList.map((venue) => (
           <VenueItem
             id={venue.id}
@@ -54,9 +41,10 @@ function VenueListConainer({ isAdmin }) {
             userMax={venue.max_number_of_people}
             isAdmin={isAdmin}
           />
+
         ))}
         {isAdmin && <AddVeuneItem />}
-      </div>
+      </Grid>
     </Container>
   );
 }
@@ -89,7 +77,6 @@ function VenueItem({
           <img
             src={picture}
             alt="Venue Image"
-            // width={500}
             height="100%"
             className="opacity-40 rounded-t-xl object-cover w-80 h-60"
           />
@@ -129,7 +116,7 @@ function AddVeuneItem() {
 
   return (
     <Link
-      className={`self-stretch ${styles.addVenueItem}`}
+      className={`self-stretch ${styles.addVenueItem} p-20 w-80`}
       href="/admin/newVenue"
     >
       <LiaPlusSolid size={40} />
