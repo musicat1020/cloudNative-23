@@ -8,15 +8,6 @@ import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 
-const dateTheme = (theme) => createTheme({
-	...theme,
-	palette: {
-		primary: {
-			main: "#14274C",
-		},
-	},
-});
-
 function ButtonField(props) {
 	const {
 		setOpen,
@@ -45,6 +36,15 @@ function ButtonDatePicker({ ...props }) {
 	const [open, setOpen] = useState(false);
 	const [navigateBeforeDisable, setNavigateBeforeDisable] = useState(false);
 	const [navigateNextDisable, setNavigateNextDisable] = useState(false);
+
+	const dateTheme = (theme) => createTheme({
+		...theme,
+		palette: {
+			primary: {
+				main: props.color ?? "#14274C",
+			},
+		},
+	});
 
 	useEffect(() => {
 		dayjs.extend(isSameOrBefore);

@@ -1,0 +1,48 @@
+.timeTableDateCell {
+	text-align: center;
+	line-height: 40px;
+
+	border-style: solid;
+	border-color: #ebebeb;
+	border-width: 0.5px;
+}
+
+.timeTableSessionCell {
+	text-align: center;
+	line-height: 50px;
+
+	border-style: solid;
+	border-color: #ebebeb;
+	border-width: 0.5px;
+
+	cursor: pointer;
+}
+
+.timeTableSessionCell[aria-disabled="true"] {
+	/* color: #ABABAB; */
+	cursor: default;
+}
+
+.datePickerCell{
+	text-align: center;
+	padding: 3px 4px;
+	border: 0.5px solid #ebebeb;
+	border-radius: 10px 10px 0px 0px;
+	background-color: #14274C;
+}
+
+.timetableContainer{
+	border-radius: 10px;
+}
+
+.availableCell {
+	color: #14274C;
+}
+
+.rentedCell {
+	color: #BEC8DD;
+}
+
+.closedCell {
+	color: #ABABAB;
+}
