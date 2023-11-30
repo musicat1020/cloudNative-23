@@ -75,13 +75,13 @@ function EditVenue() {
 
 	const { t } = useTranslation();
 	const [venueIsReady, setVenueIsReady] = useState(false);
-	// const [venueInfo, setVenueInfo] = useState(mockVenueDetail[0]);
 	const [venueInfo, setVenueInfo] = useState(null);
 	const [value, setValue] = useState(1);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 
 
 	const fetchVenueInfo = async (id) => {
+
 		const params = {
 			stadium_id: id,
 		};
@@ -90,6 +90,7 @@ function EditVenue() {
 		);
 
 		console.log("get info response", res);
+		
 		setVenueInfo(res.data);
 		setVenueIsReady(true);
 	};
@@ -99,11 +100,18 @@ function EditVenue() {
 		const { search } = window.location;
 		const searchParams = new URLSearchParams(search);
 		const id = searchParams.get("venue");
-		// const id = 1;
 		if (id) {
 			fetchVenueInfo(id);
 		}
 	}, []);
+
+	const handleEditClick = () => {
+		if (venueInfo.name === "") {
+			// TODO: show field not null alert
+      return;
+		}
+		setShowEditVenueModal(true);
+	};
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -141,20 +149,21 @@ function EditVenue() {
 
 			<Container className={`${styles.container}`}>
 				<div className="flex justify-center items-center">
-
+					
 					<img
 						className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
-						// src={venueInfo?.stadium?.imgUrl}
 						src={venueInfo?.picture}
 						alt="Venue here"
 						onClick={handleImageClick}
 					/>
+					
 					<input
 						type="file"
 						onChange={handleInputChange}
 						ref={hiddenFileInput}
 						style={{ display: "none" }} // Make the file input element invisible
 					/>
+
 				</div>
 
 				{/* Tabs */}
@@ -194,7 +203,7 @@ function EditVenue() {
 									<Button
 										variant="outlined"
 										color="secondary"
-										onClick={() => setShowEditVenueModal(true)}
+										onClick={handleEditClick}
 									>
 										{t("修改")}
 									</Button>
@@ -226,7 +235,9 @@ function EditVenue() {
 				setShow={setShowEditVenueModal}
 				handleClose={() => setShowEditVenueModal(false)}
 				title={t("修改場地資訊")}
-				info={venueInfo} />
+				info={venueInfo}
+				type={"edit"}
+			/>
 
 		</ThemeProvider>
 	) : null;
