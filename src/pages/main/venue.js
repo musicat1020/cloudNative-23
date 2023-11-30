@@ -18,7 +18,7 @@ function Venue() {
 			stadium_id: id,
 		};
 		const res = await axios.post("/api/v1/stadium/info", {}, { params });
-		
+
 		setVenueInfo(res.data);
 		setVenueIsReady(true);
 	};
@@ -30,49 +30,49 @@ function Venue() {
 		if (id) {
 			fetchVenueInfo(id);
 		}
-    }, []);
+	}, []);
 
 	return venueIsReady ? (
 		<>
 			<Head>
-				<title>{ t("Stadium Matching System") }</title>
+				<title>{t("Stadium Matching System")}</title>
 				<meta
 					property="og:description"
 					content="Stadium Matching System"
 				/>
 			</Head>
-			<NavBar/>
+			<NavBar />
 			<Container className={styles.container}>
 				{/* Subsection */}
 				<Row>
 					<Col className="text-center">
-						<h3>{ venueInfo?.name }</h3>
+						<h3>{venueInfo?.name}</h3>
 					</Col>
 				</Row>
 
 				{/* Section */}
 				<Row>
 					<Col className="text-center my-2">
-						<h1>{ venueInfo?.venue_name }</h1>
+						<h1>{venueInfo?.venue_name}</h1>
 					</Col>
 				</Row>
 
 				{/* Description */}
 				<Row>
 					<Col className="text-center">
-						<p>{ venueInfo?.description}</p>
+						<p>{venueInfo?.description}</p>
 					</Col>
 				</Row>
 
 				{/* Tab */}
 				<Row>
-					<Col xs={{span: 10, offset: 1}}>
-						<VenueTab venueInfo={venueInfo}/>
+					<Col xs={{ span: 10, offset: 1 }}>
+						<VenueTab venueInfo={venueInfo} />
 					</Col>
 				</Row>
 			</Container>
 		</>
-	): null;
+	) : null;
 }
 
 export default Venue;

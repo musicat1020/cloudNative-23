@@ -3,10 +3,11 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import Modal from "@mui/material/Modal";
 import Divider from "@mui/material/Divider";
-import styles from "@/styles/modal.module.css";
-import axios from "@/utils/axios";
 import { useRouter } from "next/router";
 import { revalidatePath } from "next/cache";
+import styles from "@/styles/modal.module.css";
+import axios from "@/utils/axios";
+import { getAccessToken } from "@/utils/cookies";
 
 const useStyles = makeStyles({
   modal: {
@@ -34,7 +35,7 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
   // DELETE api/v1/stadium/delete
   const deleteVenue = async (id) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = getAccessToken();
       const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/delete`;
       const headers = {
         "Accept": "application/json",
@@ -50,7 +51,7 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
       throw new Error(error.message); // or handle as needed
     }
   };
-  
+
 
   const handleConfirm = () => {
     const { search } = window.location;
