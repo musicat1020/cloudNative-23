@@ -21,6 +21,7 @@
 }
 
 .timeTableSessionCell[aria-disabled="true"] {
-	color: #ABABAB;
+	background-color: #ABABAB;
+	color: #FFFFFF;
 	cursor: default;
 }

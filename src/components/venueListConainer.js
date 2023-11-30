@@ -17,7 +17,7 @@ function VenueListConainer({ isAdmin }) {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const res = await axios.post("/api/v1/stadium/stadium-list/", {}, {});
+        const res = await axios.get("/api/v1/stadium/stadium-list/", {}, {});
         setVenueList(res.stadium);
       } catch (error) {
         throw new Error(error);
