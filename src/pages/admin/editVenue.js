@@ -108,6 +108,14 @@ function EditVenue() {
 		}
 	}, []);
 
+	const handleEditClick = () => {
+		if (venueInfo.name === "") {
+			// TODO: show field not null alert
+      return;
+		}
+		setShowEditVenueModal(true);
+	};
+
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
@@ -198,7 +206,7 @@ function EditVenue() {
 									<Button
 										variant="outlined"
 										color="secondary"
-										onClick={() => setShowEditVenueModal(true)}
+										onClick={handleEditClick}
 									>
 										{t("修改")}
 									</Button>

@@ -35,6 +35,14 @@ function NewVenue() {
 	const [showNewVenueModal, setShowNewVenueModal] = useState(false);
 	const { t } = useTranslation();
 
+	const handleAddClick = () => {
+		if (venueInfo.name === "") {
+			// TODO: show field not null alert
+      return;
+		}
+		setShowNewVenueModal(true);
+	};
+
 	const hiddenFileInput = useRef();
 
 	const handleImageClick = () => {
@@ -134,7 +142,8 @@ function NewVenue() {
 							<Button
 								variant="outlined"
 								color="secondary"
-								onClick={() => setShowNewVenueModal(true)}
+								// onClick={() => setShowNewVenueModal(true)}
+								onClick={handleAddClick}
 							>
 								{t("新增")}
 							</Button>
