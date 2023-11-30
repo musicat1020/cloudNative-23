@@ -1,9 +1,10 @@
 /* eslint-disable no-param-reassign */
 import axios from "axios";
 import getConfig from "next/config";
+import { getAccessToken } from "@/utils/cookies";
 
-const { 
-    publicRuntimeConfig: { apiRoot }, 
+const {
+    publicRuntimeConfig: { apiRoot },
 } = getConfig();
 
 axios.defaults.baseURL = apiRoot;
@@ -13,9 +14,12 @@ const instance = axios.create();
 // 前攔截器
 instance.interceptors.request.use(
     (config) => {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = getAccessToken();
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        else {
+            console.log("No access token found.");
         }
         return config;
     },

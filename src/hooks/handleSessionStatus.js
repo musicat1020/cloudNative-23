@@ -14,7 +14,7 @@ export const handleDisableSession = async (id, date, startTime, endTime) => {
     console.log("disable request data", requestData);
 
     await axios.post("/api/v1/stadium/disable/", requestData, {})
-        .then((res) => console.log("diable res", res));
+        .then((res) => console.log("disable res", res));
 
 };
 

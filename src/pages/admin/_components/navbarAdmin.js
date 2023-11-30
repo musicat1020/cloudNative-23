@@ -13,7 +13,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "@/styles/navbar.module.css";
 import i18n from "@/utils/i18n";
 import UserMenu from "@/components/buttonUserMenu";
-import getAccessToken from "@/hooks/getAccessToken";
+import { setUserCookies, clearAllCookies, getAllCookies } from "@/utils/cookies";
 
 const {
   publicRuntimeConfig: {
@@ -38,19 +38,18 @@ function NavBar() {
 
   const handleLogout = () => {
     signOut();
-    localStorage.removeItem("accessToken");
+    clearAllCookies();
   };
 
   useEffect(() => () => {
     clearTimeout(timeoutRef.current);
   }, []);
-
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken === null && data?.user?.name !== undefined) {
-      getAccessToken(data?.user);
+    if (data?.user !== undefined && Object.keys(getAllCookies()).length === 0) {
+      setUserCookies(data?.user);
     }
   }, [data?.user]);
+
 
   const [expanded, setExpanded] = useState(false);
 
@@ -61,7 +60,7 @@ function NavBar() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="light-cream" onToggle={setToggle}>
       <Container className="m-2" style={{ maxWidth: "initial" }}>
-        <Navbar.Brand href="/main" bsPrefix="text-2xl no-underline" className="text-dark-blue">
+        <Navbar.Brand href="/admin" bsPrefix="text-2xl no-underline" className="text-dark-blue">
           {t("Stadium Matching System")}
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />

@@ -79,7 +79,6 @@ function EditVenue() {
 	const [value, setValue] = useState(1);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 
-
 	const fetchVenueInfo = async (id) => {
 
 		const params = {
@@ -89,8 +88,6 @@ function EditVenue() {
 			"/api/v1/stadium/info/", {}, { params }
 		);
 
-		console.log("get info response", res);
-		
 		setVenueInfo(res.data);
 		setVenueIsReady(true);
 	};
@@ -108,7 +105,7 @@ function EditVenue() {
 	const handleEditClick = () => {
 		if (venueInfo.name === "") {
 			// TODO: show field not null alert
-      return;
+			return;
 		}
 		setShowEditVenueModal(true);
 	};
@@ -149,14 +146,14 @@ function EditVenue() {
 
 			<Container className={`${styles.container}`}>
 				<div className="flex justify-center items-center">
-					
+
 					<img
 						className='rounded-lg object-cover w-5/6 h-96 hover:opacity-75'
 						src={venueInfo?.picture}
 						alt="Venue here"
 						onClick={handleImageClick}
 					/>
-					
+
 					<input
 						type="file"
 						onChange={handleInputChange}
@@ -236,7 +233,7 @@ function EditVenue() {
 				handleClose={() => setShowEditVenueModal(false)}
 				title={t("修改場地資訊")}
 				info={venueInfo}
-				type={"edit"}
+				type="edit"
 			/>
 
 		</ThemeProvider>
