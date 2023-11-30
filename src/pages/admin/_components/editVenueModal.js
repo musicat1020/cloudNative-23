@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     position: "absolute",
     top: "50%",
     left: "50%",
+    height: '90%',
     transform: "translate(-50%, -50%)",
     boxShadow: 24,
     width: "50vw",
@@ -23,6 +24,7 @@ const useStyles = makeStyles({
     color: "#14274C",
     outline: 0,
     borderRadius: "5px",
+    overflow: 'scroll',
   }
 });
 
@@ -45,11 +47,11 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
   // PUT api/v1/stadium/
   const updateVenue = async () => {
     const accessToken = localStorage.getItem("accessToken");
-		const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/`;
-		const headers = {
-			"Accept": "application/json",
-			"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-		};
+    const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/`;
+    const headers = {
+      "Accept": "application/json",
+      "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+    };
     await axios.put(url, info, { headers });
   };
 
@@ -59,8 +61,8 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
     const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/create`;
     const headers = {
       "Accept": "application/json",
-			"Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-		};
+      "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
+    };
     await axios.post(url, data, { headers });
   };
 
@@ -78,7 +80,6 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
         google_map_url: input.google_map_url || "",
       },
       stadium_available_times: {
-        // id: input.data.id || 0,
         weekday: input.available_times.weekdays || [],
         start_time: input.available_times.start_time || 0,
         end_time: input.available_times.end_time || 0,
@@ -129,7 +130,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
           aria-labelledby='modal-modal-title'
           aria-describedby='modal-modal-description'
         >
-          <Container className={modalStyles.modal} style={customStyles}>
+          <Container className={`${modalStyles.modal}`} style={customStyles}>
             {/** Close button */}
             <Row>
               <Col className='text-end text-3xl'>
@@ -153,95 +154,89 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
 
             {/** Location */}
             <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("場館地址")}</span>
+              <Col className="flex items-center">
+                <span className={styles.modalAttribute} style={{ width: '100px' }}>{t("場館地址")}</span>
                 <span>{info?.address}</span>
               </Col>
             </Row>
 
             {/** stadium name */}
             <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("場館名稱")}</span>
+              <Col className="flex items-center">
+                <span className={styles.modalAttribute} style={{ width: '100px' }}>{t("場館名稱")}</span>
                 <span>{info?.name}</span>
               </Col>
             </Row>
 
             {/** venue name */}
             <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("場地名稱")}</span>
+              <Col className="flex items-center">
+                <span className={styles.modalAttribute} style={{ width: '100px' }}>{t("場地名稱")}</span>
                 <span>{info?.venue_name}</span>
               </Col>
             </Row>
 
             {/** capacity */}
             <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("容納人數")}</span>
+              <Col className="flex items-center">
+                <span className={styles.modalAttribute} style={{ width: '100px' }}>{t("容納人數")}</span>
                 <span>{info?.max_number_of_people}  {t("人")}</span>
               </Col>
             </Row>
 
             {/** court list */}
             <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("場地列表")}</span>
+              <Col className="flex items-center">
+                <span className={styles.modalAttribute} style={{ width: '100px' }}>{t("場地列表")}</span>
                 <span>{getCourtList()}</span>
               </Col>
             </Row>
 
             {/** area */}
             <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("場地面積")}</span>
+              <Col className="flex items-center">
+                <span className={styles.modalAttribute} style={{ width: '100px' }}>{t("場地面積")}</span>
                 <span>{info?.area} {t("平方公尺")}</span>
               </Col>
             </Row>
 
             {/** open time */}
             <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("開放時間")}</span>
+              <Col className="flex items-center">
+                <span className={styles.modalAttribute} style={{ width: '100px' }}>{t("開放時間")}</span>
                 <span>{`${info?.available_times?.start_time}:00 ~ ${info?.available_times?.end_time}:00`}</span>
               </Col>
             </Row>
 
             {/** open day */}
             <Row className='mt-3'>
-              <Col>
-                <span className={styles.modalAttribute}>{t("開放日")}</span>
-                {getWeekdays()}
+              <Col className="flex items-center">
+                <span className={styles.modalAttribute} style={{ width: '100px' }}>{t("開放日")}</span>
+                <span className={`${styles.modalTextArea}`}>{getWeekdays()}</span>
               </Col>
             </Row>
 
             {/** description */}
-            <Row className='mt-3 mb-10'>
-              <Col xs={3}>
-                <span className={styles.modalAttribute}>{t("說明")}</span>
-              </Col>
-              <Col>
-                <span>{info?.description}</span>
+            <Row className='mt-3'>
+              <Col className="flex items-center">
+                <span className={`${styles.modalAttribute}`} style={{ width: '100px' }}>{t("說明")}</span>
+                <span className={`${styles.modalTextArea}`}>{info?.description}</span>
               </Col>
             </Row>
 
             {/* link */}
             <Row className='mt-3 mb-10'>
-              <Col xs={3}>
-                <span className={styles.modalAttribute}>{t("地圖連結")}</span>
-              </Col>
-              <Col>
-                {info?.google_map_url && (
-                  <a className="w-2/3" href={info.google_map_url} target="_blank" rel="noopener noreferrer">
-                    {info.google_map_url}
-                  </a>
-                )}
+              <Col className="flex items-center">
+                <span className={`${styles.modalAttribute}`} style={{ width: '100px' }}>{t("地圖連結")}</span>
+                <a className={`${styles.modalTextArea}`} href={info?.google_map_url} target="_blank" rel="noopener noreferrer">
+                  {info.google_map_url}
+                </a>
               </Col>
             </Row>
 
 
             {/* Button */}
-            <Row className='mt-3'>
+            <Row className='mt-3 mb-10'>
               <Col className='text-center' >
                 <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
               </Col>

@@ -2,6 +2,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import Modal from "@mui/material/Modal";
+import Divider from "@mui/material/Divider";
 import styles from "@/styles/modal.module.css";
 import axios from "@/utils/axios";
 import { useRouter } from "next/router";
@@ -14,7 +15,8 @@ const useStyles = makeStyles({
     left: "50%",
     transform: "translate(-50%, -50%)",
     boxShadow: 24,
-    width: "50vw",
+    width: "30vw",
+    // width: "50px",
     padding: "15px 30px",
     backgroundColor: "white",
     color: "#14274C",
@@ -92,24 +94,31 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
               </Col>
             </Row>
 
+            {/** Divider */}
+            <Row className='my-3'>
+              <Col>
+                <Divider />
+              </Col>
+            </Row>
+
             {/** stadium name */}
             <Row className='mt-3'>
-              <Col>
+              <Col className="flex items-center">
                 <span className={styles.modalAttribute}>{t("場館名稱")}</span>
                 <span>{info?.name}</span>
               </Col>
             </Row>
 
             {/** venue name */}
-            <Row className='mt-3 mb-4'>
-              <Col>
+            <Row className='mt-3 mb-10'>
+              <Col className="flex items-center">
                 <span className={styles.modalAttribute}>{t("場地名稱")}</span>
                 <span>{info?.venue_name}</span>
               </Col>
             </Row>
 
             {/* Button */}
-            <Row className='mt-3'>
+            <Row className='mt-3 mb-3'>
               <Col className='text-center' >
                 <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
               </Col>

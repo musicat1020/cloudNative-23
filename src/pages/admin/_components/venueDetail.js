@@ -215,13 +215,14 @@ function VenueDetail({ info, setInfo }) {
             <Form.Label column sm="2">
               {t("單一場地可容納人數")}
             </Form.Label>
-            <Col sm="10" className='content-left'>
+            <Col sm="10" className='content-left flex items-center'>
               <Form.Control
                 type="capacity"
                 style={{ width: "80px" }}
                 value={info?.max_number_of_people}
                 onChange={(e) => handleCapacityChange(e.target.value)}
               />
+              <div className="ml-3">{t("人")}</div>
             </Col>
           </Form.Group>
 
@@ -255,13 +256,14 @@ function VenueDetail({ info, setInfo }) {
             <Form.Label column sm="2">
               {t("場地面積")}
             </Form.Label>
-            <Col sm="10">
+            <Col sm="10" className='content-left flex items-center'>
               <Form.Control
                 type="area"
                 style={{ width: "80px" }}
                 value={info?.area}
                 onChange={(e) => handleAreaChange(e.target.value)}
               />
+              <div className="ml-3 ">{t("平方公尺")} </div>
             </Col>
           </Form.Group>
 

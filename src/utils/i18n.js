@@ -104,7 +104,7 @@ i18n.use(initReactI18next).init({
 				"下架場地": "Disable venue sessions",
 				"地圖連結": "Location Link",
 				"修改場地資訊": "Update Venue Info",
-				"新增場地": "Create new Venue",
+				"新增場地": "Create New Venue",
 			}
 		},
 		zh: {
