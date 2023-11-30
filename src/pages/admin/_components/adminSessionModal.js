@@ -1,20 +1,24 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import BaseModal from "../../../components/baseModal";
-
+import { handleDisableSession, handleEnableSession } from "../../../hooks/handleSessionStatus";
 import styles from "@/styles/modal.module.css";
 
-function AdminSessionModal({ show, setShow, windowSize }) {
-
+function AdminSessionModal({
+  venueInfo,
+  clickEditData,
+  show,
+  setShow,
+  windowSize
+}) {
   const { t } = useTranslation();
-
   const [modalWidth, setModalWidth] = useState("30vw");
-  // session info: id, date, start_time, status
-  const { venue, date, start_time, status } = {
-    venue: "綜合體育館 一樓多功能球場",
+  const venue = `${venueInfo.name} ${venueInfo.venue_name}`;
+  const { date, startTime, endTime, status } = clickEditData || {
     date: "2021-10-20",
-    start_time: 14,
+    startTime: 14,
+    endTime: 15,
     status: "Available"
   };
 
@@ -31,36 +35,31 @@ function AdminSessionModal({ show, setShow, windowSize }) {
     }
   }, [windowSize]);
 
-  function formatDateTime(date, start_time) {
-    const eventDate = new Date(date); // Convert the date string to a Date object
-    const year = eventDate.getFullYear();
-    const month = (eventDate.getMonth() + 1).toString().padStart(2, '0'); // Month starts from 0
-    const day = eventDate.getDate().toString().padStart(2, '0');
-
-    const startHour = start_time.toString().padStart(2, '0');
-    const endHour = (start_time + 1).toString().padStart(2, '0'); // Assuming one hour duration
-
-    const formattedDateTime = `${year}-${month}-${day} ${startHour}:00-${endHour}:00`;
+  function formatDateTime() {
+    const formattedDateTime = `${date} ${startTime}-${endTime}`;
+    console.log("formattedDateTime", formattedDateTime);
     return formattedDateTime;
   }
 
-  function formatTitle(status) {
-    if (status === "disabled") {
+  function formatTitle() {
+    if (status === "disable") {
       return t("上架特定時段場地");
-    } else {
-      return t("下架特定時段場地");
     }
+    return t("下架特定時段場地");
+
   };
 
   return (
     // TODO: pass info to Content
     <BaseModal
       venue={venue}
-      session={formatDateTime(date, start_time)}
+      date={date}
+      startTime={startTime}
+      endTime={endTime}
       show={show}
       handleClose={() => setShow(false)}
-      title={formatTitle(status)}
-      content={<Content setShow={setShow} venue={venue} date={date} startTime={start_time} status={status} />}
+      title={formatTitle()}
+      content={<Content setShow={setShow} venueInfo={venueInfo} clickEditData={clickEditData} />}
       customStyles={{ width: modalWidth }}
     />
   );
@@ -68,42 +67,46 @@ function AdminSessionModal({ show, setShow, windowSize }) {
 
 export default AdminSessionModal;
 
-function Content({ setShow, venue, date, startTime, status }) {
-
-  const handleDisableSession = () => {
-    // TODO: disable session
-  };
-
-  const handleEnableSession = () => {
-    // TODO: enable session
-  };
+function Content({ setShow, venueInfo, clickEditData }) {
 
   const { t } = useTranslation();
+  const venueId = venueInfo?.id;
+  const date = clickEditData?.date;
+  const startHour = parseInt(clickEditData.startTime.split(":")[0], 10);
+  const endHour = parseInt(clickEditData.endTime.split(":")[0], 10);
+  const status = clickEditData?.status;
+
 
   return (
     <Row>
-      {status === "Available" || "booked" ? (
+      {status === "no_order" ? (
         <>
           <Col className='text-center' >
             <button className={styles.confirmButton} onClick={() => setShow(false)}>{t("取消")}</button>
           </Col>
           <Col className='text-center'>
-            <button className={styles.confirmButton} onClick={handleDisableSession}>{t("下架場地")}</button>
+            <button className={styles.confirmButton} onClick={() => {
+              handleDisableSession(venueId, date, startHour, endHour);
+              setShow(false);
+            }}>{t("下架場地")}</button>
           </Col>
         </>
-      ) : status === "disabled" ? (
+      ) : status === "disable" ? (
         <>
           <Col className='text-center' >
             <button className={styles.confirmButton} onClick={() => setShow(false)}>{t("取消")}</button>
           </Col>
           <Col className='text-center'>
-            <button className={styles.confirmButton} onClick={handleEnableSession}>{t("上架場地")}</button>
+            <button className={styles.confirmButton} onClick={() => {
+              handleEnableSession(venueId, date, startHour, endHour);
+              setShow(false);
+            }}>{t("上架場地")}</button>
           </Col>
         </>
-
       ) : (
         <p>Status unknown</p>
-      )}
-    </Row>
+      )
+      }
+    </Row >
   );
 };

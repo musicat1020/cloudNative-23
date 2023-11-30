@@ -13,46 +13,53 @@ import {
 	TableRow 
 } from "@mui/material";
 import Swal from "sweetalert2";
-import getConfig from "next/config";
-import axios from "../../../utils/axios";
-import BaseModal from "../../../components/baseModal";
-import BaseSwitch from "../../../components/baseSwitch";
-import BaseCheckbox from "../../../components/baseCheckbox";
+import axios from "@/utils/axios";
+import LevelEnum from "@/utils/levelEnum";
+import BaseModal from "@/components/baseModal";
+import BaseSwitch from "@/components/baseSwitch";
+import BaseCheckbox from "@/components/baseCheckbox";
+import PeopleSelect from "@/components/peopleSelect";
+import InputEmail from "@/pages/main/_components/inputEmail";
 import styles from "@/styles/court.module.css";
 
-const {
-	publicRuntimeConfig: {
-		apiRoot,
-	},
-} = getConfig();
-
-function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
+function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, level }) {
 
 	const { t } = useTranslation();
 
 	const levelList = {
-		"beginner": t("初級"),
-		"intermediate": t("中級"),
-		"advanced": t("高級"),
+		"EASY": t("初級"),
+		"MEDIUM": t("中級"),
+		"HARD": t("高級"),
 	};
 	const statusList = {
 		"join": "加入",
 		"rent": "租借",
 		"full": "已滿",
 	};
+	const reverseLevelEnum = Object.fromEntries(
+		Object.entries(LevelEnum).map(([key, value]) => [value, key])
+	);
 
 	const [showJoin, setShowJoin] = useState(false);
+	const [showJoinRes, setShowJoinRes] = useState(false);
+	const [joinResponse, setJoinResponse] = useState({});
+	const [peopleJoin, setPeopleJoin] = useState(people);
+
 	const [showRent, setShowRent] = useState(false);
 	const [showRentRes, setShowRentRes] = useState(false);
+	const [rentResponse, setRentResponse] = useState({});
 	const [peopleUsed, setPeopleUsed] = useState(people);
+	const [emails, setEmails] = useState([]);
 	const [allowMatching, setAllowMatching] = useState(false);
 	const [peopleMatching, setPeopleMatching] = useState(0);
 	const [levelChecked, setLevelChecked] = useState([]);
-	const [rentResponse, setRentResponse] = useState({});
+	
 	const [joinModalWidth, setJoinModalWidth] = useState("35vw");
 	const [rentModalWidth, setRentModalWidth] = useState("45vw");
 	const [rentSuccessModalWidth, setRentSuccessModalWidth] = useState("45vw");
+
 	const [courtData, setCourtData] = useState([]);
+	const [currCourtInfo, setCurrCourtInfo] = useState({});
 
 	/** handle modal width based on window size */
 	useEffect(() => {
@@ -72,7 +79,7 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			setRentSuccessModalWidth("50vw");
 		}
 		else {
-			setJoinModalWidth("35vw");
+			setJoinModalWidth("40vw");
 			setRentModalWidth("45vw");
 			setRentSuccessModalWidth("45vw");
 		}
@@ -84,53 +91,64 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			date,
 			start_time: parseInt(startTime, 10),
 			headcount: people,
-			level_requirement: level,
+			level_requirement: reverseLevelEnum[level],
 		};
 		const res = await axios.post("/api/v1/stadium-court/rent-info", {}, { params });
 		setCourtData(res.data);
 	};
-
+	
 	useEffect(() => {
 		fetchCourtInfo();
 	}, []);
 
-	// TODO: get data from backend
-	const joinData = {
-		"renter": t("丁丁"),
-		"people": 2,
-		"maxPeople": 4,
-		"levels": ["intermediate", "advanced"],
+	const clearJoinInput = () => {
+		setPeopleJoin(people);
+		setEmails([]);
 	};
 
 	const clearRentInput = () => {
-		setPeopleUsed(0);
+		setPeopleUsed(people);
+		setEmails([]);
 		setAllowMatching(true);
 		setPeopleMatching(0);
 		setLevelChecked([]);
 	};
 
-	const handleOpenJoin = () => {
-
-		// TODO: Send request to backend
-
+	const handleOpenJoin = (e) => {
+		const courtId = e.target.id;
+		const courtInfo = courtData.find((item) => item.stadium_court_id === parseInt(courtId, 10));
+		setCurrCourtInfo(courtInfo);
 		setShowJoin(true);
 	};
 
-	const handleOpenRent = () => {
+	const handleOpenRent = (e) => {
+		const courtId = e.target.id;
+		const courtInfo = courtData.find((item) => item.stadium_court_id === parseInt(courtId, 10));
+		setCurrCourtInfo(courtInfo);
 		setShowRent(true);
 	};
 
 	const handleCloseJoin = () => {
+		clearJoinInput();
+		setCurrCourtInfo({});
 		setShowJoin(false);
 	};
 
 	const handleCloseRent = () => {
 		clearRentInput();
+		setCurrCourtInfo({});
 		setShowRent(false);
+	};
+
+	const handleCloseJoinRes = () => {
+		setJoinResponse({});
+		setCurrCourtInfo({});
+		setShowJoinRes(false);
 	};
 
 	const handleCloseRentRes = () => {
 		setRentResponse({});
+		setCurrCourtInfo({});
 		setShowRentRes(false);
 	};
 
@@ -158,13 +176,56 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 		return flag;
 	};
 
+	const checkJoinInput = (data) => {
+		let flag = true; 
+		const text = [];
+
+		if (data.people <= 0) {
+			text.push(t("使用人數不可為0"));
+			flag = false;
+		}
+
+		if (!flag) {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				html: text.join(",<br>"),
+				confirmButtonColor: "#14274C",
+			});
+		}
+		return flag;
+	};
+
+	const handleJoin = async (e) => {
+
+		// TODO: send request to backend
+		const data = {
+			stadium_court_id: parseInt(e.target.dataset.courtId, 10),
+			team_id: parseInt(e.target.dataset.teamId, 10),
+			people: parseInt(peopleJoin, 10),
+			emails: emails?.map((item) => item.email),
+		};
+
+		// Check if input is valid
+		if (!checkJoinInput(data)) {
+			return;
+		}
+
+		// Close modal
+		handleCloseJoin();
+
+		 // Show join response modal
+		setShowJoinRes(true);
+	};
+
 	const handleRent = async () => {
 
 		const data = {
-			"people": peopleUsed,
-			"allowMatching": allowMatching,
-			"peopleMatching": allowMatching ? peopleMatching: 0,
-			"levels": levelChecked,
+			people: peopleUsed,
+			emails: emails?.map((item) => item.email),
+			allowMatching,
+			peopleMatching: allowMatching ? peopleMatching: 0,
+			levels: levelChecked,
 		};
 
 		// Check if input is valid
@@ -176,7 +237,7 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 		// TODO: send request to backend
 		const res = await axios.get(
-			`${apiRoot}/api/healthchecker`
+			"/api/healthchecker"
 		);
 
 		// Show success message
@@ -188,21 +249,25 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 		setShowRentRes(true);
 	};
 
-	const getJoinContent = (data) => (
+	const handleEmailChange = (value) => {
+		setEmails(value);
+	};
+
+	const getJoinContent = () => (
 		<Container>
 			{/* Renter */}
 			<Row>
 				<Col>
-					<span className={styles.joinAttrTitle}>{t("租借人")}</span>
-					<span>{data.renter}</span>
+					<span className={styles.borderAttrTitle}>{t("租借人")}</span>
+					<span>{currCourtInfo?.renter_name}</span>
 				</Col>
 			</Row>
 
 			{/* People */}
 			<Row>
 				<Col>
-					<span className={styles.joinAttrTitle}>{t("使用人數")}</span>
-					<span>{`${data.people}/${data.maxPeople}`}</span>
+					<span className={styles.borderAttrTitle}>{t("目前人數")}</span>
+					<span>{`${currCourtInfo?.current_member_number}/${currCourtInfo?.max_number_of_member}`}</span>
 				</Col>
 			</Row>
 
@@ -210,9 +275,78 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			{/* Levels */}
 			<Row>
 				<Col>
-					<span className={styles.joinAttrTitle}>{t("球技要求")}</span>
+					<span className={styles.borderAttrTitle}>{t("球技要求")}</span>
 					{
-						data.levels.map((item, index) => (
+						currCourtInfo?.level_requirement?.map((item, index) => (
+							<span key={index} className={styles.level}>{levelList[item]}</span>
+						))
+					}
+				</Col>
+			</Row>
+
+			{/* People Join */}
+			<Row>
+				<Col>
+					<span className={styles.borderAttrTitle}>{t("欲加入人數")}</span>
+					<PeopleSelect 
+						className="mr-4 px-2 text-center"
+						people={peopleJoin} 
+						maxPeople={currCourtInfo.max_number_of_member - currCourtInfo.current_member_number} 
+						onChange={setPeopleJoin}
+					/>
+					<span>{ t("人") }</span>
+				</Col>
+			</Row>
+
+			{/* Temmates Email */}
+			<Row>
+				<Col className="flex items-center mt-2">
+					<span className={styles.borderAttrTitle}>{t("隊友Email")}</span>
+					<InputEmail emails={emails} onChange={handleEmailChange}/>
+				</Col>
+			</Row>
+
+			{/* Button */}
+			<Row className='mt-3'>
+				<Col className='text-center'>
+					<button 
+						data-court-id={currCourtInfo?.stadium_court_id} 
+						data-team-id={currCourtInfo?.team_id}
+						className={styles.confirmButton} 
+						onClick={(e) => handleJoin(e)}
+					>
+						{t("確定")}
+					</button>
+				</Col>
+			</Row>
+		</Container>
+	);
+
+	const getJoinResContent = () => (
+		<Container>
+			{/* Renter */}
+			<Row>
+				<Col>
+					<span className={styles.borderAttrTitle}>{t("租借人")}</span>
+					<span>{joinResponse?.renter_name}</span>
+				</Col>
+			</Row>
+
+			{/* People */}
+			<Row>
+				<Col>
+					<span className={styles.borderAttrTitle}>{t("目前人數")}</span>
+					<span>{`${joinResponse?.current_member_number}/${joinResponse?.max_number_of_member}`}</span>
+				</Col>
+			</Row>
+
+
+			{/* Levels */}
+			<Row>
+				<Col>
+					<span className={styles.borderAttrTitle}>{t("球技要求")}</span>
+					{
+						joinResponse?.level_requirement?.map((item, index) => (
 							<span key={index} className={styles.level}>{levelList[item]}</span>
 						))
 					}
@@ -222,7 +356,9 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			{/* Button */}
 			<Row className='mt-3'>
 				<Col className='text-center'>
-					<button className={styles.confirmButton} onClick={handleCloseJoin}>{t("確定")}</button>
+					<button className={styles.confirmButton} onClick={handleCloseJoinRes}>
+						{t("確定")}
+					</button>
 				</Col>
 			</Row>
 		</Container>
@@ -234,22 +370,29 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			{/* People */}
 			<Row>
 				<Col>
-					<span className={styles.rentAttrTitle}>{t("使用人數")}</span>
-					<input 
-						type='number'
-						className='ml-4 mr-2 w-12'
-						value={peopleUsed}
-						min="0"
-						onChange={(e) => setPeopleUsed(e.target.value)}
+					<span className={styles.noBorderAttrTitle}>{t("使用人數")}</span>
+					<PeopleSelect 
+						className="mx-4 px-2 text-center"
+						people={peopleUsed} 
+						maxPeople={venueInfo?.max_number_of_people} 
+						onChange={setPeopleUsed}
 					/>
 					<span>{ t("人") }</span>
+				</Col>
+			</Row>
+
+			{/* Temmates Email */}
+			<Row>
+				<Col className="flex items-center mt-2">
+					<span className={styles.noBorderAttrTitle}>{t("隊友Email")}</span>
+					<InputEmail emails={emails} onChange={handleEmailChange}/>
 				</Col>
 			</Row>
 
 			{/* Allow Matching */}
 			<Row>
 				<Col>
-					<span className={styles.rentAttrTitle}>{t("允許配對球友?")}</span>
+					<span className={styles.noBorderAttrTitle}>{t("允許配對球友?")}</span>
 					<BaseSwitch 
 						checked={allowMatching}
 						handleChange={setAllowMatching}
@@ -260,14 +403,13 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			{/* People Matching */}
 			<Row>
 				<Col>
-					<span className={styles.rentAttrTitle}>{t("想再找幾名球友?")}</span>
-					<input 
-						type='number'
-						className='ml-4 mr-2 w-12'
-						value={peopleMatching}
+					<span className={styles.noBorderAttrTitle}>{t("想再找幾名球友?")}</span>
+					<PeopleSelect 
+						className="mx-4 px-2 text-center"
 						disabled={!allowMatching}
-						min="0"
-						onChange={(e) => setPeopleMatching(e.target.value)}
+						people={peopleMatching} 
+						maxPeople={venueInfo.max_number_of_people - peopleUsed} 
+						onChange={setPeopleMatching}
 					/>
 					<span>{ t("人") }</span>
 				</Col>
@@ -276,11 +418,11 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			{/* Levels */}
 			<Row>
 				<Col className='flex flex-row'>
-					<span className={styles.rentAttrTitle}>{t("球友球技要求")}</span>
+					<span className={styles.noBorderAttrTitle}>{t("球友球技要求")}</span>
 					<FormGroup className='ml-4'>
-						<FormControlLabel control={<BaseCheckbox value='beginner' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.beginner} />
-						<FormControlLabel control={<BaseCheckbox value='intermediate' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.intermediate} />
-						<FormControlLabel control={<BaseCheckbox value='advanced' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.advanced} />
+						<FormControlLabel control={<BaseCheckbox value='EASY' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.EASY} />
+						<FormControlLabel control={<BaseCheckbox value='MEDIUM' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.MEDIUM} />
+						<FormControlLabel control={<BaseCheckbox value='HARD' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.HARD} />
 					</FormGroup>
 				</Col>
 			</Row>
@@ -346,6 +488,8 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 			</Row>
 		</Container>
 	);
+
+	const getModalVenueName = () => `${venueInfo?.name} ${venueInfo?.venue_name} ${currCourtInfo?.name}`;
 	
 	return (
 		<>
@@ -384,15 +528,15 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 							<TableCell className={styles.tableCell}>
 								{
 									row.status === statusList.join &&
-									<button onClick={handleOpenJoin} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
+									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenJoin(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
 								}
 								{
 									row.status === statusList.rent &&
-									<button onClick={handleOpenRent} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{row.status}</button>
+									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenRent(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
 								}
 								{
 									row.status !== statusList.join && row.status !== statusList.rent &&
-									<span className='text-gray cursor-default'>{row.status}</span>
+									<span className='text-gray cursor-default'>{t(row.status)}</span>
 								}
 							</TableCell>
 						</TableRow>
@@ -403,19 +547,36 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 
 			{/* Modal for joined */}
 			<BaseModal 
-				venue={t("綜合體育館 一樓多功能球場 A場")}
-				session={t("2021/10/20 14:00 - 16:00")}
+				venue={getModalVenueName()}
+				date={date}
+				startTime={startTime}
+				endTime={endTime}
 				show={showJoin}
 				handleClose={handleCloseJoin}
-				title={t("已加入隊伍")}
-				content={getJoinContent(joinData)}
+				title={t("加入隊伍")}
+				content={getJoinContent()}
+				customStyles={{width: joinModalWidth}}
+			/>
+
+			{/* Modal for joined resopnse */}
+			<BaseModal 
+				venue={getModalVenueName()}
+				date={date}
+				startTime={startTime}
+				endTime={endTime}
+				show={showJoinRes}
+				handleClose={handleCloseJoinRes}
+				title={t("加入成功")}
+				content={getJoinResContent()}
 				customStyles={{width: joinModalWidth}}
 			/>
 
 			{/* Modal for rental */}
 			<BaseModal 
-				venue={t("綜合體育館 一樓多功能球場 A場")}
-				session={t("2021/10/20 14:00 - 16:00")}
+				venue={getModalVenueName()}
+				date={date}
+				startTime={startTime}
+				endTime={endTime}
 				show={showRent}
 				handleClose={handleCloseRent}
 				title={t("租借場地")}
@@ -423,10 +584,12 @@ function CourtTable({ venueInfo, date, startTime, windowSize, people, level }) {
 				customStyles={{width: rentModalWidth}}
 			/>
 
-			{/* Modal for rental successfully */}
+			{/* Modal for rental response */}
 			<BaseModal 
-				venue={t("綜合體育館 一樓多功能球場 A場")}
-				session={t("2021/10/20 14:00 - 16:00")}
+				venue={getModalVenueName()}
+				date={date}
+				startTime={startTime}
+				endTime={endTime}
 				show={showRentRes}
 				handleClose={() => setShowRentRes(false)}
 				title={t("租借成功")}

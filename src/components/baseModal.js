@@ -21,7 +21,7 @@ const useStyles = makeStyles({
 	}
 });
 
-function BaseModal({ venue, session, show, handleClose, title, content, customStyles }) {
+function BaseModal({ venue, date, startTime, endTime, show, handleClose, title, content, customStyles }) {
 
 	const modalStyles = useStyles();
 	const { t } = useTranslation();
@@ -60,7 +60,7 @@ function BaseModal({ venue, session, show, handleClose, title, content, customSt
 				<Row className='mt-3'>
 					<Col>
 						<span className={styles.modalAttribute}>{ t("時段") }</span>
-						<span>{session}</span>
+						<span>{`${date} ${startTime}:00 - ${endTime}:00`}</span>
 					</Col>
 				</Row>
 				

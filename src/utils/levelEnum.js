@@ -1,7 +1,11 @@
 const LevelEnum = {
-	"beginner": 1,
-	"intermediate": 3,
-	"advanced": 6,
+	"EASY": 1,
+	"EASY_MEDIUM": 2,
+	"MEDIUM": 3,
+	"EASY_MEDIUM_HARD": 4,
+	"MEDIUM_HARD": 5,
+	"HARD": 6,
 };
+
 
 export default LevelEnum;

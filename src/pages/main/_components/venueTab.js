@@ -9,8 +9,9 @@ import IconButton from "@mui/material/IconButton";
 import { Link } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import TimeTable from "./timetable";
-import LevelEnum from "../../../utils/levelEnum";
+import TimeTable from "@/pages/main/_components/timetable";
+import LevelEnum from "@/utils/levelEnum";
+import PeopleSelect from "@/components/peopleSelect";
 import styles from "@/styles/venuetab.module.css";
 
 const theme = createTheme({
@@ -73,7 +74,7 @@ function VenueTab({ venueInfo }) {
 	// 1 初級, 2 初＋中, 3 中, 4 初＋中＋高, 5 中＋高, 6 高
 	const [value, setValue] = useState(1);
 	const [people, setPeople] = useState(2);
-	const [level, setLevel] = useState(LevelEnum.beginner);
+	const [level, setLevel] = useState(LevelEnum.EASY);
 
 	const mapWeekday = {
 		1: t("週一"),
@@ -181,12 +182,11 @@ function VenueTab({ venueInfo }) {
 						<Row>
 							<Col xs={12} md={6} xl={4} className='my-2'>
 								<span>{t("欲使用人數")}</span>
-								<input
-									type='number'
-									className='ml-4 mr-2 w-12'
-									value={people}
-									min="0"
-									onChange={(e) => setPeople(e.target.value)}
+								<PeopleSelect 
+									className="mx-4 px-2 text-center"
+									people={people} 
+									maxPeople={venueInfo?.max_number_of_people} 
+									onChange={setPeople}
 								/>
 								<span>{t("人")}</span>
 							</Col>
@@ -197,9 +197,9 @@ function VenueTab({ venueInfo }) {
 									value={level}
 									onChange={(e) => setLevel(e.target.value)}
 								>
-									<option value={LevelEnum.beginner}>{t("初級")}</option>
-									<option value={LevelEnum.intermediate}>{t("中級")}</option>
-									<option value={LevelEnum.advanced}>{t("高級")}</option>
+									<option value={LevelEnum.EASY}>{t("初級")}</option>
+									<option value={LevelEnum.MEDIUM}>{t("中級")}</option>
+									<option value={LevelEnum.HARD}>{t("高級")}</option>
 								</select>
 							</Col>
 						</Row>

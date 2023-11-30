@@ -46,9 +46,9 @@
 	background-position: 0 100%;
 }
 
-.joinAttrTitle {
+.borderAttrTitle {
 	display: inline-block;
-	width: 100px;
+	width: 180px;
 	text-align: center;
 	color: #14274C;
 	margin: 10px 20px 10px 0px;
@@ -57,7 +57,7 @@
 	border-radius: 50px;
 }
 
-.rentAttrTitle {
+.noBorderAttrTitle {
 	display: inline-block;
 	width: 250px;
 	text-align: center;
