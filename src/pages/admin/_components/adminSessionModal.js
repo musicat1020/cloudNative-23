@@ -15,8 +15,9 @@ function AdminSessionModal({
   const { t } = useTranslation();
   const [modalWidth, setModalWidth] = useState("30vw");
   const venue = `${venueInfo.name} ${venueInfo.venue_name}`;
-  const { date, startTime, endTime, status } = clickEditData || {
-    date: "2021-10-20",
+  const { startDate, startTime, endDate, endTime, status } = clickEditData || {
+    startDate: "2021-10-20",
+    endDate: "2021-10-20",
     startTime: 14,
     endTime: 15,
     status: "Available"
@@ -36,7 +37,7 @@ function AdminSessionModal({
   }, [windowSize]);
 
   function formatDateTime() {
-    const formattedDateTime = `${date} ${startTime}-${endTime}`;
+    const formattedDateTime = `${startDate} ${startTime}-${endTime}`;
     console.log("formattedDateTime", formattedDateTime);
     return formattedDateTime;
   }
@@ -53,7 +54,7 @@ function AdminSessionModal({
     // TODO: pass info to Content
     <BaseModal
       venue={venue}
-      date={date}
+      date={startDate}
       startTime={startTime}
       endTime={endTime}
       show={show}
@@ -71,7 +72,8 @@ function Content({ setShow, venueInfo, clickEditData }) {
 
   const { t } = useTranslation();
   const venueId = venueInfo?.id;
-  const date = clickEditData?.date;
+  const startDate = clickEditData?.startDate;
+  const endDate = clickEditData?.endDate;
   const startHour = parseInt(clickEditData.startTime.split(":")[0], 10);
   const endHour = parseInt(clickEditData.endTime.split(":")[0], 10);
   const status = clickEditData?.status;
@@ -86,7 +88,8 @@ function Content({ setShow, venueInfo, clickEditData }) {
           </Col>
           <Col className='text-center'>
             <button className={styles.confirmButton} onClick={() => {
-              handleDisableSession(venueId, date, startHour, endHour);
+              console.log("start date in adminsessionModal", startDate, startHour);
+              handleDisableSession(venueId, startDate, startHour, endDate, endHour);
               setShow(false);
             }}>{t("下架場地")}</button>
           </Col>
@@ -98,7 +101,7 @@ function Content({ setShow, venueInfo, clickEditData }) {
           </Col>
           <Col className='text-center'>
             <button className={styles.confirmButton} onClick={() => {
-              handleEnableSession(venueId, date, startHour, endHour);
+              handleEnableSession(venueId, startDate, startHour, endDate, endHour);
               setShow(false);
             }}>{t("上架場地")}</button>
           </Col>

@@ -40,14 +40,12 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
 
   // TODO
   const handleConfirm = () => {
-    console.log("end date", formatDate(endDate));
-    console.log("end time", formatTime(endTime));
     const formattedStartDate = formatDate(startDate);
     const formattedStartTime = formatTime(startTime);
     const formattedEndDate = formatDate(endDate);
     const formattedEndTime = formatTime(endTime);
-    handleDisableSession(info.id, formattedStartDate, formattedStartTime, formattedEndTime);
 
+    handleDisableSession(info.id, formattedStartDate, formattedStartTime, formattedEndDate, formattedEndTime);
     handleClose();
   };
 

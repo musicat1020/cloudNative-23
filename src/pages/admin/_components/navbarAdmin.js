@@ -44,9 +44,21 @@ function NavBar() {
   useEffect(() => () => {
     clearTimeout(timeoutRef.current);
   }, []);
+
   useEffect(() => {
+    // After login, set user cookies and reload the page
+    // to show the admin if the user is provider
     if (data?.user !== undefined && Object.keys(getAllCookies()).length === 0) {
-      setUserCookies(data?.user);
+      setUserCookies(data?.user).then(() => {
+        window.location.reload(false);
+      });
+    }
+
+    // If token is expired, sign out and clear all cookies
+    if (data?.user !== undefined && Object.keys(getAllCookies()).length === 2) {
+      signOut();
+      clearAllCookies();
+      alert(t("連線逾時，請重新登入！"));
     }
   }, [data?.user]);
 

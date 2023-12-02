@@ -45,8 +45,8 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
     const formattedStartTime = formatTime(startTime);
     const formattedEndDate = formatDate(endDate);
     const formattedEndTime = formatTime(endTime);
-    handleEnableSession(info.id, formattedStartDate, formattedStartTime, formattedEndTime);
 
+    handleEnableSession(info.id, formattedStartDate, formattedStartTime, formattedEndDate, formattedEndTime);
     handleClose();
   };
 

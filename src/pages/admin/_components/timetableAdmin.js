@@ -99,7 +99,13 @@ function AdminTimeTable({ venueInfo }) {
 
 	const handleSessionClick = (e, status) => {
 		const { date, start, end } = e.target.dataset;
-		setClickEditData({ date, startTime: start.split(":")[0], endTime: end.split(":")[0], status });
+		setClickEditData({
+			startDate: date,
+			startTime: start.split(":")[0],
+			endDate: date,
+			endTime: end.split(":")[0],
+			status
+		});
 		setShowSessionModal(true);
 	};
 
