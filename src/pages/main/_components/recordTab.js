@@ -6,8 +6,7 @@ import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Container } from "react-bootstrap";
 import { useTranslation } from "next-i18next";
-import RecordTable from "./recordTable";
-import { mockRentalRecords, mockPairingRecords } from "../../../../mockData/mockData";
+import RentalTable from "./rentalTable";
 import PairingTable from "./pairingTable";
 
 const theme = createTheme({
@@ -26,7 +25,7 @@ const theme = createTheme({
   },
   typography: {
     fontFamily:
-            "\"Palatino\", sans-serif",
+      "\"Palatino\", sans-serif",
   },
 });
 
@@ -67,7 +66,7 @@ function a11yProps(index) {
 
 function RecordTab() {
   const { t } = useTranslation();
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -90,12 +89,12 @@ function RecordTab() {
         </Box>
         <CustomTabPanel value={value} index={0}>
           <Container>
-            <RecordTable records={mockRentalRecords} />
+            <RentalTable />
           </Container>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
           <Container>
-            <PairingTable records={mockPairingRecords} />
+            <PairingTable />
           </Container>
         </CustomTabPanel>
       </Box>

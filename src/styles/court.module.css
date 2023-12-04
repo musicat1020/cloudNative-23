@@ -99,3 +99,15 @@
 .confirmButton:hover {
 	background-color: #203357;
 }
+
+
+.borderAttrTitle {
+	display: inline-block;
+	width: 90px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 2px;
+	padding: 4px 7px;
+	border: 1px solid #14274C;
+	border-radius: 50px;
+}
