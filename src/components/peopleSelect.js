@@ -9,8 +9,13 @@ function PeopleSelect ({ className, disabled, people, maxPeople, onChange }) {
 
 	const getOptions = () => {
 		const options = [];
-		for (let i = 1; i <= maxPeople; i+=1) {
-			options.push(<option value={i} selected={i===people}>{i}</option>);
+		if (maxPeople <= 0) {
+			options.push(<option value={0}>{0}</option>);
+		}
+		else {
+			for (let i = 1; i <= maxPeople; i+=1) {
+				options.push(<option value={i} selected={i===people}>{i}</option>);
+			}
 		}
 		return options;
 	};

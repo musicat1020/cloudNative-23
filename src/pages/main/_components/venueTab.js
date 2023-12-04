@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
+import Image from "next/image";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import RoomIcon from "@mui/icons-material/Room";
 import IconButton from "@mui/material/IconButton";
@@ -136,11 +137,13 @@ function VenueTab({ venueInfo }) {
 								<p className="text-lg">
 									<span className={styles.infoAttr}>{t("Location")}</span>
 									<span>{venueInfo?.address}</span>
-									<Link href={venueInfo?.google_map_url}>
-										<IconButton>
-											<RoomIcon fontSize='inherit' color='secondary' />
-										</IconButton>
-									</Link>
+									{venueInfo?.google_map_url && 
+										<Link href={venueInfo?.google_map_url}>
+											<IconButton>
+												<RoomIcon fontSize='inherit' color='secondary' />
+											</IconButton>
+										</Link>
+									}
 								</p>
 								<p className="text-lg">
 									<span className={styles.infoAttr}>{t("場地面積")}</span>
@@ -168,11 +171,15 @@ function VenueTab({ venueInfo }) {
 								</p>
 							</Col>
 							<Col lg={12} xl={6}>
-								<img
-									src='/venue-1.jpg'
-									className='d-block w-100 h-80'
-									alt='image 1'
-								/>
+								{venueInfo?.picture && 
+									<Image
+										src={venueInfo?.picture}
+										className='d-block shadow-md rounded-md'
+										width={500}
+										height={500}
+										alt="Venue Image"
+									/>
+								}
 							</Col>
 						</Row>
 					</Container>

@@ -14,7 +14,21 @@
 	background-color: #14274C;
 	border-radius: 10px;
 	padding: 7px 35px;
-	margin: 0px 20px;
+}
+
+.cancelButton {
+	color: #FFFFFF;
+	background-color: #ABABAB;
+	border-radius: 10px;
+	padding: 7px 35px;
+}
+
+.cancelButton:hover {
+	background-color: #c0bfbf;
+}
+
+.confirmButton:hover {
+	background-color: #203357;
 }
 
 .courtListCell {

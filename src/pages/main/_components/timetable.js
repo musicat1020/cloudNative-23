@@ -137,7 +137,8 @@ function TimeTable({ people, level, venueInfo }) {
 					data-start={FormatSessionStart}
 					data-end={FormatSessionEnd}
 					onClick={handleSessionClick} 
-					className={styles.timeTableSessionCell}
+					aria-disabled={false}
+					className={styles.timeTableAvailableCell}
 				>
 					{ t("Open") }
 				</Col>;
@@ -150,7 +151,7 @@ function TimeTable({ people, level, venueInfo }) {
 						data-start={FormatSessionStart}
 						data-end={FormatSessionEnd}
 						aria-disabled 
-						className={styles.timeTableSessionCell}
+						className={styles.timeTableAvailableCell}
 					>
 						{ (status === "Booked") ? t("Rented") : t("Closed") }
 					</Col>;

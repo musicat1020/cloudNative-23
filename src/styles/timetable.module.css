@@ -12,15 +12,36 @@
 .timeTableSessionCell {
 	text-align: center;
 	line-height: 50px;
+	border: 1px solid #DADAD1;
+	cursor: default;
+}
 
-	border-style: solid;
-	border-color: #DADAD1;
-	border-width: 1px;
-
+.timeTableAvailableCell {
+	text-align: center;
+	line-height: 50px;
+	border: 1px solid #DADAD1;
 	cursor: pointer;
 }
 
-.timeTableSessionCell[aria-disabled="true"] {
-	color: #ABABAB;
+.timeTableAvailableCell[aria-disabled="true"] {
+	background-color: #ABABAB;
+	color: #E8E8E8;
 	cursor: default;
+}
+
+.timeTableAvailableCell[aria-disabled="false"]:hover {
+	background-color: rgba(20, 39, 76, 0.05);
+}
+
+.timeTableDisableCell {
+	text-align: center;
+	line-height: 50px;
+	background-color: #ABABAB;
+	color: #E8E8E8;
+	border: 1px solid #DADAD1;
+	cursor: pointer;
+}
+
+.timeTableDisableCell:hover {
+	background-color: rgba(171, 171, 171, 0.8);
 }

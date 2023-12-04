@@ -82,7 +82,7 @@ function Content({ setShow, venueInfo, clickEditData }) {
       {status === "no_order" ? (
         <>
           <Col className='text-center' >
-            <button className={styles.confirmButton} onClick={() => setShow(false)}>{t("取消")}</button>
+            <button className={styles.cancelButton} onClick={() => setShow(false)}>{t("取消")}</button>
           </Col>
           <Col className='text-center'>
             <button className={styles.confirmButton} onClick={() => {
@@ -94,7 +94,7 @@ function Content({ setShow, venueInfo, clickEditData }) {
       ) : status === "disable" ? (
         <>
           <Col className='text-center' >
-            <button className={styles.confirmButton} onClick={() => setShow(false)}>{t("取消")}</button>
+            <button className={styles.cancelButton} onClick={() => setShow(false)}>{t("取消")}</button>
           </Col>
           <Col className='text-center'>
             <button className={styles.confirmButton} onClick={() => {

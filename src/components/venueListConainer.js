@@ -77,7 +77,6 @@ function VenueItem({
           <img
             src={picture}
             alt="Venue Image"
-            height="100%"
             className="opacity-40 rounded-t-xl object-cover w-80 h-60"
           />
         </div>
