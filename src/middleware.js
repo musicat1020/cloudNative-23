@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getIsProvider } from "@/utils/cookies"; 
 
 function middleware(request) {
 	if (request.nextUrl.pathname.endsWith("/")) {
@@ -7,7 +6,8 @@ function middleware(request) {
 	}
 
 	if (request.nextUrl.pathname.startsWith("/admin")) {
-		if (!getIsProvider()) {
+		const isProvider = request.cookies.get("isProvider")?.value;
+		if (isProvider!=="true") {
 			return NextResponse.redirect(new URL("/main", request.url));
 		}
 	}

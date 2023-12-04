@@ -20,7 +20,6 @@ function NavBar() {
   const timeoutRef = useRef(null);
   const [isProvider, setIsProvider] = useState(false);
 
-
   const handleLanguage = () => {
     const oriLang = getCookie("lang") ?? "en";
     const newLang = oriLang === "en" ? "zh" : "en";
@@ -61,7 +60,7 @@ function NavBar() {
           <Nav className="me-auto" />
           <Nav>
             {
-              !isProvider && (
+              isProvider && (
                 <Nav.Link href="/admin">
                   <span className={styles.navAdmin}>{t("Admin")}</span>
                 </Nav.Link>
