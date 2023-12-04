@@ -189,11 +189,6 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			flag = false;
 		}
 
-		if (data.level_requirement === undefined || data.level_requirement === null) {
-			text.push(t("請選擇球友球技要求"));
-			flag = false;
-		}
-
 		if (!flag) {
 			Swal.fire({
 				icon: "error",
@@ -264,13 +259,29 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		}
 	};
 
-	const convertLevelRequirement = (levels) => {
+	const convertLevelRequirement = async (levels) => {
 		const mapLevels = levels.sort().map(item => reverseLevelEnum[parseInt(item, 10)]);
+		if (mapLevels?.length === 0) {
+			await Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: t("請選擇球友球技要求"),
+				confirmButtonColor: "#14274C",
+			});
+		}
+		else if (mapLevels?.length === 2 && mapLevels.includes("EASY") && mapLevels.includes("HARD")) {
+			await Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: t("球技要求不可跳級"),
+				confirmButtonColor: "#14274C",
+			});
+		}
 		return LevelEnum[mapLevels.join("_")];
 	};
 
 	const handleRent = async () => {
-
+		const levelRequirement = await convertLevelRequirement(levelChecked);
 		const data = {
 			stadium_court_id: currCourtInfo.stadium_court_id,
 			date,
@@ -279,7 +290,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			current_member_number: peopleUsed,
 			max_number_of_member: allowMatching ? parseInt(peopleUsed, 10) + parseInt(peopleMatching, 10) : parseInt(peopleUsed, 10),
 			is_matching: allowMatching,
-			level_requirement: convertLevelRequirement(levelChecked),
+			level_requirement: levelRequirement,
 			team_member_emails: emails?.map((item) => item.email),
 		};
 
@@ -430,6 +441,13 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		);
 	};
 
+	const rentPeopleUsedChange = (value) => {
+		if (parseInt(value, 10) === venueInfo?.max_number_of_people) {
+			setAllowMatching(false);
+		}
+		setPeopleUsed(value);
+	};
+
 	const getRentContent = () => (
 		<Container>
 
@@ -441,7 +459,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 						className="mx-4 px-2 text-center"
 						people={peopleUsed} 
 						maxPeople={venueInfo?.max_number_of_people} 
-						onChange={setPeopleUsed}
+						onChange={rentPeopleUsedChange}
 					/>
 					<span>{ t("人") }</span>
 				</Col>

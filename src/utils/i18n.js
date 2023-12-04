@@ -115,7 +115,8 @@ i18n.use(initReactI18next).init({
 				"請選擇球友球技要求": "Please select teammates level",
 				"隊友Email不符合人數": "Teammates Email does not match the number of people",
 				"無法加入": "Cannot join",
-				"Please login first." : "Please login first.",
+				"Please login first.": "Please login first.",
+				"球技要求不可跳級": "Cannot skip levels",
 			}
 		},
 		zh: {
@@ -228,6 +229,7 @@ i18n.use(initReactI18next).init({
 				"隊友Email不符合人數": "隊友Email不符合人數",
 				"無法加入": "無法加入",
 				"Please login first." : "請先登入",
+				"球技要求不可跳級": "球技要求不可跳級",
 			}
 		},
 	},
