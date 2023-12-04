@@ -51,7 +51,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	const [peopleUsed, setPeopleUsed] = useState(people);
 	const [emails, setEmails] = useState([]);
 	const [allowMatching, setAllowMatching] = useState(false);
-	const [peopleMatching, setPeopleMatching] = useState(0);
+	const [peopleMatching, setPeopleMatching] = useState(1);
 	const [levelChecked, setLevelChecked] = useState([]);
 	
 	const [joinModalWidth, setJoinModalWidth] = useState("35vw");
@@ -91,7 +91,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			date,
 			start_time: parseInt(startTime, 10),
 			headcount: people,
-			level_requirement: reverseLevelEnum[level],
+			level_requirement: level,
 		};
 		const res = await axios.post("/api/v1/stadium-court/rent-info", {}, { params });
 		setCourtData(res.data);
@@ -110,7 +110,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		setPeopleUsed(people);
 		setEmails([]);
 		setAllowMatching(true);
-		setPeopleMatching(0);
+		setPeopleMatching(1);
 		setLevelChecked([]);
 	};
 
@@ -130,13 +130,11 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 
 	const handleCloseJoin = () => {
 		clearJoinInput();
-		setCurrCourtInfo({});
 		setShowJoin(false);
 	};
 
 	const handleCloseRent = () => {
 		clearRentInput();
-		setCurrCourtInfo({});
 		setShowRent(false);
 	};
 
@@ -156,12 +154,23 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		let flag = true; 
 		const text = [];
 
-		if (data.people <= 0) {
+		if (data.current_member_number <= 0) {
 			text.push(t("使用人數不可為0"));
 			flag = false;
 		}
-		if (data.allowMatching && data.peopleMatching <= 0) {
+
+		if (data.is_matching && data.max_number_of_member <= 0) {
 			text.push(t("可加入人數不可為0"));
+			flag = false;
+		}
+
+		if (data.team_member_emails?.length !== (data.current_member_number-1)) {
+			text.push(t("隊友Email不符合人數"));
+			flag = false;
+		}
+
+		if (data.level_requirement === undefined || data.level_requirement === null) {
+			text.push(t("請選擇球友球技要求"));
 			flag = false;
 		}
 
@@ -185,6 +194,11 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			flag = false;
 		}
 
+		if (data.team_member_emails?.length !== (peopleJoin-1)) {
+			text.push(t("隊友Email不符合人數"));
+			flag = false;
+		}
+
 		if (!flag) {
 			Swal.fire({
 				icon: "error",
@@ -198,18 +212,19 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 
 	const handleJoin = async (e) => {
 
-		// TODO: send request to backend
 		const data = {
-			stadium_court_id: parseInt(e.target.dataset.courtId, 10),
 			team_id: parseInt(e.target.dataset.teamId, 10),
-			people: parseInt(peopleJoin, 10),
-			emails: emails?.map((item) => item.email),
+			team_member_emails: emails?.map((item) => item.email),
 		};
 
 		// Check if input is valid
 		if (!checkJoinInput(data)) {
 			return;
 		}
+
+		const res = await axios.post("/api/v1/stadium-court/join", data, {});
+
+		setJoinResponse(res);
 
 		// Close modal
 		handleCloseJoin();
@@ -218,14 +233,23 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		setShowJoinRes(true);
 	};
 
+	const convertLevelRequirement = (levels) => {
+		const mapLevels = levels.sort().map(item => reverseLevelEnum[parseInt(item, 10)]);
+		return LevelEnum[mapLevels.join("_")];
+	};
+
 	const handleRent = async () => {
 
 		const data = {
-			people: peopleUsed,
-			emails: emails?.map((item) => item.email),
-			allowMatching,
-			peopleMatching: allowMatching ? peopleMatching: 0,
-			levels: levelChecked,
+			stadium_court_id: currCourtInfo.stadium_court_id,
+			date,
+			start_time: parseInt(startTime, 10),
+			end_time: parseInt(endTime, 10),
+			current_member_number: peopleUsed,
+			max_number_of_member: allowMatching ? parseInt(peopleUsed, 10) + parseInt(peopleMatching, 10) : parseInt(peopleUsed, 10),
+			is_matching: allowMatching,
+			level_requirement: convertLevelRequirement(levelChecked),
+			team_member_emails: emails?.map((item) => item.email),
 		};
 
 		// Check if input is valid
@@ -233,20 +257,25 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			return;
 		}
 
-		setRentResponse(data);
+		const res = await axios.post("/api/v1/stadium-court/rent", data, {});
 
-		// TODO: send request to backend
-		const res = await axios.get(
-			"/api/healthchecker"
-		);
-
-		// Show success message
-		alert(JSON.stringify(res));
+		setRentResponse(res);
 
 		// Close modal
 		handleCloseRent();
 
-		setShowRentRes(true);
+		// Show rent response modal
+		if (res.message === "success") {
+			setShowRentRes(true);
+		}
+		else {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: t("Please rent again."),
+				confirmButtonColor: "#14274C",
+			});
+		}
 	};
 
 	const handleEmailChange = (value) => {
@@ -278,7 +307,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 					<span className={styles.borderAttrTitle}>{t("球技要求")}</span>
 					{
 						currCourtInfo?.level_requirement?.map((item, index) => (
-							<span key={index} className={styles.level}>{levelList[item]}</span>
+							<span key={index} className={styles.level}>{t(item)}</span>
 						))
 					}
 				</Col>
@@ -322,47 +351,52 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		</Container>
 	);
 
-	const getJoinResContent = () => (
-		<Container>
-			{/* Renter */}
-			<Row>
-				<Col>
-					<span className={styles.borderAttrTitle}>{t("租借人")}</span>
-					<span>{joinResponse?.renter_name}</span>
-				</Col>
-			</Row>
+	const getJoinResContent = () => {
+		const { team } = joinResponse;
+		const levels = reverseLevelEnum[team?.level_requirement]?.split("_");
 
-			{/* People */}
-			<Row>
-				<Col>
-					<span className={styles.borderAttrTitle}>{t("目前人數")}</span>
-					<span>{`${joinResponse?.current_member_number}/${joinResponse?.max_number_of_member}`}</span>
-				</Col>
-			</Row>
+		return (
+			<Container>
+				{/* Renter */}
+				<Row>
+					<Col>
+						<span className={styles.borderAttrTitle}>{t("租借人")}</span>
+						<span>{currCourtInfo?.renter_name}</span>
+					</Col>
+				</Row>
+
+				{/* People */}
+				<Row>
+					<Col>
+						<span className={styles.borderAttrTitle}>{t("目前人數")}</span>
+						<span>{`${team?.current_member_number}/${team?.max_number_of_member}`}</span>
+					</Col>
+				</Row>
 
 
-			{/* Levels */}
-			<Row>
-				<Col>
-					<span className={styles.borderAttrTitle}>{t("球技要求")}</span>
-					{
-						joinResponse?.level_requirement?.map((item, index) => (
-							<span key={index} className={styles.level}>{levelList[item]}</span>
-						))
-					}
-				</Col>
-			</Row>
+				{/* Levels */}
+				<Row>
+					<Col>
+						<span className={styles.borderAttrTitle}>{t("球技要求")}</span>
+						{		
+							levels?.map((item, index) => (
+								<span key={index} className={styles.level}>{t(levelList[item])}</span>
+							))
+						}
+					</Col>
+				</Row>
 
-			{/* Button */}
-			<Row className='mt-3'>
-				<Col className='text-center'>
-					<button className={styles.confirmButton} onClick={handleCloseJoinRes}>
-						{t("確定")}
-					</button>
-				</Col>
-			</Row>
-		</Container>
-	);
+				{/* Button */}
+				<Row className='mt-3'>
+					<Col className='text-center'>
+						<button className={styles.confirmButton} onClick={handleCloseJoinRes}>
+							{t("確定")}
+						</button>
+					</Col>
+				</Row>
+			</Container>
+		);
+	};
 
 	const getRentContent = () => (
 		<Container>
@@ -420,9 +454,9 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				<Col className='flex flex-row'>
 					<span className={styles.noBorderAttrTitle}>{t("球友球技要求")}</span>
 					<FormGroup className='ml-4'>
-						<FormControlLabel control={<BaseCheckbox value='EASY' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.EASY} />
-						<FormControlLabel control={<BaseCheckbox value='MEDIUM' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.MEDIUM} />
-						<FormControlLabel control={<BaseCheckbox value='HARD' checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.HARD} />
+						<FormControlLabel control={<BaseCheckbox value={LevelEnum.EASY} checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.EASY} />
+						<FormControlLabel control={<BaseCheckbox value={LevelEnum.MEDIUM} checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.MEDIUM} />
+						<FormControlLabel control={<BaseCheckbox value={LevelEnum.HARD} checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.HARD} />
 					</FormGroup>
 				</Col>
 			</Row>
@@ -437,57 +471,66 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		</Container>
 	);
 
-	const getRentResContent = () => (
-		<Container>
-			
-			{/* People */}
-			<Row>
-				<Col>
-					<span className={styles.rentSuccAttrTitle}>{t("使用人數")}</span>
-					<span>{`${rentResponse.people}`}</span>
-					<span className="ml-2">{ t("人") }</span>
-				</Col>
-			</Row>
+	const convertLevelIndexToList = (levelIndex) => {
+		const levels = reverseLevelEnum[levelIndex]?.split("_");
+		if (levels?.length === 0) {
+			return <span key={0} className={styles.level}>{t("無")}</span>;
+		}
 
-			{/* Allow Matching */}
-			<Row>
-				<Col>
-					<span className={styles.rentSuccAttrTitle}>{t("允許配對")}</span>
-					<span>{ rentResponse.allowMatching ? t("是") : t("否") }</span>
-				</Col>
-			</Row>
+		return levels?.map((item, index) => (
+			<span key={index} className={styles.level}>{t(levelList[item])}</span>
+		));
+	};
 
-			{/* People Matching */}
-			<Row>
-				<Col>
-					<span className={styles.rentSuccAttrTitle}>{t("可加入人數")}</span>
-					<span>{`${rentResponse.peopleMatching}`}</span>
-					<span className="ml-2">{ t("人") }</span>
-				</Col>
-			</Row>
+	const getRentResContent = () => {
+		const { data } = rentResponse;
 
-			{/* Levels */}
-			<Row>
-				<Col>
-					<span className={styles.rentSuccAttrTitle}>{t("球技要求")}</span>
-					{ rentResponse.levels && ((
-						rentResponse.levels.length > 0 && 
-						rentResponse.levels.map((item, index) => (
-							<span key={index} className={styles.level}>{levelList[item]}</span>
-						))) 
-						|| (rentResponse.levels.length === 0 && <span key={0} className={styles.level}>{t("無")}</span>)
-					)}
-				</Col>
-			</Row>
+		return (
+			<Container>
+				
+				{/* People */}
+				<Row>
+					<Col>
+						<span className={styles.rentSuccAttrTitle}>{t("目前使用人數")}</span>
+						<span>{`${data?.current_member_number}`}</span>
+						<span className="ml-2">{ t("人") }</span>
+					</Col>
+				</Row>
 
-			{/* Button */}
-			<Row className='mt-3'>
-				<Col className='text-center'>
-					<button className={styles.confirmButton} onClick={handleCloseRentRes}>{t("確定")}</button>
-				</Col>
-			</Row>
-		</Container>
-	);
+				{/* Allow Matching */}
+				<Row>
+					<Col>
+						<span className={styles.rentSuccAttrTitle}>{t("允許配對")}</span>
+						<span>{ data?.is_matching ? t("是") : t("否") }</span>
+					</Col>
+				</Row>
+
+				{/* People Matching */}
+				<Row>
+					<Col>
+						<span className={styles.rentSuccAttrTitle}>{t("可配對人數")}</span>
+						<span>{data ? data.max_number_of_member-data.current_member_number : 0}</span>
+						<span className="ml-2">{ t("人") }</span>
+					</Col>
+				</Row>
+
+				{/* Levels */}
+				<Row>
+					<Col>
+						<span className={styles.rentSuccAttrTitle}>{t("球技要求")}</span>
+						{convertLevelIndexToList(data?.level_requirement)}
+					</Col>
+				</Row>
+
+				{/* Button */}
+				<Row className='mt-3'>
+					<Col className='text-center'>
+						<button className={styles.confirmButton} onClick={handleCloseRentRes}>{t("確定")}</button>
+					</Col>
+				</Row>
+			</Container>
+		);
+	};
 
 	const getModalVenueName = () => `${venueInfo?.name} ${venueInfo?.venue_name} ${currCourtInfo?.name}`;
 	
@@ -519,7 +562,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 							<TableCell className={styles.tableCell}>
 								{
 									(row.level_requirement?.length > 0 && row.level_requirement.map((item, index) => (
-										<span key={index} className={styles.level}>{levelList[item]}</span>
+										<span key={index} className={styles.level}>{t(item)}</span>
 									)))
 									|| 
 									<span className={styles.level}>{t("無")}</span>
