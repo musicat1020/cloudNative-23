@@ -13,7 +13,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "@/styles/navbar.module.css";
 import i18n from "@/utils/i18n";
 import UserMenu from "@/components/buttonUserMenu";
-import getAccessToken from "@/hooks/getAccessToken";
+import { setUserCookies, clearAllCookies, getAllCookies, getIsProvider } from "@/utils/cookies";
 
 const {
   publicRuntimeConfig: {
@@ -28,6 +28,8 @@ function NavBar() {
   const { t } = useTranslation();
   const { data, status } = useSession();
   const timeoutRef = useRef(null);
+  const [isProvider, setIsProvider] = useState(false);
+
 
   const handleLanguage = () => {
     const oriLang = getCookie("lang") ?? "en";
@@ -38,17 +40,17 @@ function NavBar() {
 
   const handleLogout = () => {
     signOut();
-    localStorage.removeItem("accessToken");
+    clearAllCookies();
   };
 
   useEffect(() => () => {
     clearTimeout(timeoutRef.current);
+    setIsProvider(getIsProvider());
   }, []);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken === null && data?.user?.name !== undefined) {
-      getAccessToken(data?.user);
+    if (data?.user !== undefined && Object.keys(getAllCookies()).length === 0) {
+      setUserCookies(data?.user);
     }
   }, [data?.user]);
 
@@ -68,9 +70,13 @@ function NavBar() {
         <Navbar.Collapse id="responsive-navbar-nav" className="flex justify-end mt-1 border-b-white">
           <Nav className="me-auto" />
           <Nav>
-            <Nav.Link href="/admin">
-              <span className={styles.navAdmin}>{t("Admin")}</span>
-            </Nav.Link>
+
+            {
+              isProvider &&
+              <Nav.Link href="/admin">
+                <span className={styles.navAdmin}>{t("Admin")}</span>
+              </Nav.Link>
+            }
             <Nav.Link href="/main" className={styles.navLink}>
               {t("Home")}
             </Nav.Link>
