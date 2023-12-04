@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 import axios from "@/utils/axios";
+import { getAccessToken } from "@/utils/cookies";
 import LevelEnum from "@/utils/levelEnum";
 import BaseModal from "@/components/baseModal";
 import BaseSwitch from "@/components/baseSwitch";
@@ -60,6 +61,19 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 
 	const [courtData, setCourtData] = useState([]);
 	const [currCourtInfo, setCurrCourtInfo] = useState({});
+
+	const checkLogin = () => {
+		if (!getAccessToken()) {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: t("Please login first."),
+				confirmButtonColor: "#14274C",
+			});
+			return false;
+		}
+		return true;
+	};
 
 	/** handle modal width based on window size */
 	useEffect(() => {
@@ -115,6 +129,9 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const handleOpenJoin = (e) => {
+		if (!checkLogin()){
+			return;
+		}
 		const courtId = e.target.id;
 		const courtInfo = courtData.find((item) => item.stadium_court_id === parseInt(courtId, 10));
 		setCurrCourtInfo(courtInfo);
@@ -122,6 +139,9 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const handleOpenRent = (e) => {
+		if (!checkLogin()){
+			return;
+		}
 		const courtId = e.target.id;
 		const courtInfo = courtData.find((item) => item.stadium_court_id === parseInt(courtId, 10));
 		setCurrCourtInfo(courtInfo);
@@ -229,8 +249,19 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		// Close modal
 		handleCloseJoin();
 
-		 // Show join response modal
-		setShowJoinRes(true);
+		// Show rent response modal
+		if (res.message === "success") {
+			setShowJoinRes(true);
+			fetchCourtInfo();
+		}
+		else {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: t("Please join again."),
+				confirmButtonColor: "#14274C",
+			});
+		}
 	};
 
 	const convertLevelRequirement = (levels) => {
@@ -267,6 +298,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		// Show rent response modal
 		if (res.message === "success") {
 			setShowRentRes(true);
+			fetchCourtInfo();
 		}
 		else {
 			Swal.fire({

@@ -6,7 +6,6 @@ import {
 } from "react-bootstrap";
 import { useTranslation } from "next-i18next";
 import { getCookie, setCookie } from "cookies-next";
-import getConfig from "next/config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -14,15 +13,6 @@ import styles from "@/styles/navbar.module.css";
 import i18n from "@/utils/i18n";
 import UserMenu from "@/components/buttonUserMenu";
 import { setUserCookies, clearAllCookies, getAllCookies, getIsProvider } from "@/utils/cookies";
-
-const {
-  publicRuntimeConfig: {
-    apiRoot,
-    frontendRoot,
-    accessTokenMaxAge,
-    refreshTokenMaxAge,
-  },
-} = getConfig();
 
 function NavBar() {
   const { t } = useTranslation();
@@ -45,7 +35,7 @@ function NavBar() {
 
   useEffect(() => () => {
     clearTimeout(timeoutRef.current);
-    setIsProvider(getIsProvider());
+    setIsProvider(getIsProvider() === "true");
   }, []);
 
   useEffect(() => {
@@ -70,12 +60,12 @@ function NavBar() {
         <Navbar.Collapse id="responsive-navbar-nav" className="flex justify-end mt-1 border-b-white">
           <Nav className="me-auto" />
           <Nav>
-
             {
-              isProvider &&
-              <Nav.Link href="/admin">
-                <span className={styles.navAdmin}>{t("Admin")}</span>
-              </Nav.Link>
+              !isProvider && (
+                <Nav.Link href="/admin">
+                  <span className={styles.navAdmin}>{t("Admin")}</span>
+                </Nav.Link>
+              )
             }
             <Nav.Link href="/main" className={styles.navLink}>
               {t("Home")}

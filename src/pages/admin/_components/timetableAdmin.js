@@ -27,7 +27,7 @@ function AdminTimeTable({ venueInfo }) {
 	const getTimeTable = async (queryDate) => {
 		setLoading(true);
 		const params = {
-			stadium_id: 1,
+			stadium_id: venueInfo.id,
 			query_date: queryDate.format("YYYY-MM-DD")
 		};
 
@@ -123,7 +123,7 @@ function AdminTimeTable({ venueInfo }) {
 			const status = timeTableData[i][`day_${i + 1}`][hour];
 
 			let col;
-			if (status === "no_order") {
+			if (status === "no_order" || status === "has_order") {
 				col =
 					<Col
 						key={i}
@@ -131,9 +131,10 @@ function AdminTimeTable({ venueInfo }) {
 						data-start={FormatSessionStart}
 						data-end={FormatSessionEnd}
 						onClick={(e) => handleSessionClick(e, status)}
-						className={styles.timeTableSessionCell}
+						aria-disabled={false}
+						className={styles.timeTableAvailableCell}
 					>
-						{t("Available")}
+						{(status === "no_order") ? t("Available") : t("Booked")}
 					</Col>;
 			}
 			else {
@@ -143,11 +144,10 @@ function AdminTimeTable({ venueInfo }) {
 						data-date={convertDateFormat(date, "YYYY-MM-DD")}
 						data-start={FormatSessionStart}
 						data-end={FormatSessionEnd}
-						// aria-disabled
 						onClick={(e) => handleSessionClick(e, status)}
-						className={styles.timeTableSessionCell}
+						className={styles.timeTableDisableCell}
 					>
-						{(status === "has_order") ? t("Booked") : t("Disabled")}
+						{t("Disabled")}
 					</Col>;
 			}
 
