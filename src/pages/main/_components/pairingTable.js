@@ -1,7 +1,7 @@
 import { useTranslation } from "next-i18next";
 import { Button } from "react-bootstrap";
 import Tooltip from "@mui/material/Tooltip";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "@/utils/axios";
 import styles from "@/styles/record.module.css";
 import CancelResvationModel from "./cancelReservationModel";
@@ -28,6 +28,12 @@ function PairingTable() {
 
     setPairingRecords(result);
   };
+
+  const handleCancelConfirmed = useCallback(() => {
+    fetchPairingRecords();
+    setShowCancelModal(false);
+  }, []);
+
 
   useEffect(() => {
     if (pairingRecords.length === 0) {
@@ -96,7 +102,7 @@ function PairingTable() {
           })}
         </tbody>
       </table>
-      <CancelResvationModel show={showCancelModal} setShow={setShowCancelModal} record={selectedRecord} />
+      <CancelResvationModel show={showCancelModal} setShow={setShowCancelModal} record={selectedRecord} onCancelConfirmed={handleCancelConfirmed} />
     </div >
   );
 }

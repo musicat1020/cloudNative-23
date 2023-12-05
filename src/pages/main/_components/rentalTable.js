@@ -1,6 +1,6 @@
 import { useTranslation } from "next-i18next";
 import { Button } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import axios from "@/utils/axios";
 import styles from "@/styles/record.module.css";
@@ -26,7 +26,13 @@ function RentalTable() {
       });
 
     setRentalRecords(result);
+
   };
+
+  const handleCancelConfirmed = useCallback(() => {
+    fetchRentalRecords();
+    setShowCancelModal(false);
+  }, []);
 
   useEffect(() => {
     if (rentalRecords.length === 0) {
@@ -92,7 +98,7 @@ function RentalTable() {
           })}
         </tbody>
       </table>
-      <CancelResvationModel show={showCancelModal} setShow={setShowCancelModal} record={selectedRecord} />
+      <CancelResvationModel show={showCancelModal} setShow={setShowCancelModal} record={selectedRecord} onCancelConfirmed={handleCancelConfirmed} />
     </div>
   );
 }

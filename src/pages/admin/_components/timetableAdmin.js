@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
@@ -38,6 +38,12 @@ function AdminTimeTable({ venueInfo }) {
 		setTimeTableData(res.data);
 		setLoading(false);
 	};
+
+	const handleChangeStatusConfirmed = useCallback(() => {
+		getTimeTable(startDate);
+		setShowSessionModal(false);
+	}, []);
+
 
 	// init time table data
 	useEffect(() => {
@@ -236,6 +242,7 @@ function AdminTimeTable({ venueInfo }) {
 				clickEditData={clickEditData}
 				show={showSessionModal}
 				setShow={setShowSessionModal}
+				onChangeStatusConfirmed={handleChangeStatusConfirmed}
 				windowSize={windowSize} />
 		</>
 	);

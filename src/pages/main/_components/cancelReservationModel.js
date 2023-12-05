@@ -5,7 +5,7 @@ import BaseModal from "@/components/baseModal";
 import styles from "@/styles/court.module.css";
 import axios from "@/utils/axios";
 
-function CancelInfoDetail({ setShow, record }) {
+function CancelInfoDetail({ setShow, record, onCancelConfirmed }) {
     const { t } = useTranslation();
     const apiUrl = record.team_id ? "/api/v1/team-member/leave/" : "/api/v1/order/order-cancel/";
     const params = record.team_id ? { team_id: record.team_id } : { order_id: record.id };
@@ -14,18 +14,15 @@ function CancelInfoDetail({ setShow, record }) {
         setShow(false);
     };
 
-
-    // TODO
     const handleConfirm = async () => {
         await axios.post(apiUrl, {}, { params });
+        onCancelConfirmed();
         setShow(false);
     };
 
 
 
     return (
-
-
         <Container>
             {/* Renter */}
             <Row>
@@ -62,7 +59,7 @@ function CancelInfoDetail({ setShow, record }) {
     );
 };
 
-function CancelResvationModel({ show, setShow, record }) {
+function CancelResvationModel({ show, setShow, record, onCancelConfirmed }) {
     const { t } = useTranslation();
     if (!record) return null;
     const venue = `${record.stadium_name} ${record.venue_name} ${record.court_name}`;
@@ -83,7 +80,7 @@ function CancelResvationModel({ show, setShow, record }) {
             endTime={endTime}
             handleClose={() => setShow(false)}
             title={t("Confirm Cancellation?")}
-            content={<CancelInfoDetail setShow={setShow} record={record} />}
+            content={<CancelInfoDetail setShow={setShow} record={record} onCancelConfirmed={onCancelConfirmed} />}
             customStyles={{ width: "35vw" }}
         />
     );

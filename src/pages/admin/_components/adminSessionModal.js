@@ -1,6 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import Checkbox from "@mui/material/Checkbox";
 import BaseModal from "../../../components/baseModal";
 import { handleDisableSession, handleEnableSession } from "../../../hooks/handleSessionStatus";
 import styles from "@/styles/modal.module.css";
@@ -10,6 +11,7 @@ function AdminSessionModal({
   clickEditData,
   show,
   setShow,
+  onChangeStatusConfirmed,
   windowSize
 }) {
   const { t } = useTranslation();
@@ -36,12 +38,6 @@ function AdminSessionModal({
     }
   }, [windowSize]);
 
-  function formatDateTime() {
-    const formattedDateTime = `${startDate} ${startTime}-${endTime}`;
-    console.log("formattedDateTime", formattedDateTime);
-    return formattedDateTime;
-  }
-
   function formatTitle() {
     if (status === "disable") {
       return t("上架特定時段場地");
@@ -51,7 +47,6 @@ function AdminSessionModal({
   };
 
   return (
-    // TODO: pass info to Content
     <BaseModal
       venue={venue}
       date={startDate}
@@ -60,7 +55,13 @@ function AdminSessionModal({
       show={show}
       handleClose={() => setShow(false)}
       title={formatTitle()}
-      content={<Content setShow={setShow} venueInfo={venueInfo} clickEditData={clickEditData} />}
+      content={
+        <Content
+          setShow={setShow}
+          venueInfo={venueInfo}
+          clickEditData={clickEditData}
+          onChangeStatusConfirmed={onChangeStatusConfirmed}
+        />}
       customStyles={{ width: modalWidth }}
     />
   );
@@ -68,9 +69,9 @@ function AdminSessionModal({
 
 export default AdminSessionModal;
 
-function Content({ setShow, venueInfo, clickEditData }) {
-
+function Content({ setShow, venueInfo, clickEditData, onChangeStatusConfirmed }) {
   const { t } = useTranslation();
+  const [checked, setChecked] = useState(false);
   const venueId = venueInfo?.id;
   const startDate = clickEditData?.startDate;
   const endDate = clickEditData?.endDate;
@@ -80,36 +81,54 @@ function Content({ setShow, venueInfo, clickEditData }) {
 
 
   return (
-    <Row>
-      {status === "no_order" ? (
-        <>
-          <Col className='text-center' >
-            <button className={styles.cancelButton} onClick={() => setShow(false)}>{t("取消")}</button>
-          </Col>
-          <Col className='text-center'>
-            <button className={styles.confirmButton} onClick={() => {
-              console.log("start date in adminsessionModal", startDate, startHour);
-              handleDisableSession(venueId, startDate, startHour, endDate, endHour);
-              setShow(false);
-            }}>{t("下架場地")}</button>
-          </Col>
-        </>
-      ) : status === "disable" ? (
-        <>
-          <Col className='text-center' >
-            <button className={styles.cancelButton} onClick={() => setShow(false)}>{t("取消")}</button>
-          </Col>
-          <Col className='text-center'>
-            <button className={styles.confirmButton} onClick={() => {
-              handleEnableSession(venueId, startDate, startHour, endDate, endHour);
-              setShow(false);
-            }}>{t("上架場地")}</button>
-          </Col>
-        </>
-      ) : (
-        <p>Status unknown</p>
-      )
+    <>
+      {(status === "no_order" || status === "has_order") &&
+        <Col className='text-center mx-5 mb-3' >
+          < Checkbox
+            checked={checked}
+            onChange={() => setChecked(!checked)}
+          /><text>{t("我了解一旦下架場地，則這個時段的訂單會全部取消。")}</text>
+        </Col>
       }
-    </Row >
+      <Row>
+        {status === "no_order" || status === "has_order" ? (
+          <>
+            <Col className='text-center' >
+              <button className={styles.cancelButton} onClick={() => setShow(false)}>{t("取消")}</button>
+            </Col>
+            <Col className='text-center'>
+              <button
+                className={`${checked ? styles.confirmButton : styles.cancelButton}`}
+                disabled={!checked}
+                onClick={() => {
+                  console.log("start date in adminsessionModal", startDate, startHour);
+                  handleDisableSession(venueId, startDate, startHour, endDate, endHour);
+                  onChangeStatusConfirmed();
+                  setShow(false);
+
+                }}>{t("下架場地")}</button>
+            </Col>
+          </>
+        ) : status === "disable" ? (
+          <>
+            <Col className='text-center' >
+              <button className={styles.cancelButton} onClick={() => setShow(false)}>{t("取消")}</button>
+            </Col>
+            <Col className='text-center'>
+              <button className={styles.confirmButton} onClick={() => {
+                handleEnableSession(venueId, startDate, startHour, endDate, endHour);
+                onChangeStatusConfirmed();
+                setShow(false);
+              }}>{t("上架場地")}</button>
+            </Col>
+          </>
+        ) : (
+          <p>Status unknown</p>
+        )
+        }
+
+
+      </Row >
+    </>
   );
 };
