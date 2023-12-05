@@ -29,23 +29,24 @@ function VenueListConainer({ isAdmin }) {
   return (
     <Container className="flex flex-column">
       <h1 className="justify-center text-center text-3xl">{t("Venue")}</h1>
-      <Grid container spacing={5} justifyContent="flex-start" className="mt-5">
-        {venueList && venueList.map((venue) => (
-          <VenueItem
-            id={venue.id}
-            stadium={venue.name}
-            venue={venue.venue_name}
-            picture={venue.picture}
-            area={venue.area}
-            userCount={venue.current_people_count}
-            userMax={venue.max_number_of_people}
-            isAdmin={isAdmin}
-          />
-
-        ))}
-        {isAdmin && <AddVeuneItem />}
-      </Grid>
-    </Container>
+      <Container className="mx-5 justify-center" style={{ maxWidth: "initial" }}>
+        <Grid container spacing={{ xs: 2, md: 3 }} className="mt-3 justify-start">
+          {venueList && venueList.map((venue) => (
+            <VenueItem
+              id={venue.id}
+              stadium={venue.name}
+              venue={venue.venue_name}
+              picture={venue.picture}
+              area={venue.area}
+              userCount={venue.current_people_count}
+              userMax={venue.max_number_of_people}
+              isAdmin={isAdmin}
+            />
+          ))}
+          {isAdmin && <AddVeuneItem />}
+        </Grid>
+      </Container>
+    </Container >
   );
 }
 
@@ -71,7 +72,10 @@ function VenueItem({
   };
 
   return (
-    <button className="w-80 bg-white rounded-xl shadow m-2" onClick={isAdmin ? handleEditClick : handleRentClick}>
+    <button
+      className=" bg-white rounded-xl shadow m-2"
+      style={{ width: "320px", height: "296px" }}
+      onClick={isAdmin ? handleEditClick : handleRentClick}>
       < div className="relative" >
         <div className="bg-black rounded-t-xl">
           <img
@@ -115,7 +119,8 @@ function AddVeuneItem() {
 
   return (
     <Link
-      className={`self-stretch ${styles.addVenueItem} p-20 w-80`}
+      className={`self-stretch ${styles.addVenueItem}`}
+      style={{ width: "320px", height: "296px" }}
       href="/admin/newVenue"
     >
       <LiaPlusSolid size={40} />
