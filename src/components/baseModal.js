@@ -51,7 +51,7 @@ function BaseModal({ venue, date, startTime, endTime, show, handleClose, title, 
 				{/** Venue */}
 				<Row className='mt-3'>
 					<Col>
-						<span className={styles.modalAttribute}>{ t("場地") }</span>
+						<span className={styles.modalAttribute}>{t("場地")}</span>
 						<span>{venue}</span>
 					</Col>
 				</Row>
@@ -59,15 +59,15 @@ function BaseModal({ venue, date, startTime, endTime, show, handleClose, title, 
 				{/** Session */}
 				<Row className='mt-3'>
 					<Col>
-						<span className={styles.modalAttribute}>{ t("時段") }</span>
+						<span className={styles.modalAttribute}>{t("時段")}</span>
 						<span>{`${date} ${startTime}:00 - ${endTime}:00`}</span>
 					</Col>
 				</Row>
-				
+
 				{/** Divider */}
 				<Row className='my-3'>
 					<Col>
-						<Divider/>
+						<Divider />
 					</Col>
 				</Row>
 

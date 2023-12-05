@@ -8,6 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { useState } from "react";
+import Checkbox from "@mui/material/Checkbox";
 import { formatDate, formatTime } from "../../../utils/formatTime";
 import { handleDisableSession } from "../../../hooks/handleSessionStatus";
 
@@ -37,17 +38,16 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
   const [startTime, setStartTime] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
+  const [checked, setChecked] = useState(false);
 
   // TODO
   const handleConfirm = () => {
-    console.log("end date", formatDate(endDate));
-    console.log("end time", formatTime(endTime));
     const formattedStartDate = formatDate(startDate);
     const formattedStartTime = formatTime(startTime);
     const formattedEndDate = formatDate(endDate);
     const formattedEndTime = formatTime(endTime);
-    handleDisableSession(info.id, formattedStartDate, formattedStartTime, formattedEndTime);
 
+    handleDisableSession(info.id, formattedStartDate, formattedStartTime, formattedEndDate, formattedEndTime);
     handleClose();
   };
 
@@ -127,13 +127,26 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               </Col>
             </Row>
 
+
+            <Row className='my-4'>
+              <Col className='text-center mx-5 mb-3' >
+                < Checkbox
+                  checked={checked}
+                  onChange={() => setChecked(!checked)}
+                /><text>{t("我了解一旦下架場地，則這個時段的訂單會全部取消。")}</text>
+              </Col>
+
+            </Row>
             {/* Button */}
             <Row className='mt-5'>
               <Col className='text-center' >
                 <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
               </Col>
               <Col className='text-center'>
-                <button className={styles.confirmButton} onClick={handleConfirm}>{t("確定")}</button>
+                <button
+                  disabled={!checked}
+                  className={`${checked ? styles.confirmButton : styles.cancelButton}`}
+                  onClick={handleConfirm}>{t("確定")}</button>
               </Col>
             </Row>
           </Container>

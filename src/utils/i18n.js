@@ -117,6 +117,8 @@ i18n.use(initReactI18next).init({
 				"無法加入": "Cannot join",
 				"Please login first.": "Please login first.",
 				"球技要求不可跳級": "Cannot skip levels",
+				"連線逾時，請重新登入！": "Connection timed out, please log in again!",
+				"我了解一旦下架場地，則這個時段的訂單會全部取消。": "I understand that once the venue sessions are disabled, all orders for that time slot will be canceled."
 			}
 		},
 		zh: {
@@ -228,8 +230,10 @@ i18n.use(initReactI18next).init({
 				"請選擇球友球技要求": "請選擇球友球技要求",
 				"隊友Email不符合人數": "隊友Email不符合人數",
 				"無法加入": "無法加入",
-				"Please login first." : "請先登入",
+				"Please login first.": "請先登入",
 				"球技要求不可跳級": "球技要求不可跳級",
+				"連線逾時，請重新登入！": "連線逾時，請重新登入！",
+				"我了解一旦下架場地，則這個時段的訂單會全部取消。": "我了解一旦下架場地，則這個時段的訂單會全部取消。"
 			}
 		},
 	},

@@ -4,10 +4,12 @@ import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { Nav } from "react-bootstrap";
 import styles from "../styles/navbar.module.css";
+import { getIsProvider } from "../utils/cookies";
 
 function UserMenu({ data, signOut, expanded }) {
     const { t } = useTranslation();
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+    const isProvider = getIsProvider() === "true";
 
     const handleButtonClick = () => {
         setDropdownVisible(!isDropdownVisible);
@@ -16,6 +18,7 @@ function UserMenu({ data, signOut, expanded }) {
     const handleLinkClick = () => {
         setDropdownVisible(false);
     };
+
 
     return (
         <>
@@ -33,9 +36,11 @@ function UserMenu({ data, signOut, expanded }) {
                 {isDropdownVisible && !expanded && (
                     <div className="absolute right-0 shadow-md top-12 bg-white p-2 rounded-md">
                         <div className="flex flex-col justify-center items-center">
-                            <Nav.Link href="/main/records" className={styles.manageList} onClick={handleLinkClick}>
-                                {t("Records")}
-                            </Nav.Link>
+                            {!isProvider && (
+                                <Nav.Link href="/main/records" className={styles.manageList} onClick={handleLinkClick}>
+                                    {t("Records")}
+                                </Nav.Link>
+                            )}
                             <button className={styles.manageList} onClick={() => signOut()}>
                                 {t("Logout")}
                             </button>
@@ -43,7 +48,7 @@ function UserMenu({ data, signOut, expanded }) {
                     </div>
                 )}
             </div>
-            {expanded && (
+            {expanded && !isProvider && (
                 <Nav.Link href="/main/records" className={styles.navLink} onClick={handleLinkClick}>
                     {t("Records")}
                 </Nav.Link>)

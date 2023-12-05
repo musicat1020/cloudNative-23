@@ -3,60 +3,69 @@ import { useTranslation } from "react-i18next";
 import { Container, Row, Col } from "react-bootstrap";
 import BaseModal from "@/components/baseModal";
 import styles from "@/styles/court.module.css";
+import axios from "@/utils/axios";
 
-function CancelInfoDetail({ setShow, record }) {
+function CancelInfoDetail({ setShow, record, onCancelConfirmed }) {
     const { t } = useTranslation();
+    const apiUrl = record.team_id ? "/api/v1/team-member/leave/" : "/api/v1/order/order-cancel/";
+    const params = record.team_id ? { team_id: record.team_id } : { order_id: record.id };
 
     const handleCancel = () => {
         setShow(false);
     };
 
-
-    // TODO
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
+        await axios.post(apiUrl, {}, { params });
+        onCancelConfirmed();
         setShow(false);
     };
 
 
 
     return (
-        <div>
-            <Container>
-                {/* 使用人數 */}
-                <Row>
-                    <Col>
-                        <span className={styles.joinAttrTitle}>{t("使用人數")}</span>
-                        <span>{record.numOfPeople}</span>
-                    </Col>
-                </Row>
+        <Container>
+            {/* Renter */}
+            <Row>
+                <Col>
+                    <span className={styles.borderAttrTitle}>{t("使用人數")}</span>
+                    <span>{record.current_member_number}/{record.max_number_of_member}</span>
+                </Col>
+            </Row>
 
-                {/* People */}
-                <Row>
-                    <Col>
-                        <span className={styles.joinAttrTitle}>{t("Members")}</span>
-                        {record.members.map((member, index) => (
-                            <text>{member.name}{index < record.members.length - 1 && ","}</text>
-                        ))}
-                    </Col>
-                </Row>
+            {/* People */}
+            <Row>
+                <Col>
+                    <span className={styles.borderAttrTitle}>{t("Members")}</span>
+                    {record.team_members.map((member, index) => (
+                        <text>{member.name}{index < record.team_members.length - 1 && ","}</text>
+                    ))}
+                </Col>
+            </Row>
 
 
-                {/* Button */}
-                <Row className='mt-3'>
-                    <Col className='text-center'>
-                        <button className={styles.cancelButton} onClick={handleCancel}>{t("取消")}</button>
-                    </Col>
-                    <Col className='text-center'>
-                        <button className={styles.confirmButton} onClick={handleConfirm}>{t("確定")}</button>
-                    </Col>
-                </Row>
-            </Container>
-        </div>
+            {/* Button */}
+            <Row className='mt-3'>
+                <Col className='text-center'>
+                    <button className={styles.cancelButton} onClick={handleCancel}>
+                        {t("取消")}
+                    </button>
+
+                    <button className={styles.confirmButton} onClick={handleConfirm}>
+                        {t("確定")}
+                    </button>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 
-function CancelResvationModel({ show, setShow, record }) {
+function CancelResvationModel({ show, setShow, record, onCancelConfirmed }) {
     const { t } = useTranslation();
+    if (!record) return null;
+    const venue = `${record.stadium_name} ${record.venue_name} ${record.court_name}`;
+    const date = record.order_time;
+    const startTime = record.start_time;
+    const endTime = record.end_time;
 
     if (!show) {
         return null;
@@ -64,10 +73,14 @@ function CancelResvationModel({ show, setShow, record }) {
 
     return (
         <BaseModal
+            venue={venue}
+            date={date}
             show={show}
+            startTime={startTime}
+            endTime={endTime}
             handleClose={() => setShow(false)}
             title={t("Confirm Cancellation?")}
-            content={<CancelInfoDetail setShow={setShow} record={record} />}
+            content={<CancelInfoDetail setShow={setShow} record={record} onCancelConfirmed={onCancelConfirmed} />}
             customStyles={{ width: "35vw" }}
         />
     );
