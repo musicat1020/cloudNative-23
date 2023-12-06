@@ -8,6 +8,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { IconButton } from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "@/utils/axios";
 
@@ -79,6 +81,7 @@ function EditVenue() {
 	const [value, setValue] = useState(1);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 
+
 	const fetchVenueInfo = async (id) => {
 
 		const params = {
@@ -87,6 +90,8 @@ function EditVenue() {
 		const res = await axios.post(
 			"/api/v1/stadium/info/", {}, { params }
 		);
+
+		console.log("get info response", res);
 
 		setVenueInfo(res.data);
 		setVenueIsReady(true);
@@ -131,6 +136,10 @@ function EditVenue() {
 			}));
 		};
 		reader.readAsDataURL(fileUploaded);
+	};
+
+	const handleBackClick = () => {
+		window.history.back();
 	};
 
 	return venueIsReady ? (
@@ -222,6 +231,17 @@ function EditVenue() {
 					<Container className="flex justify-center ">
 						<Row className="w-4/5">
 							<AdminTimeTable venueInfo={venueInfo} />
+							<div className="flex justify-end mt-4">
+								<div>
+								<Button 
+									variant="outlined"
+									color="secondary"
+									endIcon={<ChevronRightIcon />}
+									onClick={handleBackClick}>
+									{t("回到場地一覽")}
+								</Button>
+								</div>
+							</div>
 						</Row>
 					</Container>
 				</CustomTabPanel>
@@ -233,7 +253,7 @@ function EditVenue() {
 				handleClose={() => setShowEditVenueModal(false)}
 				title={t("修改場地資訊")}
 				info={venueInfo}
-				type="edit"
+				type={"edit"}
 			/>
 
 		</ThemeProvider>
