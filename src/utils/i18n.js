@@ -120,6 +120,8 @@ i18n.use(initReactI18next).init({
 				"連線逾時，請重新登入！": "Connection timed out, please log in again!",
 				"我了解一旦下架場地，則這個時段的訂單會全部取消。": "I understand that once the venue sessions are disabled, all orders for that time slot will be canceled.",
 				"回到場地一覽": "Back to venue list",
+				"請填寫所有必填欄位（包含圖片）": "Please fill in all required fields (including image).",
+				"起始時間需要早於結束時間": "Start time must be before end time",
 			}
 		},
 		zh: {
@@ -236,6 +238,8 @@ i18n.use(initReactI18next).init({
 				"連線逾時，請重新登入！": "連線逾時，請重新登入！",
 				"我了解一旦下架場地，則這個時段的訂單會全部取消。": "我了解一旦下架場地，則這個時段的訂單會全部取消。",
 				"回到場地一覽": "回到場地一覽",
+				"請填寫所有必填欄位（包含圖片）": "請填寫所有必填欄位（包含圖片）",
+				"起始時間需要早於結束時間": "起始時間需要早於結束時間",
 			}
 		},
 	},

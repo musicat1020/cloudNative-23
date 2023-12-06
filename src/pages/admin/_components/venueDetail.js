@@ -37,10 +37,8 @@ const theme = createTheme({
 });
 
 function VenueDetail({ info, setInfo }) {
-  // console.log(info?.address);
 
   const { t } = useTranslation();
-
   const [openAddModal, setOpenAddModal] = useState(false);
   const newCourtRef = useRef(null);
 

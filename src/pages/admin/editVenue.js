@@ -78,16 +78,13 @@ function EditVenue() {
 	const [showAlert, setShowAlert] = useState(false);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 
-
 	const fetchVenueInfo = async (id) => {
-
 		const params = {
 			stadium_id: id,
 		};
 		const res = await axios.post(
 			"/api/v1/stadium/info/", {}, { params }
 		);
-
 		console.log("get info response", res);
 
 		setVenueInfo(res.data);
@@ -116,11 +113,23 @@ function EditVenue() {
 			venueInfo.available_times.weekdays.length === 0 ||
 			venueInfo.description === "") 
 			{
-				setShowAlert(true);
+				// setShowAlert(true);
+				alert(t("請填寫所有必填欄位（包含圖片）"));
+				return;
+			} 
+			if (!isStartTimeBeforeEndTime()) {
+				alert(t("起始時間需要早於結束時間"));
 				return;
 			}
+
 		setShowEditVenueModal(true);
 	};
+
+	const isStartTimeBeforeEndTime = () => {
+    const startTime = +venueInfo?.available_times?.start_time;
+    const endTime = +venueInfo?.available_times?.end_time;
+    return startTime < endTime;
+  };
 
 	const handleCloseAlert = () => {
     setShowAlert(false);
