@@ -3,9 +3,9 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useState, useRef } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import PublishIcon from "@mui/icons-material/Publish";
 import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
+import PublishIcon from "@mui/icons-material/Publish";
+import { Button, Snackbar, Alert } from "@mui/material";
 
 import styles from "../../styles/venue.module.css";
 import VenueInput from "./_components/venueInput";
@@ -33,15 +33,30 @@ function NewVenue() {
 
 	const [venueInfo, setVenueInfo] = useState(initialState);
 	const [showNewVenueModal, setShowNewVenueModal] = useState(false);
+	const [showAlert, setShowAlert] = useState(false);
 	const { t } = useTranslation();
 
 	const handleAddClick = () => {
-		if (venueInfo.name === "") {
-			// TODO: show field not null alert
-      return;
-		}
+		// Check if all required fields are filled
+		if (
+			venueInfo.picture === "" ||
+			venueInfo.address === "" || 
+			venueInfo.name === "" || 
+			venueInfo.venue_name === "" || 
+			venueInfo.max_number_of_people === 0 ||
+			venueInfo.stadium_courts.length === 0 ||
+			venueInfo.available_times.weekdays.length === 0 ||
+			venueInfo.description === "") 
+			{
+				setShowAlert(true);
+				return;
+			}
 		setShowNewVenueModal(true);
 	};
+
+	const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
 
 	const hiddenFileInput = useRef();
 
@@ -157,6 +172,11 @@ function NewVenue() {
 					</Col>
 				</Row>
 			</Container>
+			<Snackbar open={showAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert onClose={handleCloseAlert} severity="error">
+          Please fill in all required fields (including image).
+        </Alert>
+      </Snackbar>
 			<EditVenueModal
 				show={showNewVenueModal}
 				setShow={setShowNewVenueModal}

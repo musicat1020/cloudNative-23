@@ -1,12 +1,10 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
-import Modal from "@mui/material/Modal";
-import Divider from "@mui/material/Divider";
+import { Modal, Divider } from "@mui/material";
 import { useRouter } from "next/router";
-import { revalidatePath } from "next/cache";
-import axios from "@/utils/axios";
 
+import axios from "@/utils/axios";
 import styles from "@/styles/modal.module.css";
 import { getAccessToken } from "@/utils/cookies";
 

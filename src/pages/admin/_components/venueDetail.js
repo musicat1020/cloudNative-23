@@ -7,15 +7,8 @@ import { useState, useRef } from "react";
 import { Col, Row, Form } from "react-bootstrap";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
-import Chip from "@mui/material/Chip";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import Dialog from "@mui/material/Dialog";
-import Button from "@mui/material/Button";
+import { Box, TextField, Chip, Button, Tab, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
