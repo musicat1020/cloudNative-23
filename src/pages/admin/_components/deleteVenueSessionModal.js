@@ -18,6 +18,7 @@ const useStyles = makeStyles({
     position: "absolute",
     top: "50%",
     left: "50%",
+    height: "90%",
     transform: "translate(-50%, -50%)",
     boxShadow: 24,
     width: "50vw",
@@ -26,6 +27,7 @@ const useStyles = makeStyles({
     color: "#14274C",
     outline: 0,
     borderRadius: "5px",
+    overflow: "scroll",
   }
 });
 
@@ -103,9 +105,13 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("開始日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className="mr-5" label="date"
+                  <DatePicker 
+                    className="mr-5 m-1" 
+                    label="date"
                     onChange={(newValue) => setStartDate(new Date(newValue))} />
-                  <TimePicker views={["hours"]}
+                  <TimePicker 
+                    className="m-1"
+                    views={["hours"]}
                     onChange={(newValue) => setStartTime(new Date(newValue))}
                   />
                 </LocalizationProvider>
@@ -117,9 +123,13 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("結束日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className="mr-5" label="date"
+                  <DatePicker 
+                    className="mr-5 m-1" 
+                    label="date"
                     onChange={(newValue) => setEndDate(new Date(newValue))} />
-                  <TimePicker views={["hours"]}
+                  <TimePicker 
+                    className="m-1"
+                    views={["hours"]}
                     onChange={(newValue) => setEndTime(new Date(newValue))}
                   />
                 </LocalizationProvider>
@@ -129,7 +139,8 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
 
             <Row className='my-4'>
               <Col className='text-center mx-5 mb-3' >
-                < Checkbox
+                <Checkbox
+                  color="secondary"
                   checked={checked}
                   onChange={() => setChecked(!checked)}
                 /><text>{t("我了解一旦下架場地，則這個時段的訂單會全部取消。")}</text>
@@ -138,10 +149,10 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
             </Row>
             {/* Button */}
             <Row className='mt-5'>
-              <Col className='text-center' >
-                <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
+              <Col className='text-center m-1'>
+                <button className={styles.cancelButton} onClick={handleClose}>{t("取消")}</button>
               </Col>
-              <Col className='text-center'>
+              <Col className='text-center m-1'>
                 <button
                   disabled={!checked}
                   className={`${checked ? styles.confirmButton : styles.cancelButton}`}

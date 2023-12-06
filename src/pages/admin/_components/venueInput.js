@@ -229,9 +229,9 @@ function VenueInput({ info, setInfo }) {
               {t("場地列表")}
             </Form.Label>
             <Col sm="10">
-              <Stack direction="row" spacing={1}>
                 {info?.stadium_courts?.map((court) => (
                   <Chip
+                    className="mr-2 mb-1"
                     label={court.name}
                     key={court.id}
                     variant="outlined"
@@ -246,7 +246,6 @@ function VenueInput({ info, setInfo }) {
                   onClick={() => setOpenAddModal(true)}
                   onDelete={() => setOpenAddModal(true)}
                   deleteIcon={<AddIcon />} />
-              </Stack>
             </Col>
           </Form.Group>
 

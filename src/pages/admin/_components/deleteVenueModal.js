@@ -105,7 +105,7 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
             {/** stadium name */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute}>{t("場館名稱")}</span>
+                <span className={`${styles.modalAttribute} flex-none`}>{t("場館名稱")}</span>
                 <span>{info?.name}</span>
               </Col>
             </Row>
@@ -113,17 +113,17 @@ function DeleteVenueModal({ show, handleClose, title, info, customStyles }) {
             {/** venue name */}
             <Row className='mt-3 mb-10'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute}>{t("場地名稱")}</span>
+                <span className={`${styles.modalAttribute} flex-none`}>{t("場地名稱")}</span>
                 <span>{info?.venue_name}</span>
               </Col>
             </Row>
 
             {/* Button */}
-            <Row className='mt-3 mb-3'>
-              <Col className='text-center' >
-                <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
+            <Row>
+              <Col className='text-center m-1'>
+                <button className={styles.cancelButton} onClick={handleClose}>{t("取消")}</button>
               </Col>
-              <Col className='text-center'>
+              <Col className='text-center m-1'>
                 <button className={styles.confirmButton} onClick={handleConfirm}>{t("確定")}</button>
               </Col>
             </Row>

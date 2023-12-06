@@ -107,7 +107,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
   const getCourtList = () => {
     const courtList = [];
     info?.stadium_courts?.forEach((court) => {
-      courtList.push(<span className={styles.courtListCell}>{court?.name}</span>);
+      courtList.push(<span className={`${styles.courtListCell} mb-1`}>{court?.name}</span>);
     });
     return courtList;
   };
@@ -115,7 +115,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
   const getWeekdays = () => {
     const weekdays = [];
     info?.available_times?.weekdays?.forEach((weekday) => {
-      weekdays.push(<span className={styles.courtListCell}>{dayMap[weekday]}</span>);
+      weekdays.push(<span className={`${styles.courtListCell} mb-1`}>{dayMap[weekday]}</span>);
     });
     return weekdays;
   };
@@ -154,7 +154,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
             {/** Location */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute} style={{ width: "100px" }}>{t("場館地址")}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場館地址")}</span>
                 <span>{info?.address}</span>
               </Col>
             </Row>
@@ -162,7 +162,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
             {/** stadium name */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute} style={{ width: "100px" }}>{t("場館名稱")}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場館名稱")}</span>
                 <span>{info?.name}</span>
               </Col>
             </Row>
@@ -170,7 +170,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
             {/** venue name */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute} style={{ width: "100px" }}>{t("場地名稱")}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場地名稱")}</span>
                 <span>{info?.venue_name}</span>
               </Col>
             </Row>
@@ -178,7 +178,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
             {/** capacity */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute} style={{ width: "100px" }}>{t("容納人數")}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("容納人數")}</span>
                 <span>{info?.max_number_of_people}  {t("人")}</span>
               </Col>
             </Row>
@@ -186,15 +186,17 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
             {/** court list */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute} style={{ width: "100px" }}>{t("場地列表")}</span>
-                <span>{getCourtList()}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場地列表")}</span>
+                <div className="flex flex-wrap">
+                  {getCourtList()}
+                </div>
               </Col>
             </Row>
 
             {/** area */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute} style={{ width: "100px" }}>{t("場地面積")}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場地面積")}</span>
                 <span>{info?.area} {t("平方公尺")}</span>
               </Col>
             </Row>
@@ -202,7 +204,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
             {/** open time */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute} style={{ width: "100px" }}>{t("開放時間")}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("開放時間")}</span>
                 <span>{`${info?.available_times?.start_time}:00 ~ ${info?.available_times?.end_time}:00`}</span>
               </Col>
             </Row>
@@ -210,15 +212,17 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
             {/** open day */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={styles.modalAttribute} style={{ width: "100px" }}>{t("開放日")}</span>
-                <span className={`${styles.modalTextArea}`}>{getWeekdays()}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("開放日")}</span>
+                <div className="flex flex-wrap">
+                  {getWeekdays()}
+                </div>
               </Col>
             </Row>
 
             {/** description */}
             <Row className='mt-3'>
               <Col className="flex items-center">
-                <span className={`${styles.modalAttribute}`} style={{ width: "100px" }}>{t("說明")}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("說明")}</span>
                 <span className={`${styles.modalTextArea}`}>{info?.description}</span>
               </Col>
             </Row>
@@ -226,7 +230,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
             {/* link */}
             <Row className='mt-3 mb-10'>
               <Col className="flex items-center">
-                <span className={`${styles.modalAttribute}`} style={{ width: "100px" }}>{t("地圖連結")}</span>
+                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("地圖連結")}</span>
                 <a className={`${styles.modalTextArea}`} href={info?.google_map_url} target="_blank" rel="noopener noreferrer">
                   {info.google_map_url}
                 </a>
@@ -236,10 +240,10 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
 
             {/* Button */}
             <Row className='mt-3 mb-10'>
-              <Col className='text-center' >
-                <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
+              <Col className='text-center m-1'>
+                <button className={styles.cancelButton} onClick={handleClose}>{t("取消")}</button>
               </Col>
-              <Col className='text-center'>
+              <Col className='text-center m-1'>
                 <button className={styles.confirmButton} onClick={handleConfirm}>{t("確定")}</button>
               </Col>
             </Row>

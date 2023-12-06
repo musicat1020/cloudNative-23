@@ -18,6 +18,7 @@ const useStyles = makeStyles({
     position: "absolute",
     top: "50%",
     left: "50%",
+    // height: "90%",
     transform: "translate(-50%, -50%)",
     boxShadow: 24,
     width: "50vw",
@@ -26,6 +27,7 @@ const useStyles = makeStyles({
     color: "#14274C",
     outline: 0,
     borderRadius: "5px",
+    // overflow: "scroll",
   }
 });
 
@@ -103,9 +105,13 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("開始日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker label="date"
+                  <DatePicker 
+                    className="m-1"
+                    label="date"
                     onChange={(newValue) => setStartDate(new Date(newValue))} />
-                  <TimePicker views={["hours"]}
+                  <TimePicker 
+                    className="m-1"
+                    views={["hours"]}
                     onChange={(newValue) => setStartTime(new Date(newValue))}
                   />
                 </LocalizationProvider>
@@ -117,9 +123,13 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("結束日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker label="date"
+                  <DatePicker
+                    className="m-1"
+                    label="date"
                     onChange={(newValue) => setEndDate(new Date(newValue))} />
-                  <TimePicker views={["hours"]}
+                  <TimePicker 
+                    className="m-1"
+                    views={["hours"]}
                     onChange={(newValue) => setEndTime(new Date(newValue))}
                   />
                 </LocalizationProvider>
@@ -127,11 +137,11 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
             </Row>
 
             {/* Button */}
-            <Row className='mt-5'>
-              <Col className='text-center' >
-                <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
+            <Row className=''>
+              <Col className='text-center m-1'>
+                <button className={styles.cancelButton} onClick={handleClose}>{t("取消")}</button>
               </Col>
-              <Col className='text-center'>
+              <Col className='text-center m-1'>
                 <button className={styles.confirmButton} onClick={handleConfirm}>{t("確定")}</button>
               </Col>
             </Row>
