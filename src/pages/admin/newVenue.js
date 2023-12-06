@@ -177,6 +177,7 @@ function NewVenue() {
 							<Button
 								variant="outlined"
 								color="secondary"
+								onClick={() => window.history.back()}
 							>
 								{t("取消")}
 							</Button>
