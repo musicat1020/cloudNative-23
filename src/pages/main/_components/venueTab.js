@@ -14,6 +14,8 @@ import TimeTable from "@/pages/main/_components/timetable";
 import LevelEnum from "@/utils/levelEnum";
 import PeopleSelect from "@/components/peopleSelect";
 import styles from "@/styles/venuetab.module.css";
+import Button from "@mui/material/Button";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 const theme = createTheme({
 	palette: {
@@ -115,6 +117,10 @@ function VenueTab({ venueInfo }) {
 		return result;
 	};
 
+	const handleBackClick = () => {
+		window.history.back();
+	}
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Box sx={{ width: "100%" }}>
@@ -212,6 +218,15 @@ function VenueTab({ venueInfo }) {
 						</Row>
 						<Row className='my-3'>
 							<TimeTable people={people} level={level} venueInfo={venueInfo} />
+							<div className="flex justify-end mt-4">
+								<Button 
+									variant="outlined"
+									color="secondary"
+									endIcon={<ChevronRightIcon />}
+									onClick={handleBackClick}>
+									{t("回到場地一覽")}
+								</Button>
+							</div>
 						</Row>
 					</Container>
 				</CustomTabPanel>
