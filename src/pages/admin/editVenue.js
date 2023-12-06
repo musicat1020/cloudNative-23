@@ -105,35 +105,35 @@ function EditVenue() {
 		// Check if all required fields are filled
 		if (
 			venueInfo.picture === "" ||
-			venueInfo.address === "" || 
-			venueInfo.name === "" || 
-			venueInfo.venue_name === "" || 
+			venueInfo.address === "" ||
+			venueInfo.name === "" ||
+			venueInfo.venue_name === "" ||
 			venueInfo.max_number_of_people === 0 ||
 			venueInfo.stadium_courts.length === 0 ||
 			venueInfo.available_times.weekdays.length === 0 ||
 			venueInfo.description === "") 
-			{
-				// setShowAlert(true);
-				alert(t("請填寫所有必填欄位（包含圖片）"));
-				return;
-			} 
-			if (!isStartTimeBeforeEndTime()) {
-				alert(t("起始時間需要早於結束時間"));
-				return;
-			}
+		{
+			// setShowAlert(true);
+			alert(t("請填寫所有必填欄位（包含圖片）"));
+			return;
+		}
+		if (!isStartTimeBeforeEndTime()) {
+			alert(t("起始時間需要早於結束時間"));
+			return;
+		}
 
 		setShowEditVenueModal(true);
 	};
 
 	const isStartTimeBeforeEndTime = () => {
-    const startTime = +venueInfo?.available_times?.start_time;
-    const endTime = +venueInfo?.available_times?.end_time;
-    return startTime < endTime;
-  };
+		const startTime = +venueInfo?.available_times?.start_time;
+		const endTime = +venueInfo?.available_times?.end_time;
+		return startTime < endTime;
+	};
 
 	const handleCloseAlert = () => {
-    setShowAlert(false);
-  };
+		setShowAlert(false);
+	};
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -253,13 +253,13 @@ function EditVenue() {
 							<AdminTimeTable venueInfo={venueInfo} />
 							<div className="flex justify-end mt-4">
 								<div>
-								<Button 
-									variant="outlined"
-									color="secondary"
-									endIcon={<ChevronRightIcon />}
-									onClick={handleBackClick}>
-									{t("回到場地一覽")}
-								</Button>
+									<Button
+										variant="outlined"
+										color="secondary"
+										endIcon={<ChevronRightIcon />}
+										onClick={handleBackClick}>
+										{t("回到場地一覽")}
+									</Button>
 								</div>
 							</div>
 						</Row>
@@ -267,10 +267,10 @@ function EditVenue() {
 				</CustomTabPanel>
 			</Container>
 			<Snackbar open={showAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
-        <Alert onClose={handleCloseAlert} severity="error">
-          Please fill in all required fields (including image).
-        </Alert>
-      </Snackbar>
+				<Alert onClose={handleCloseAlert} severity="error">
+					Please fill in all required fields (including image).
+				</Alert>
+			</Snackbar>
 			<EditVenueModal
 				show={showEditVenueModal}
 				setShow={setShowEditVenueModal}
