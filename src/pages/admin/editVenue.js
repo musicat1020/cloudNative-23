@@ -4,16 +4,14 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
 import PropTypes from "prop-types";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Tabs, Tab, Box, Button, Snackbar, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from "@/utils/axios";
 
 import NavBar from "./_components/navbarAdmin";
 import VenueDetail from "./_components/venueDetail";
 import styles from "../../styles/venue.module.css";
+import axios from "@/utils/axios";
 import EditVenueModal from "@/pages/admin/_components/editVenueModal";
 import ButtonDeleteVenue from "@/pages/admin/_components/buttonDeleteVenue";
 import AdminTimeTable from "@/pages/admin/_components/timetableAdmin";
@@ -77,16 +75,17 @@ function EditVenue() {
 	const [venueIsReady, setVenueIsReady] = useState(false);
 	const [venueInfo, setVenueInfo] = useState(null);
 	const [value, setValue] = useState(1);
+	const [showAlert, setShowAlert] = useState(false);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 
 	const fetchVenueInfo = async (id) => {
-
 		const params = {
 			stadium_id: id,
 		};
 		const res = await axios.post(
 			"/api/v1/stadium/info/", {}, { params }
 		);
+		console.log("get info response", res);
 
 		setVenueInfo(res.data);
 		setVenueIsReady(true);
@@ -103,11 +102,37 @@ function EditVenue() {
 	}, []);
 
 	const handleEditClick = () => {
-		if (venueInfo.name === "") {
-			// TODO: show field not null alert
+		// Check if all required fields are filled
+		if (
+			venueInfo.picture === "" ||
+			venueInfo.address === "" ||
+			venueInfo.name === "" ||
+			venueInfo.venue_name === "" ||
+			venueInfo.max_number_of_people === 0 ||
+			venueInfo.stadium_courts.length === 0 ||
+			venueInfo.available_times.weekdays.length === 0 ||
+			venueInfo.description === "") 
+		{
+			// setShowAlert(true);
+			alert(t("請填寫所有必填欄位（包含圖片）"));
 			return;
 		}
+		if (!isStartTimeBeforeEndTime()) {
+			alert(t("起始時間需要早於結束時間"));
+			return;
+		}
+
 		setShowEditVenueModal(true);
+	};
+
+	const isStartTimeBeforeEndTime = () => {
+		const startTime = +venueInfo?.available_times?.start_time;
+		const endTime = +venueInfo?.available_times?.end_time;
+		return startTime < endTime;
+	};
+
+	const handleCloseAlert = () => {
+		setShowAlert(false);
 	};
 
 	const handleChange = (event, newValue) => {
@@ -131,6 +156,10 @@ function EditVenue() {
 			}));
 		};
 		reader.readAsDataURL(fileUploaded);
+	};
+
+	const handleBackClick = () => {
+		window.history.back();
 	};
 
 	return venueIsReady ? (
@@ -222,20 +251,34 @@ function EditVenue() {
 					<Container className="flex justify-center ">
 						<Row className="w-4/5">
 							<AdminTimeTable venueInfo={venueInfo} />
+							<div className="flex justify-end mt-4">
+								<div>
+									<Button
+										variant="outlined"
+										color="secondary"
+										endIcon={<ChevronRightIcon />}
+										onClick={handleBackClick}>
+										{t("回到場地一覽")}
+									</Button>
+								</div>
+							</div>
 						</Row>
 					</Container>
 				</CustomTabPanel>
-
 			</Container>
+			<Snackbar open={showAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+				<Alert onClose={handleCloseAlert} severity="error">
+					Please fill in all required fields (including image).
+				</Alert>
+			</Snackbar>
 			<EditVenueModal
 				show={showEditVenueModal}
 				setShow={setShowEditVenueModal}
 				handleClose={() => setShowEditVenueModal(false)}
 				title={t("修改場地資訊")}
 				info={venueInfo}
-				type="edit"
+				type={"edit"}
 			/>
-
 		</ThemeProvider>
 	) : null;
 }

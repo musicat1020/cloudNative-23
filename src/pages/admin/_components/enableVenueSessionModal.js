@@ -1,16 +1,16 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
-import Modal from "@mui/material/Modal";
-import Divider from "@mui/material/Divider";
+import { useState } from "react";
+
+import { Modal, Divider } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { useState } from "react";
-import { formatDate, formatTime } from "../../../utils/formatTime";
-import { handleEnableSession } from "../../../hooks/handleSessionStatus";
 
+import { formatDate, formatTime } from "@/utils/formatTime";
+import { handleEnableSession } from "@/hooks/handleSessionStatus";
 import styles from "@/styles/modal.module.css";
 
 const useStyles = makeStyles({
@@ -18,6 +18,7 @@ const useStyles = makeStyles({
     position: "absolute",
     top: "50%",
     left: "50%",
+    // height: "90%",
     transform: "translate(-50%, -50%)",
     boxShadow: 24,
     width: "50vw",
@@ -26,6 +27,7 @@ const useStyles = makeStyles({
     color: "#14274C",
     outline: 0,
     borderRadius: "5px",
+    // overflow: "scroll",
   }
 });
 
@@ -77,7 +79,7 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
 
             {/** stadium name */}
             <Row className='mt-3'>
-              <Col>
+              <Col className="flex items-center">
                 <span className={styles.modalAttribute}>{t("場館名稱")}</span>
                 <span>{info?.name}</span>
               </Col>
@@ -85,7 +87,7 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
 
             {/** venue name */}
             <Row className='mt-3'>
-              <Col>
+              <Col className="flex items-center">
                 <span className={styles.modalAttribute}>{t("場地名稱")}</span>
                 <span>{info?.venue_name}</span>
               </Col>
@@ -103,9 +105,13 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("開始日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className="mr-5" label="date"
+                  <DatePicker 
+                    className="m-1"
+                    label="date"
                     onChange={(newValue) => setStartDate(new Date(newValue))} />
-                  <TimePicker views={["hours"]}
+                  <TimePicker 
+                    className="m-1"
+                    views={["hours"]}
                     onChange={(newValue) => setStartTime(new Date(newValue))}
                   />
                 </LocalizationProvider>
@@ -117,9 +123,13 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("結束日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className="mr-5" label="date"
+                  <DatePicker
+                    className="m-1"
+                    label="date"
                     onChange={(newValue) => setEndDate(new Date(newValue))} />
-                  <TimePicker views={["hours"]}
+                  <TimePicker 
+                    className="m-1"
+                    views={["hours"]}
                     onChange={(newValue) => setEndTime(new Date(newValue))}
                   />
                 </LocalizationProvider>
@@ -127,11 +137,11 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
             </Row>
 
             {/* Button */}
-            <Row className='mt-5'>
-              <Col className='text-center' >
-                <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
+            <Row className=''>
+              <Col className='text-center m-1'>
+                <button className={styles.cancelButton} onClick={handleClose}>{t("取消")}</button>
               </Col>
-              <Col className='text-center'>
+              <Col className='text-center m-1'>
                 <button className={styles.confirmButton} onClick={handleConfirm}>{t("確定")}</button>
               </Col>
             </Row>

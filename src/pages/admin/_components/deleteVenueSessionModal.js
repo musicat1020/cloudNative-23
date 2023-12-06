@@ -1,17 +1,16 @@
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+
 import { makeStyles } from "@mui/styles";
-import Modal from "@mui/material/Modal";
-import Divider from "@mui/material/Divider";
+import { Modal, Divider, Checkbox } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { useState } from "react";
-import Checkbox from "@mui/material/Checkbox";
-import { formatDate, formatTime } from "../../../utils/formatTime";
-import { handleDisableSession } from "../../../hooks/handleSessionStatus";
 
+import { formatDate, formatTime } from "@/utils/formatTime";
+import { handleDisableSession } from "@/hooks/handleSessionStatus";
 import styles from "@/styles/modal.module.css";
 
 const useStyles = makeStyles({
@@ -19,6 +18,7 @@ const useStyles = makeStyles({
     position: "absolute",
     top: "50%",
     left: "50%",
+    height: "90%",
     transform: "translate(-50%, -50%)",
     boxShadow: 24,
     width: "50vw",
@@ -27,6 +27,7 @@ const useStyles = makeStyles({
     color: "#14274C",
     outline: 0,
     borderRadius: "5px",
+    overflow: "scroll",
   }
 });
 
@@ -78,7 +79,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
 
             {/** stadium name */}
             <Row className='mt-3'>
-              <Col>
+              <Col className="flex items-center">
                 <span className={styles.modalAttribute}>{t("場館名稱")}</span>
                 <span>{info?.name}</span>
               </Col>
@@ -86,7 +87,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
 
             {/** venue name */}
             <Row className='mt-3'>
-              <Col>
+              <Col className="flex items-center">
                 <span className={styles.modalAttribute}>{t("場地名稱")}</span>
                 <span>{info?.venue_name}</span>
               </Col>
@@ -104,9 +105,13 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("開始日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className="mr-5" label="date"
+                  <DatePicker 
+                    className="mr-5 m-1" 
+                    label="date"
                     onChange={(newValue) => setStartDate(new Date(newValue))} />
-                  <TimePicker views={["hours"]}
+                  <TimePicker 
+                    className="m-1"
+                    views={["hours"]}
                     onChange={(newValue) => setStartTime(new Date(newValue))}
                   />
                 </LocalizationProvider>
@@ -118,9 +123,13 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("結束日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker className="mr-5" label="date"
+                  <DatePicker 
+                    className="mr-5 m-1" 
+                    label="date"
                     onChange={(newValue) => setEndDate(new Date(newValue))} />
-                  <TimePicker views={["hours"]}
+                  <TimePicker 
+                    className="m-1"
+                    views={["hours"]}
                     onChange={(newValue) => setEndTime(new Date(newValue))}
                   />
                 </LocalizationProvider>
@@ -130,7 +139,8 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
 
             <Row className='my-4'>
               <Col className='text-center mx-5 mb-3' >
-                < Checkbox
+                <Checkbox
+                  color="secondary"
                   checked={checked}
                   onChange={() => setChecked(!checked)}
                 /><text>{t("我了解一旦下架場地，則這個時段的訂單會全部取消。")}</text>
@@ -139,10 +149,10 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
             </Row>
             {/* Button */}
             <Row className='mt-5'>
-              <Col className='text-center' >
-                <button className={styles.confirmButton} onClick={handleClose}>{t("取消")}</button>
+              <Col className='text-center m-1'>
+                <button className={styles.cancelButton} onClick={handleClose}>{t("取消")}</button>
               </Col>
-              <Col className='text-center'>
+              <Col className='text-center m-1'>
                 <button
                   disabled={!checked}
                   className={`${checked ? styles.confirmButton : styles.cancelButton}`}

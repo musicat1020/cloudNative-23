@@ -8,17 +8,19 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import Grid from "@mui/material/Grid";
 import axios from "@/utils/axios";
-import styles from "../styles/venueItem.module.css";
+import styles from "@/styles/venueItem.module.css";
 
 function VenueListConainer({ isAdmin }) {
   const { t } = useTranslation();
   const [venueList, setVenueList] = useState([]);
+	const [venueListIsReady, setVenueListIsReady] = useState(false);
 
   useEffect(() => {
     const fetchVenues = async () => {
       try {
         const res = await axios.get("/api/v1/stadium/stadium-list/", {}, {});
         setVenueList(res.stadium);
+        setVenueListIsReady(true);
       } catch (error) {
         throw new Error(error);
       }
@@ -26,7 +28,7 @@ function VenueListConainer({ isAdmin }) {
     fetchVenues();
   }, []);
 
-  return (
+  return venueListIsReady ? (
     <Container className="flex flex-column">
       <h1 className="justify-center text-center text-3xl">{t("Venue")}</h1>
       <Container className="mx-5 justify-center" style={{ maxWidth: "initial" }}>
@@ -47,7 +49,7 @@ function VenueListConainer({ isAdmin }) {
         </Grid>
       </Container>
     </Container >
-  );
+  ) : null;
 }
 
 function VenueItem({

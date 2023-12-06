@@ -7,22 +7,13 @@ import { useState, useRef } from "react";
 import { Col, Row, Form } from "react-bootstrap";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Chip from "@mui/material/Chip";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import Dialog from "@mui/material/Dialog";
-import Button from "@mui/material/Button";
+import { Box, TextField, Chip, Button, Tab, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Stack from "@mui/joy/Stack";
-import Tab from "@mui/material/Tab";
 
 function VenueInput({ info, setInfo }) {
   const { t } = useTranslation();
@@ -238,9 +229,9 @@ function VenueInput({ info, setInfo }) {
               {t("場地列表")}
             </Form.Label>
             <Col sm="10">
-              <Stack direction="row" spacing={1}>
                 {info?.stadium_courts?.map((court) => (
                   <Chip
+                    className="mr-2 mb-1"
                     label={court.name}
                     key={court.id}
                     variant="outlined"
@@ -255,7 +246,6 @@ function VenueInput({ info, setInfo }) {
                   onClick={() => setOpenAddModal(true)}
                   onDelete={() => setOpenAddModal(true)}
                   deleteIcon={<AddIcon />} />
-              </Stack>
             </Col>
           </Form.Group>
 

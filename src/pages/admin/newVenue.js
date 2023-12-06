@@ -3,9 +3,9 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useState, useRef } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import PublishIcon from "@mui/icons-material/Publish";
 import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
+import PublishIcon from "@mui/icons-material/Publish";
+import { Button, Snackbar, Alert } from "@mui/material";
 
 import styles from "../../styles/venue.module.css";
 import VenueInput from "./_components/venueInput";
@@ -33,14 +33,41 @@ function NewVenue() {
 
 	const [venueInfo, setVenueInfo] = useState(initialState);
 	const [showNewVenueModal, setShowNewVenueModal] = useState(false);
+	const [showAlert, setShowAlert] = useState(false);
 	const { t } = useTranslation();
 
 	const handleAddClick = () => {
-		if (venueInfo.name === "") {
-			// TODO: show field not null alert
-      return;
+		// Check if all required fields are filled
+		if (
+			venueInfo.picture === "" ||
+			venueInfo.address === "" ||
+			venueInfo.name === "" ||
+			venueInfo.venue_name === "" ||
+			venueInfo.max_number_of_people === 0 ||
+			venueInfo.stadium_courts.length === 0 ||
+			venueInfo.available_times.weekdays.length === 0 ||
+			venueInfo.description === "") 
+		{
+			// setShowAlert(true);
+			alert(t("請填寫所有必填欄位（包含圖片）"));
+			return;
 		}
+		if (!isStartTimeBeforeEndTime()) {
+			alert(t("起始時間需要早於結束時間"));
+			return;
+		}
+
 		setShowNewVenueModal(true);
+	};
+
+	const isStartTimeBeforeEndTime = () => {
+		const startTime = +venueInfo?.available_times?.start_time;
+		const endTime = +venueInfo?.available_times?.end_time;
+		return startTime < endTime;
+	};
+
+	const handleCloseAlert = () => {
+		setShowAlert(false);
 	};
 
 	const hiddenFileInput = useRef();
@@ -150,6 +177,7 @@ function NewVenue() {
 							<Button
 								variant="outlined"
 								color="secondary"
+								onClick={() => window.history.back()}
 							>
 								{t("取消")}
 							</Button>
@@ -157,6 +185,11 @@ function NewVenue() {
 					</Col>
 				</Row>
 			</Container>
+			<Snackbar open={showAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+				<Alert onClose={handleCloseAlert} severity="error">
+					Please fill in all required fields (including image).
+				</Alert>
+			</Snackbar>
 			<EditVenueModal
 				show={showNewVenueModal}
 				setShow={setShowNewVenueModal}
