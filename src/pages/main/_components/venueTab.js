@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -73,6 +74,7 @@ function a11yProps(index) {
 function VenueTab({ venueInfo }) {
 
 	const { t } = useTranslation();
+	const router = useRouter();
 
 	// 1 初級, 2 初＋中, 3 中, 4 初＋中＋高, 5 中＋高, 6 高
 	const [value, setValue] = useState(1);
@@ -118,8 +120,8 @@ function VenueTab({ venueInfo }) {
 	};
 
 	const handleBackClick = () => {
-		window.history.back();
-	}
+		router.push("/main");
+	};
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -144,7 +146,10 @@ function VenueTab({ venueInfo }) {
 									<span className={styles.infoAttr}>{t("Location")}</span>
 									<span>{venueInfo?.address}</span>
 									{venueInfo?.google_map_url && 
-										<Link href={venueInfo?.google_map_url}>
+										<Link 
+											target="_blank"
+											rel="noopener noreferrer"
+											href={venueInfo?.google_map_url}>
 											<IconButton>
 												<RoomIcon fontSize='inherit' color='secondary' />
 											</IconButton>
