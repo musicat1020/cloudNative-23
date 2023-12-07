@@ -102,8 +102,8 @@ function Content({ setShow, venueInfo, clickEditData, onChangeStatusConfirmed })
                 disabled={!checked}
                 onClick={() => {
                   console.log("start date in adminsessionModal", startDate, startHour);
-                  handleDisableSession(venueId, startDate, startHour, endDate, endHour);
-                  onChangeStatusConfirmed();
+                  handleDisableSession(venueId, startDate, startHour, endDate, endHour)
+                    .then(() => onChangeStatusConfirmed());
                   setShow(false);
 
                 }}>{t("下架場地")}</button>
@@ -116,8 +116,8 @@ function Content({ setShow, venueInfo, clickEditData, onChangeStatusConfirmed })
             </Col>
             <Col className='text-center'>
               <button className={styles.confirmButton} onClick={() => {
-                handleEnableSession(venueId, startDate, startHour, endDate, endHour);
-                onChangeStatusConfirmed();
+                handleEnableSession(venueId, startDate, startHour, endDate, endHour)
+                  .then(() => onChangeStatusConfirmed());
                 setShow(false);
               }}>{t("上架場地")}</button>
             </Col>

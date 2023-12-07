@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   }
 });
 
-function EnableVenueSessionModal({ show, handleClose, title, info, customStyles }) {
+function EnableVenueSessionModal({ show, setRefresh, handleClose, title, info, customStyles }) {
 
   const modalStyles = useStyles();
   const { t } = useTranslation();
@@ -50,6 +50,7 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
 
     handleEnableSession(info.id, formattedStartDate, formattedStartTime, formattedEndDate, formattedEndTime);
     handleClose();
+    setRefresh((prev) => !prev);
   };
 
   return (
@@ -105,11 +106,11 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("開始日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker 
+                  <DatePicker
                     className="m-1"
                     label="date"
                     onChange={(newValue) => setStartDate(new Date(newValue))} />
-                  <TimePicker 
+                  <TimePicker
                     className="m-1"
                     views={["hours"]}
                     onChange={(newValue) => setStartTime(new Date(newValue))}
@@ -127,7 +128,7 @@ function EnableVenueSessionModal({ show, handleClose, title, info, customStyles 
                     className="m-1"
                     label="date"
                     onChange={(newValue) => setEndDate(new Date(newValue))} />
-                  <TimePicker 
+                  <TimePicker
                     className="m-1"
                     views={["hours"]}
                     onChange={(newValue) => setEndTime(new Date(newValue))}
