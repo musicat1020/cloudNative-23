@@ -122,6 +122,7 @@ i18n.use(initReactI18next).init({
 				"回到場地一覽": "Back to venue list",
 				"請填寫所有必填欄位（包含圖片）": "Please fill in all required fields (including image).",
 				"起始時間需要早於結束時間": "Start time must be before end time",
+				"Provider cannot join a team or rent a court.": "Provider cannot join a team or rent a court.",
 			}
 		},
 		zh: {
@@ -240,6 +241,7 @@ i18n.use(initReactI18next).init({
 				"回到場地一覽": "回到場地一覽",
 				"請填寫所有必填欄位（包含圖片）": "請填寫所有必填欄位（包含圖片）",
 				"起始時間需要早於結束時間": "起始時間需要早於結束時間",
+				"Provider cannot join a team or rent a court.": "場地提供者無法加入隊伍或租借場地。",
 			}
 		},
 	},

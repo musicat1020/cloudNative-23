@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 import axios from "@/utils/axios";
-import { getAccessToken } from "@/utils/cookies";
+import { getAccessToken, getIsProvider } from "@/utils/cookies";
 import LevelEnum from "@/utils/levelEnum";
 import BaseModal from "@/components/baseModal";
 import BaseSwitch from "@/components/baseSwitch";
@@ -61,6 +61,19 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 
 	const [courtData, setCourtData] = useState([]);
 	const [currCourtInfo, setCurrCourtInfo] = useState({});
+
+	const checkIsProvider = () => {
+		const isProvider = getIsProvider() === "true";
+		if (isProvider) {
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: t("Provider cannot join a team or rent a court."),
+				confirmButtonColor: "#14274C",
+			});
+		}
+		return isProvider;
+	};
 
 	const checkLogin = () => {
 		if (!getAccessToken()) {
@@ -129,7 +142,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const handleOpenJoin = (e) => {
-		if (!checkLogin()){
+		if (!checkLogin() || checkIsProvider()){
 			return;
 		}
 		const courtId = e.target.id;
@@ -139,7 +152,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const handleOpenRent = (e) => {
-		if (!checkLogin()){
+		if (!checkLogin() || checkIsProvider()){
 			return;
 		}
 		const courtId = e.target.id;
@@ -447,6 +460,10 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			setAllowMatching(false);
 		}
 		setPeopleUsed(value);
+
+		if (venueInfo.max_number_of_people - value < peopleMatching) {
+			setPeopleMatching(venueInfo.max_number_of_people - value);
+		}
 	};
 
 	const getRentContent = () => (
