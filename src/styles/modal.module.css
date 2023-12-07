@@ -1,0 +1,48 @@
+.modalAttribute {
+	display: inline-block;
+	width: 90px;
+	background-color: #14274C;
+	color: #FFFFFF;
+	text-align: center;
+	margin: 0px 15px;
+	padding: 5px 10px;
+	border-radius: 50px;
+}
+
+.confirmButton {
+	color: #FFFFFF;
+	background-color: #14274C;
+	border-radius: 10px;
+	padding: 7px 35px;
+}
+
+.cancelButton {
+	color: #FFFFFF;
+	background-color: #ABABAB;
+	border-radius: 10px;
+	padding: 7px 35px;
+}
+
+.cancelButton:hover {
+	background-color: #c0bfbf;
+}
+
+.confirmButton:hover {
+	background-color: #203357;
+}
+
+.courtListCell {
+	font-size: 15px;
+	color: #14274C;
+	border-radius: 20px;
+	margin: 0px 3px;
+	padding: 5px 10px;
+	border: 1px solid #14274C;
+}
+
+.modalTextArea {
+	font-size: 15px;
+	color: #14274C;
+	overflow-wrap: break-word;
+	word-break: break-all;
+}

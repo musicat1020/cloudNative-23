@@ -1,0 +1,35 @@
+.navLink {
+	color: #14274C;
+	font-size: 18px;
+	margin-left: 12px;
+	margin-right: 12px;
+	text-align: right;
+}
+
+.navLink:hover {
+	text-decoration: underline;
+}
+
+.navAdmin {
+	color: #14274C;
+	font-size: 18px;
+
+	margin-left: 12px;
+	margin-right: 12px;
+	padding: 5px 15px;
+
+	border-style: solid;
+	border-color: #14274C;
+	border-width: 1px;
+	border-radius: 100px;
+}
+
+.navAdmin:hover {
+	background-color: #14274C;
+	color: #FFFFFF;
+}
+
+.manageList {
+	color: #14274C;
+	white-space: nowrap;
+}

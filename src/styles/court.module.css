@@ -1,0 +1,124 @@
+.table {
+	text-align: center;
+	border: 0.5px solid #14274C;
+	cursor: default;
+}
+
+.tableTitle {
+	background-color: #14274C;
+	color: #FFFFFF !important;
+	text-align: center !important;
+	padding: 7px 0px;
+	border-style: solid;
+	border-color: #FFFFFF;
+	border-width: 0px 0.5px 0px 0px;
+	border-collapse: collapse;
+}
+
+.tableCell {
+	border: 0.5px solid #14274C !important;
+	text-align: center !important;
+}
+
+.level {
+	color: #AD5625;
+	border-radius: 50px;
+	border: 1px solid #AD5625;
+	padding: 5px 10px;
+	margin-right: 10px;
+}
+
+.statusButton {
+	border-bottom-width: 0;
+	background-image: linear-gradient(transparent, transparent), linear-gradient(#FFF, #FFF);
+	background-size: 0 1px;
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	transition: background-size .3s ease-in-out;
+}
+
+.statusButtonBlack {
+	background-image: linear-gradient(transparent, transparent), linear-gradient(#14274C, #14274C);
+}
+
+.statusButton:hover {
+	background-size: 100% 1px;
+	background-position: 0 100%;
+}
+
+.borderAttrTitle {
+	display: inline-block;
+	width: 180px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 0px;
+	padding: 5px 10px;
+	border: 1px solid #14274C;
+	border-radius: 50px;
+}
+
+.noBorderAttrTitle {
+	display: inline-block;
+	width: 250px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 0px;
+}
+
+.rentSuccAttrTitle {
+	display: inline-block;
+	width: 200px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 0px;
+	padding: 5px 10px;
+	border: 1px solid #14274C;
+	border-radius: 50px;
+}
+
+.confirmButton {
+	color: #FFFFFF;
+	background-color: #14274C;
+	border-radius: 10px;
+	padding: 7px 35px;
+	margin: 0px 20px;
+}
+
+.cancelButton {
+	color: #FFFFFF;
+	background-color: #ABABAB;
+	border-radius: 10px;
+	padding: 7px 35px;
+	margin: 0px 20px;
+}
+
+.cancelButton:hover {
+	background-color: #c0bfbf;
+}
+
+.confirmButton:hover {
+	background-color: #203357;
+}
+
+
+.borderAttrTitle {
+	display: inline-block;
+	width: 180px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 2px;
+	padding: 4px 7px;
+	border: 1px solid #14274C;
+	border-radius: 50px;
+}
+
+.cancelInfoAttrTitle {
+	display: inline-block;
+	width: 90px;
+	text-align: center;
+	color: #14274C;
+	margin: 10px 20px 10px 2px;
+	padding: 4px 7px;
+	border: 1px solid #14274C;
+	border-radius: 50px;
+}
