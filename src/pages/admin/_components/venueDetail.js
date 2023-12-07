@@ -7,14 +7,21 @@ import { useState, useRef } from "react";
 import { Col, Row, Form } from "react-bootstrap";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Box, TextField, Chip, Button, Tab, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import {
+  TextField,
+  Chip,
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import Stack from "@mui/joy/Stack";
-
 
 const theme = createTheme({
   palette: {
@@ -31,13 +38,11 @@ const theme = createTheme({
     divider: "#BEC8DD",
   },
   typography: {
-    fontFamily:
-      "\"Palatino\", sans-serif",
+    fontFamily: '"Palatino", sans-serif',
   },
 });
 
 function VenueDetail({ info, setInfo }) {
-
   const { t } = useTranslation();
   const [openAddModal, setOpenAddModal] = useState(false);
   const newCourtRef = useRef(null);
@@ -45,50 +50,54 @@ function VenueDetail({ info, setInfo }) {
   const handleAddressChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      address: newValue
+      address: newValue,
     }));
   };
 
   const handleStadiumNameChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      name: newValue
+      name: newValue,
     }));
   };
 
   const handleVenueNameChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      venue_name: newValue
+      venue_name: newValue,
     }));
   };
 
   const handleCapacityChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      max_number_of_people: newValue
+      max_number_of_people: newValue,
     }));
   };
 
   function handleListDelete(courtToDelete) {
-    const updatedCourtList = info?.stadium_courts?.filter((court) => court.name !== courtToDelete.name);
+    const updatedCourtList = info?.stadium_courts?.filter(
+      (court) => court.name !== courtToDelete.name
+    );
     setInfo((prevInfo) => ({
       ...prevInfo,
-      stadium_courts: updatedCourtList
+      stadium_courts: updatedCourtList,
     }));
-  };
+  }
 
-  function handleAddCourt() {
+  const handleAddCourt = () => {
     try {
       const newCourt = newCourtRef.current.value;
       if (newCourt.trim() !== "") {
         setInfo((prevInfo) => ({
           ...prevInfo,
-          stadium_courts: 
-          [...prevInfo.stadium_courts, {
-            id: null,
-            name: newCourt
-          }]
+          stadium_courts: [
+            ...prevInfo.stadium_courts,
+            {
+              id: null,
+              name: newCourt,
+            },
+          ],
         }));
         setOpenAddModal(false);
       } else {
@@ -104,11 +113,10 @@ function VenueDetail({ info, setInfo }) {
     setOpenAddModal(false);
   };
 
-
   const handleAreaChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      area: newValue
+      area: newValue,
     }));
   };
 
@@ -117,15 +125,15 @@ function VenueDetail({ info, setInfo }) {
       ...prevInfo,
       available_times: {
         ...prevInfo.available_times,
-        weekdays: newOpenDay.map(Number)
-      }
+        weekdays: newOpenDay.map(Number),
+      },
     }));
   };
 
   const handleDecriptionChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      description: newValue
+      description: newValue,
     }));
   };
 
@@ -134,8 +142,8 @@ function VenueDetail({ info, setInfo }) {
       ...prevInfo,
       available_times: {
         ...prevInfo.available_times,
-        start_time: +newValue
-      }
+        start_time: +newValue,
+      },
     }));
   };
 
@@ -144,15 +152,15 @@ function VenueDetail({ info, setInfo }) {
       ...prevInfo,
       available_times: {
         ...prevInfo.available_times,
-        end_time: +newValue
-      }
+        end_time: +newValue,
+      },
     }));
   };
-  
+
   const handleLocationLinkChange = (newValue) => {
     setInfo((prevInfo) => ({
       ...prevInfo,
-      google_map_url: newValue
+      google_map_url: newValue,
     }));
   };
 
@@ -206,7 +214,7 @@ function VenueDetail({ info, setInfo }) {
             <Form.Label column sm="2">
               {t("單一場地可容納人數")}
             </Form.Label>
-            <Col sm="10" className='content-left flex items-center'>
+            <Col sm="10" className="content-left flex items-center">
               <Form.Control
                 type="capacity"
                 style={{ width: "80px" }}
@@ -221,24 +229,27 @@ function VenueDetail({ info, setInfo }) {
             <Form.Label column sm="2">
               {t("場地列表")}
             </Form.Label>
-            <Col sm="10">
-                {info?.stadium_courts?.map((court) => (
-                  <Chip
-                    className="mr-2 mb-1"
-                    label={court.name}
-                    key={court.id}
-                    variant="outlined"
-                    color='secondary'
-                    onDelete={() => handleListDelete(court)} />
-                ))}
+            <Col sm="10" className="flex flex-wrap items-center">
+              {info?.stadium_courts?.map((court) => (
                 <Chip
+                  className="m-1"
+                  label={court.name}
+                  key={court.id}
                   variant="outlined"
-                  color='secondary'
-                  key="addCourt"
-                  label={t("新增")}
-                  onClick={() => setOpenAddModal(true)}
-                  onDelete={() => setOpenAddModal(true)}
-                  deleteIcon={<AddIcon />} />
+                  color="secondary"
+                  onDelete={() => handleListDelete(court)}
+                />
+              ))}
+              <Chip
+                className="m-1"
+                variant="outlined"
+                color="secondary"
+                key="addCourt"
+                label={t("新增")}
+                onClick={() => setOpenAddModal(true)}
+                onDelete={() => setOpenAddModal(true)}
+                deleteIcon={<AddIcon />}
+              />
             </Col>
           </Form.Group>
 
@@ -246,7 +257,7 @@ function VenueDetail({ info, setInfo }) {
             <Form.Label column sm="2">
               {t("場地面積")}
             </Form.Label>
-            <Col sm="10" className='content-left flex items-center'>
+            <Col sm="10" className="content-left flex items-center">
               <Form.Control
                 type="area"
                 style={{ width: "80px" }}
@@ -261,21 +272,44 @@ function VenueDetail({ info, setInfo }) {
             <Form.Label column sm="2">
               {t("開放時間")}
             </Form.Label>
-            <Col sm="10" style={{ display: "flex", alignItems: "center" }} className='space-x-4'>
-              <LocalizationProvider dateAdapter={AdapterDayjs} color='secondary'>
+            <Col
+              sm="10"
+              style={{ display: "flex", alignItems: "center" }}
+              className="space-x-4"
+            >
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                color="secondary"
+              >
                 <TimePicker
-                  color='secondary'
-                  value={dayjs(info?.available_times?.start_time?.toString(), "H")}
-                  onChange={(newValue) => handleStartTimeChange(newValue.format("H"))}
+                  color="secondary"
+                  value={dayjs(
+                    info?.available_times?.start_time?.toString(),
+                    "H"
+                  )}
+                  onChange={(newValue) =>
+                    handleStartTimeChange(newValue.format("H"))
+                  }
                   views={["hours"]}
-                  slotProps={{ textField: { size: "small", color: "secondary" } }} />
+                  slotProps={{
+                    textField: { size: "small", color: "secondary" },
+                  }}
+                />
                 <span>{t("至")}</span>
                 <TimePicker
-                  color='secondary'
-                  value={dayjs(info?.available_times?.end_time?.toString(), "H")}
-                  onChange={(newValue) => handleEndTimeChange(newValue.format("H"))}
+                  color="secondary"
+                  value={dayjs(
+                    info?.available_times?.end_time?.toString(),
+                    "H"
+                  )}
+                  onChange={(newValue) =>
+                    handleEndTimeChange(newValue.format("H"))
+                  }
                   views={["hours"]}
-                  slotProps={{ textField: { size: "small", color: "secondary" } }} />
+                  slotProps={{
+                    textField: { size: "small", color: "secondary" },
+                  }}
+                />
               </LocalizationProvider>
             </Col>
           </Form.Group>
@@ -291,7 +325,7 @@ function VenueDetail({ info, setInfo }) {
                 aria-label="open day setting"
                 size="small"
               >
-                <ToggleButton value="1" aria-label="mon" >
+                <ToggleButton value="1" aria-label="mon">
                   {t("週一")}
                 </ToggleButton>
                 <ToggleButton value="2" aria-label="tue">
@@ -348,9 +382,7 @@ function VenueDetail({ info, setInfo }) {
 
       <Dialog open={openAddModal} onClose={handleClose}>
         <DialogContent>
-          <DialogContentText>
-            {t("球場名稱")}
-          </DialogContentText>
+          <DialogContentText>{t("球場名稱")}</DialogContentText>
           <TextField
             inputRef={newCourtRef}
             color="secondary"
@@ -361,8 +393,12 @@ function VenueDetail({ info, setInfo }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='secondary' >{t("取消")}</Button>
-          <Button onClick={handleAddCourt} color='secondary'>{t("新增")} </Button>
+          <Button onClick={handleClose} color="secondary">
+            {t("取消")}
+          </Button>
+          <Button onClick={handleAddCourt} color="secondary">
+            {t("新增")}{" "}
+          </Button>
         </DialogActions>
       </Dialog>
     </ThemeProvider>

@@ -4,13 +4,13 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
 import PropTypes from "prop-types";
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Tabs, Tab, Box, Button, Snackbar, Alert } from '@mui/material';
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Tabs, Tab, Box, Button, Snackbar, Alert } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import NavBar from "./_components/navbarAdmin";
 import VenueDetail from "./_components/venueDetail";
-import styles from "../../styles/venue.module.css";
+import styles from "@/styles/venue.module.css";
 import axios from "@/utils/axios";
 import EditVenueModal from "@/pages/admin/_components/editVenueModal";
 import ButtonDeleteVenue from "@/pages/admin/_components/buttonDeleteVenue";
@@ -101,6 +101,12 @@ function EditVenue() {
 		}
 	}, []);
 
+	const isStartTimeBeforeEndTime = () => {
+		const startTime = +venueInfo?.available_times?.start_time;
+		const endTime = +venueInfo?.available_times?.end_time;
+		return startTime < endTime;
+	};
+
 	const handleEditClick = () => {
 		// Check if all required fields are filled
 		if (
@@ -125,11 +131,7 @@ function EditVenue() {
 		setShowEditVenueModal(true);
 	};
 
-	const isStartTimeBeforeEndTime = () => {
-		const startTime = +venueInfo?.available_times?.start_time;
-		const endTime = +venueInfo?.available_times?.end_time;
-		return startTime < endTime;
-	};
+	
 
 	const handleCloseAlert = () => {
 		setShowAlert(false);
@@ -173,7 +175,7 @@ function EditVenue() {
 			</Head>
 			<NavBar />
 
-			<Container className={`${styles.container}`}>
+			<Container className={`${styles.container} relative`}>
 				<div className="flex justify-center items-center">
 
 					<img
@@ -277,7 +279,7 @@ function EditVenue() {
 				handleClose={() => setShowEditVenueModal(false)}
 				title={t("修改場地資訊")}
 				info={venueInfo}
-				type={"edit"}
+				type="edit"
 			/>
 		</ThemeProvider>
 	) : null;
