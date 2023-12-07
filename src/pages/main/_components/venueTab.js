@@ -144,7 +144,10 @@ function VenueTab({ venueInfo }) {
 									<span className={styles.infoAttr}>{t("Location")}</span>
 									<span>{venueInfo?.address}</span>
 									{venueInfo?.google_map_url && 
-										<Link href={venueInfo?.google_map_url}>
+										<Link 
+											target="_blank"
+											rel="noopener noreferrer"
+											href={venueInfo?.google_map_url}>
 											<IconButton>
 												<RoomIcon fontSize='inherit' color='secondary' />
 											</IconButton>
