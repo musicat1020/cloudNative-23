@@ -18,11 +18,16 @@ function NavBar() {
   const { t } = useTranslation();
   const { data, status } = useSession();
   const timeoutRef = useRef(null);
+  const [lang, setLang] = useState(getCookie("lang") ?? "en");
   const [isProvider, setIsProvider] = useState(false);
 
-  const handleLanguage = () => {
-    const oriLang = getCookie("lang") ?? "en";
-    const newLang = oriLang === "en" ? "zh" : "en";
+  const initLang = () => {
+    i18n.changeLanguage(lang);
+  };
+
+  const handleLang = () => {
+    const newLang = lang === "en" ? "zh" : "en";
+    setLang(newLang);
     setCookie("lang", newLang);
     i18n.changeLanguage(newLang);
   };
@@ -33,6 +38,7 @@ function NavBar() {
   };
 
   useEffect(() => () => {
+    initLang(lang);
     clearTimeout(timeoutRef.current);
     setIsProvider(getIsProvider() === "true");
   }, []);
@@ -94,7 +100,7 @@ function NavBar() {
                 {t("Login")}
               </button>
             )}
-            <Nav.Link className={styles.navLink} onClick={handleLanguage}>
+            <Nav.Link className={styles.navLink} onClick={handleLang}>
               <FontAwesomeIcon icon={faEarthAmericas} className="mr-2 flex flex-row" />
               中 | EN
             </Nav.Link>
