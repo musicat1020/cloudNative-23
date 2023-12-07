@@ -6,7 +6,6 @@ import {
 } from "react-bootstrap";
 import { useTranslation } from "next-i18next";
 import { getCookie, setCookie } from "cookies-next";
-import getConfig from "next/config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -15,14 +14,6 @@ import i18n from "@/utils/i18n";
 import UserMenu from "@/components/buttonUserMenu";
 import { setUserCookies, clearAllCookies, getAllCookies } from "@/utils/cookies";
 
-const {
-  publicRuntimeConfig: {
-    apiRoot,
-    frontendRoot,
-    accessTokenMaxAge,
-    refreshTokenMaxAge,
-  },
-} = getConfig();
 
 function NavBar() {
   const { t } = useTranslation();

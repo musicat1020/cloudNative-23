@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import { Modal, Divider } from "@mui/material";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 import axios from "@/utils/axios";
 import styles from "@/styles/modal.module.css";
 import { getAccessToken } from "@/utils/cookies";
-
 
 const useStyles = makeStyles({
   modal: {
@@ -24,11 +24,17 @@ const useStyles = makeStyles({
     outline: 0,
     borderRadius: "5px",
     overflow: "scroll",
-  }
+  },
 });
 
-export default function EditVenueModal({ show, handleClose, title, info, customStyles, type }) {
-
+export default function EditVenueModal({
+  show,
+  handleClose,
+  title,
+  info,
+  customStyles,
+  type,
+}) {
   const modalStyles = useStyles();
   const router = useRouter();
   const { t } = useTranslation();
@@ -43,26 +49,21 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
     7: t("週日"),
   };
 
+  const [venueUpdated, setVenueUpdated] = useState(false);
+  const [venueCreated, setVenueCreated] = useState(false);
+
   // PUT api/v1/stadium/
   const updateVenue = async () => {
-    const accessToken = getAccessToken();
-    const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/`;
-    const headers = {
-      "Accept": "application/json",
-      "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-    };
-    await axios.put(url, info, { headers });
+
+    await axios.put("/api/v1/stadium/", info, {});
+    setVenueUpdated(true);
   };
 
   // POST api/v1/stadium/create
   const createVenue = async (data) => {
-    const accessToken = getAccessToken();
-    const url = `${process.env.NEXT_PUBLIC_API_ROOT}/api/v1/stadium/create`;
-    const headers = {
-      "Accept": "application/json",
-      "Authorization": `Bearer ${accessToken}`, // Replace 'YOUR_ACCESS_TOKEN' with the actual access token
-    };
-    await axios.post(url, data, { headers });
+
+    await axios.post("/api/v1/stadium/create", data, {});
+    setVenueCreated(true);
   };
 
   const transformData = (input) => {
@@ -73,9 +74,9 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
         venue_name: input.venue_name || "",
         address: input.address || "",
         picture: input.picture || "",
-        area: parseInt(input.area) || 0,
+        area: parseInt(input.area, 10) || 0,
         description: input.description || "",
-        max_number_of_people: parseInt(input.max_number_of_people) || 0,
+        max_number_of_people: parseInt(input.max_number_of_people, 10) || 0,
         google_map_url: input.google_map_url || "",
       },
       stadium_available_times: {
@@ -83,7 +84,7 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
         start_time: input.available_times.start_time || 0,
         end_time: input.available_times.end_time || 0,
       },
-      stadium_court_name: input.stadium_courts.map(court => court.name || ""),
+      stadium_court_name: input.stadium_courts.map((court) => court.name || ""),
     };
     return transformedData;
   };
@@ -93,21 +94,35 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
       // Create new venue
       const transformedData = transformData(info);
       createVenue(transformedData);
-    }
-    else if (type === "edit") {
+      
+    } else if (type === "edit") {
       // Update venue
       updateVenue();
     }
-    handleClose();
-    // redirect to venue list page
-    // revalidatePath("/admin/");
-    router.push("/admin/");
   };
+
+  useEffect(() => {
+    if (venueUpdated) {
+      handleClose();
+      // redirect to venue list page
+      router.push("/admin/");
+    }
+  }, [venueUpdated]);
+
+  useEffect(() => {
+    if (venueCreated) {
+      handleClose();
+      // redirect to venue list page
+      router.push("/admin/");
+    }
+  }, [venueCreated]);
 
   const getCourtList = () => {
     const courtList = [];
     info?.stadium_courts?.forEach((court) => {
-      courtList.push(<span className={`${styles.courtListCell} mb-1`}>{court?.name}</span>);
+      courtList.push(
+        <span className={`${styles.courtListCell} mb-1`}>{court?.name}</span>
+      );
     });
     return courtList;
   };
@@ -115,141 +130,203 @@ export default function EditVenueModal({ show, handleClose, title, info, customS
   const getWeekdays = () => {
     const weekdays = [];
     info?.available_times?.weekdays?.forEach((weekday) => {
-      weekdays.push(<span className={`${styles.courtListCell} mb-1`}>{dayMap[weekday]}</span>);
+      weekdays.push(
+        <span className={`${styles.courtListCell} mb-1`}>
+          {dayMap[weekday]}
+        </span>
+      );
     });
     return weekdays;
   };
 
   return (
-    <>
-      {show &&
-        <Modal
-          open={show}
-          onClose={handleClose}
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
-        >
-          <Container className={`${modalStyles.modal}`} style={customStyles}>
-            {/** Close button */}
-            <Row>
-              <Col className='text-end text-3xl'>
-                <button onClick={handleClose}>&times;</button>
-              </Col>
-            </Row>
+    show && (
+      <Modal
+        open={show}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Container className={`${modalStyles.modal}`} style={customStyles}>
+          {/** Close button */}
+          <Row>
+            <Col className="text-end text-3xl">
+              <button onClick={handleClose}>&times;</button>
+            </Col>
+          </Row>
 
-            {/** Title */}
-            <Row>
-              <Col className='text-center'>
-                <h1>{title}</h1>
-              </Col>
-            </Row>
+          {/** Title */}
+          <Row>
+            <Col className="text-center">
+              <h1>{title}</h1>
+            </Col>
+          </Row>
 
-            {/** Divider */}
-            <Row className='my-3'>
-              <Col>
-                <Divider />
-              </Col>
-            </Row>
+          {/** Divider */}
+          <Row className="my-3">
+            <Col>
+              <Divider />
+            </Col>
+          </Row>
 
-            {/** Location */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場館地址")}</span>
-                <span>{info?.address}</span>
-              </Col>
-            </Row>
+          {/** Location */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("場館地址")}
+              </span>
+              <span>{info?.address}</span>
+            </Col>
+          </Row>
 
-            {/** stadium name */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場館名稱")}</span>
-                <span>{info?.name}</span>
-              </Col>
-            </Row>
+          {/** stadium name */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("場館名稱")}
+              </span>
+              <span>{info?.name}</span>
+            </Col>
+          </Row>
 
-            {/** venue name */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場地名稱")}</span>
-                <span>{info?.venue_name}</span>
-              </Col>
-            </Row>
+          {/** venue name */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("場地名稱")}
+              </span>
+              <span>{info?.venue_name}</span>
+            </Col>
+          </Row>
 
-            {/** capacity */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("容納人數")}</span>
-                <span>{info?.max_number_of_people}  {t("人")}</span>
-              </Col>
-            </Row>
+          {/** capacity */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("容納人數")}
+              </span>
+              <span>
+                {info?.max_number_of_people} {t("人")}
+              </span>
+            </Col>
+          </Row>
 
-            {/** court list */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場地列表")}</span>
-                <div className="flex flex-wrap">
-                  {getCourtList()}
-                </div>
-              </Col>
-            </Row>
+          {/** court list */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("場地列表")}
+              </span>
+              <div className="flex flex-wrap">{getCourtList()}</div>
+            </Col>
+          </Row>
 
-            {/** area */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("場地面積")}</span>
-                <span>{info?.area} {t("平方公尺")}</span>
-              </Col>
-            </Row>
+          {/** area */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("場地面積")}
+              </span>
+              <span>
+                {info?.area} {t("平方公尺")}
+              </span>
+            </Col>
+          </Row>
 
-            {/** open time */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("開放時間")}</span>
-                <span>{`${info?.available_times?.start_time}:00 ~ ${info?.available_times?.end_time}:00`}</span>
-              </Col>
-            </Row>
+          {/** open time */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("開放時間")}
+              </span>
+              <span>{`${info?.available_times?.start_time}:00 ~ ${info?.available_times?.end_time}:00`}</span>
+            </Col>
+          </Row>
 
-            {/** open day */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("開放日")}</span>
-                <div className="flex flex-wrap">
-                  {getWeekdays()}
-                </div>
-              </Col>
-            </Row>
+          {/** open day */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("開放日")}
+              </span>
+              <div className="flex flex-wrap">{getWeekdays()}</div>
+            </Col>
+          </Row>
 
-            {/** description */}
-            <Row className='mt-3'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("說明")}</span>
-                <span className={`${styles.modalTextArea}`}>{info?.description}</span>
-              </Col>
-            </Row>
+          {/** description */}
+          <Row className="mt-3">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("說明")}
+              </span>
+              <span className={`${styles.modalTextArea}`}>
+                {info?.description}
+              </span>
+            </Col>
+          </Row>
 
-            {/* link */}
-            <Row className='mt-3 mb-10'>
-              <Col className="flex items-center">
-                <span className={`${styles.modalAttribute} flex-none`} style={{ width: "100px" }}>{t("地圖連結")}</span>
-                <a className={`${styles.modalTextArea}`} href={info?.google_map_url} target="_blank" rel="noopener noreferrer">
-                  {info.google_map_url}
-                </a>
-              </Col>
-            </Row>
+          {/* link */}
+          <Row className="mt-3 mb-10">
+            <Col className="flex items-center">
+              <span
+                className={`${styles.modalAttribute} flex-none`}
+                style={{ width: "100px" }}
+              >
+                {t("地圖連結")}
+              </span>
+              <a
+                className={`${styles.modalTextArea}`}
+                href={info?.google_map_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {info.google_map_url}
+              </a>
+            </Col>
+          </Row>
 
-
-            {/* Button */}
-            <Row className='mt-3 mb-10'>
-              <Col className='text-center m-1'>
-                <button className={styles.cancelButton} onClick={handleClose}>{t("取消")}</button>
-              </Col>
-              <Col className='text-center m-1'>
-                <button className={styles.confirmButton} onClick={handleConfirm}>{t("確定")}</button>
-              </Col>
-            </Row>
-          </Container>
-        </Modal>
-      }
-    </>
+          {/* Button */}
+          <Row className="mt-3 mb-10">
+            <Col className="text-center m-1">
+              <button className={styles.cancelButton} onClick={handleClose}>
+                {t("取消")}
+              </button>
+            </Col>
+            <Col className="text-center m-1">
+              <button className={styles.confirmButton} onClick={handleConfirm}>
+                {t("確定")}
+              </button>
+            </Col>
+          </Row>
+        </Container>
+      </Modal>
+    )
   );
 }
