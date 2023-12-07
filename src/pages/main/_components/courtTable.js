@@ -447,6 +447,10 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			setAllowMatching(false);
 		}
 		setPeopleUsed(value);
+
+		if (venueInfo.max_number_of_people - value < peopleMatching) {
+			setPeopleMatching(venueInfo.max_number_of_people - value);
+		}
 	};
 
 	const getRentContent = () => (
