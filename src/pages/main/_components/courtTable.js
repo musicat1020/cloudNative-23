@@ -189,6 +189,20 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			flag = false;
 		}
 
+		if (data?.level_requirement?.length === 0) {
+			text.push(t("請選擇球友球技要求"));
+			flag = false;
+		}
+		
+		if (
+			data?.level_requirement?.length === 2 && 
+			data?.level_requirement.includes("EASY") && 
+			data?.level_requirement.includes("HARD")
+		) {
+			text.push(t("球技要求不可跳級"));
+			flag = false;
+		}
+
 		if (!flag) {
 			Swal.fire({
 				icon: "error",
@@ -259,29 +273,13 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		}
 	};
 
-	const convertLevelRequirement = async (levels) => {
+	const mapLevelRequirement = async (levels) => {
 		const mapLevels = levels.sort().map(item => reverseLevelEnum[parseInt(item, 10)]);
-		if (mapLevels?.length === 0) {
-			await Swal.fire({
-				icon: "error",
-				title: "Error",
-				text: t("請選擇球友球技要求"),
-				confirmButtonColor: "#14274C",
-			});
-		}
-		else if (mapLevels?.length === 2 && mapLevels.includes("EASY") && mapLevels.includes("HARD")) {
-			await Swal.fire({
-				icon: "error",
-				title: "Error",
-				text: t("球技要求不可跳級"),
-				confirmButtonColor: "#14274C",
-			});
-		}
-		return LevelEnum[mapLevels.join("_")];
+		return mapLevels;
 	};
 
 	const handleRent = async () => {
-		const levelRequirement = await convertLevelRequirement(levelChecked);
+		const levelRequirement = await mapLevelRequirement(levelChecked);
 		const data = {
 			stadium_court_id: currCourtInfo.stadium_court_id,
 			date,
@@ -298,6 +296,9 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		if (!checkRentInput(data)) {
 			return;
 		}
+
+		// Convert level requirement to index
+		data.level_requirement = LevelEnum[levelRequirement.join("_")];
 
 		const res = await axios.post("/api/v1/stadium-court/rent", data, {});
 
