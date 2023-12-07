@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/router";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
@@ -77,6 +78,7 @@ function EditVenue() {
 	const [value, setValue] = useState(1);
 	const [showAlert, setShowAlert] = useState(false);
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
+	const router = useRouter();
 
 	const fetchVenueInfo = async (id) => {
 		const params = {
@@ -161,7 +163,7 @@ function EditVenue() {
 	};
 
 	const handleBackClick = () => {
-		window.history.back();
+		router.push("/admin");
 	};
 
 	return venueIsReady ? (
