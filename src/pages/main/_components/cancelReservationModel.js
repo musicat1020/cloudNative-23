@@ -27,7 +27,7 @@ function CancelInfoDetail({ setShow, record, onCancelConfirmed }) {
             {/* Renter */}
             <Row>
                 <Col>
-                    <span className={styles.borderAttrTitle}>{t("使用人數")}</span>
+                    <span className={styles.cancelInfoAttrTitle}>{t("使用人數")}</span>
                     <span>{record.current_member_number}/{record.max_number_of_member}</span>
                 </Col>
             </Row>
@@ -35,7 +35,7 @@ function CancelInfoDetail({ setShow, record, onCancelConfirmed }) {
             {/* People */}
             <Row>
                 <Col>
-                    <span className={styles.borderAttrTitle}>{t("Members")}</span>
+                    <span className={styles.cancelInfoAttrTitle}>{t("Members")}</span>
                     {record.team_members.map((member, index) => (
                         <text>{member.name}{index < record.team_members.length - 1 && ","}</text>
                     ))}
