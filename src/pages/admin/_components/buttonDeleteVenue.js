@@ -17,7 +17,7 @@ import DeleteVenueSessionModal from "@/pages/admin/_components/deleteVenueSessio
 import EnableVenueSessionModal from "@/pages/admin/_components/enableVenueSessionModal";
 
 
-function ButtonDeleteVenue({ info }) {
+function ButtonDeleteVenue({ info, setRefresh }) {
 
   const { t } = useTranslation();
 
@@ -25,7 +25,7 @@ function ButtonDeleteVenue({ info }) {
   const [showDeleteVenueModal, setShowDeleteVenueModal] = useState(false);
   const [showDeleteSessionVenueModal, setShowDeleteSessionVenueModal] = useState(false);
   const [showEnableSessionVenueModal, setShowEnableSessionVenueModal] = useState(false);
-  
+
   const anchorRef = useRef(null);
 
   const handleToggle = () => {
@@ -89,7 +89,7 @@ function ButtonDeleteVenue({ info }) {
             <Paper>
               <ClickAwayListener onClickAway={handleSubButtonsClose}>
                 <MenuList
-                  autoFocusItem={true}
+                  autoFocusItem
                   id="composition-menu"
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
@@ -103,28 +103,30 @@ function ButtonDeleteVenue({ info }) {
           </Grow>
         )}
       </Popper>
-      <DeleteVenueModal 
-				show={showDeleteVenueModal}
-				setShow = {setShowDeleteVenueModal}
-				handleClose={() => setShowDeleteVenueModal(false)}
-				title={t("刪除場地")}
+      <DeleteVenueModal
+        show={showDeleteVenueModal}
+        setShow={setShowDeleteVenueModal}
+        handleClose={() => setShowDeleteVenueModal(false)}
+        title={t("刪除場地")}
         info={info}
       />
       <DeleteVenueSessionModal
         show={showDeleteSessionVenueModal}
-				setShow = {setShowDeleteSessionVenueModal}
-				handleClose={() => setShowDeleteSessionVenueModal(false)}
-				title={t("下架特定時段場地")}
+        setShow={setShowDeleteSessionVenueModal}
+        setRefresh={setRefresh}
+        handleClose={() => setShowDeleteSessionVenueModal(false)}
+        title={t("下架特定時段場地")}
         info={info}
-        />
+      />
       <EnableVenueSessionModal
         show={showEnableSessionVenueModal}
-        setShow = {setShowEnableSessionVenueModal}
+        setShow={setShowEnableSessionVenueModal}
+        setRefresh={setRefresh}
         handleClose={() => setShowEnableSessionVenueModal(false)}
         title={t("上架特定時段場地")}
         info={info}
-        />
-    </>    
+      />
+    </>
   );
 }
 

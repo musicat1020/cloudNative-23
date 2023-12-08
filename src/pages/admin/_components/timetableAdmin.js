@@ -10,7 +10,7 @@ import axios from "@/utils/axios";
 import styles from "@/styles/timetable.module.css";
 import AdminSessionModal from "@/pages/admin/_components/adminSessionModal";
 
-function AdminTimeTable({ venueInfo }) {
+function AdminTimeTable({ venueInfo, refresh, setRefresh }) {
 	const { t } = useTranslation();
 
 	const curDate = dayjs();
@@ -48,7 +48,11 @@ function AdminTimeTable({ venueInfo }) {
 	// init time table data
 	useEffect(() => {
 		getTimeTable(startDate);
-	}, [startDate]);
+		if (refresh) {
+			getTimeTable(startDate);
+			setRefresh((prev) => !prev);
+		}
+	}, [startDate, refresh]);
 
 	/** handle window resize */
 	useEffect(() => {
