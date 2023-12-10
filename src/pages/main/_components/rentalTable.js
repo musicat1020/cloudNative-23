@@ -90,7 +90,7 @@ function RentalTable() {
                     disabled={isCancelled}
                     onClick={() => handleModalClick(record)}
                   >
-                    {t("Unpair")}
+                    {t("Cancel")}
                   </Button>
                 </td>
               </tr>

@@ -123,6 +123,11 @@ i18n.use(initReactI18next).init({
 				"請填寫所有必填欄位（包含圖片）": "Please fill in all required fields (including image).",
 				"起始時間需要早於結束時間": "Start time must be before end time",
 				"Provider cannot join a team or rent a court.": "Provider cannot join a team or rent a court.",
+				"Available": "Available",
+				"Booked": "Booked",
+				"Disabled": "Disabled",
+				"Cancel": "Cancel",
+				"Type Email": "Type Email",
 			}
 		},
 		zh: {
@@ -134,6 +139,7 @@ i18n.use(initReactI18next).init({
 				"Rent": "租借場地",
 				"Admin": "管理員",
 				"Session": "時段",
+				"上下架場地": "上下架場地",
 				"欲使用人數": "欲使用人數",
 				"人": "人",
 				"球技程度": "球技程度",
@@ -242,6 +248,11 @@ i18n.use(initReactI18next).init({
 				"請填寫所有必填欄位（包含圖片）": "請填寫所有必填欄位（包含圖片）",
 				"起始時間需要早於結束時間": "起始時間需要早於結束時間",
 				"Provider cannot join a team or rent a court.": "場地提供者無法加入隊伍或租借場地。",
+				"Available": "開放中",
+				"Booked": "已租借",
+				"Disabled": "未開放",
+				"Cancel": "取消",
+				"Type Email": "輸入Email",
 			}
 		},
 	},
