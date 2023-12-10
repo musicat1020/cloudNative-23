@@ -80,6 +80,8 @@ function EditVenue() {
 	const [showEditVenueModal, setShowEditVenueModal] = useState(false);
 	const router = useRouter();
 
+	const [refresh, setRefresh] = useState(false);// for refresh the timetable
+
 	const fetchVenueInfo = async (id) => {
 		const params = {
 			stadium_id: id,
@@ -119,8 +121,7 @@ function EditVenue() {
 			venueInfo.max_number_of_people === 0 ||
 			venueInfo.stadium_courts.length === 0 ||
 			venueInfo.available_times.weekdays.length === 0 ||
-			venueInfo.description === "") 
-		{
+			venueInfo.description === "") {
 			// setShowAlert(true);
 			alert(t("請填寫所有必填欄位（包含圖片）"));
 			return;
@@ -133,7 +134,7 @@ function EditVenue() {
 		setShowEditVenueModal(true);
 	};
 
-	
+
 
 	const handleCloseAlert = () => {
 		setShowAlert(false);
@@ -213,6 +214,7 @@ function EditVenue() {
 								</Tabs>
 								<ButtonDeleteVenue
 									info={venueInfo}
+									setRefresh={setRefresh}
 								/>
 							</div>
 						</Box>
@@ -254,7 +256,7 @@ function EditVenue() {
 				<CustomTabPanel value={value} index={1}>
 					<Container className="flex justify-center ">
 						<Row className="w-4/5">
-							<AdminTimeTable venueInfo={venueInfo} />
+							<AdminTimeTable venueInfo={venueInfo} refresh={refresh} setRefresh={setRefresh} />
 							<div className="flex justify-end mt-4">
 								<div>
 									<Button

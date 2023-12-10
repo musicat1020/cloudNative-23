@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   }
 });
 
-function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles }) {
+function DeleteVenueSessionModal({ show, setRefresh, handleClose, title, info, customStyles }) {
 
   const modalStyles = useStyles();
   const { t } = useTranslation();
@@ -50,6 +50,7 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
 
     handleDisableSession(info.id, formattedStartDate, formattedStartTime, formattedEndDate, formattedEndTime);
     handleClose();
+    setRefresh((prev) => !prev);
   };
 
   return (
@@ -105,11 +106,11 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("開始日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker 
-                    className="mr-5 m-1" 
+                  <DatePicker
+                    className="mr-5 m-1"
                     label="date"
                     onChange={(newValue) => setStartDate(new Date(newValue))} />
-                  <TimePicker 
+                  <TimePicker
                     className="m-1"
                     views={["hours"]}
                     onChange={(newValue) => setStartTime(new Date(newValue))}
@@ -123,11 +124,11 @@ function DeleteVenueSessionModal({ show, handleClose, title, info, customStyles 
               <Col className="ml-8">
                 <div className="mb-3">{t("結束日期/時間")}</div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker 
-                    className="mr-5 m-1" 
+                  <DatePicker
+                    className="mr-5 m-1"
                     label="date"
                     onChange={(newValue) => setEndDate(new Date(newValue))} />
-                  <TimePicker 
+                  <TimePicker
                     className="m-1"
                     views={["hours"]}
                     onChange={(newValue) => setEndTime(new Date(newValue))}
