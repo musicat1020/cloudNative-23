@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useTranslation } from "next-i18next";
 import axios from "@/utils/axios";
 
 const customTheme = (theme) => createTheme({
@@ -15,6 +16,7 @@ const customTheme = (theme) => createTheme({
 
 function InputEmail({ emails, onChange }) {
 
+	const { t } = useTranslation();
 	const [options, setOptions] = useState([]);
 
 	const fetchAllUsers = async () => {
@@ -44,7 +46,7 @@ function InputEmail({ emails, onChange }) {
 					<TextField 
 						{...params}
 						variant="standard"
-						placeholder="Type Email"
+						placeholder={t("Type Email")}
 					/>
 				)}
 			/>

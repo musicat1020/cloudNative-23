@@ -127,6 +127,7 @@ i18n.use(initReactI18next).init({
 				"Booked": "Booked",
 				"Disabled": "Disabled",
 				"Cancel": "Cancel",
+				"Type Email": "Type Email",
 			}
 		},
 		zh: {
@@ -251,6 +252,7 @@ i18n.use(initReactI18next).init({
 				"Booked": "已租借",
 				"Disabled": "未開放",
 				"Cancel": "取消",
+				"Type Email": "輸入Email",
 			}
 		},
 	},
