@@ -126,6 +126,7 @@ i18n.use(initReactI18next).init({
 				"Available": "Available",
 				"Booked": "Booked",
 				"Disabled": "Disabled",
+				"Cancel": "Cancel",
 			}
 		},
 		zh: {
@@ -249,6 +250,7 @@ i18n.use(initReactI18next).init({
 				"Available": "開放中",
 				"Booked": "已租借",
 				"Disabled": "未開放",
+				"Cancel": "取消",
 			}
 		},
 	},

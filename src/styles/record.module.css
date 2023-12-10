@@ -24,7 +24,7 @@
 }
 
 .cancelButton:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(173, 86, 37, 0.05);
     border-color: #AD5625;
     color: #AD5625;
 }
