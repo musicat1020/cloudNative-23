@@ -2,8 +2,8 @@ import { Row, Col } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Checkbox from "@mui/material/Checkbox";
-import BaseModal from "../../../components/baseModal";
-import { handleDisableSession, handleEnableSession } from "../../../hooks/handleSessionStatus";
+import BaseModal from "../baseModal";
+import { handleDisableSession, handleEnableSession } from "../../hooks/handleSessionStatus";
 import styles from "@/styles/modal.module.css";
 
 function AdminSessionModal({

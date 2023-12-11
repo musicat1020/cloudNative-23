@@ -1,16 +1,16 @@
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { 
-	FormGroup, 
-	FormControlLabel, 
-	Paper, 
-	Table, 
-	TableBody, 
+import {
+	FormGroup,
+	FormControlLabel,
+	Paper,
+	Table,
+	TableBody,
 	TableCell,
-	TableContainer, 
-	TableHead, 
-	TableRow 
+	TableContainer,
+	TableHead,
+	TableRow
 } from "@mui/material";
 import Swal from "sweetalert2";
 import axios from "@/utils/axios";
@@ -20,7 +20,7 @@ import BaseModal from "@/components/baseModal";
 import BaseSwitch from "@/components/baseSwitch";
 import BaseCheckbox from "@/components/baseCheckbox";
 import PeopleSelect from "@/components/peopleSelect";
-import InputEmail from "@/pages/main/_components/inputEmail";
+import InputEmail from "@/components/mainComponents/inputEmail";
 import styles from "@/styles/court.module.css";
 
 function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, level }) {
@@ -54,7 +54,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	const [allowMatching, setAllowMatching] = useState(false);
 	const [peopleMatching, setPeopleMatching] = useState(1);
 	const [levelChecked, setLevelChecked] = useState([]);
-	
+
 	const [joinModalWidth, setJoinModalWidth] = useState("35vw");
 	const [rentModalWidth, setRentModalWidth] = useState("45vw");
 	const [rentSuccessModalWidth, setRentSuccessModalWidth] = useState("45vw");
@@ -113,8 +113,8 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	}, [windowSize]);
 
 	const fetchCourtInfo = async () => {
-		const params = { 
-			stadium_id: venueInfo.id, 
+		const params = {
+			stadium_id: venueInfo.id,
 			date,
 			start_time: parseInt(startTime, 10),
 			headcount: people,
@@ -123,7 +123,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		const res = await axios.post("/api/v1/stadium-court/rent-info", {}, { params });
 		setCourtData(res.data);
 	};
-	
+
 	useEffect(() => {
 		fetchCourtInfo();
 	}, []);
@@ -142,7 +142,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const handleOpenJoin = (e) => {
-		if (!checkLogin() || checkIsProvider()){
+		if (!checkLogin() || checkIsProvider()) {
 			return;
 		}
 		const courtId = e.target.id;
@@ -152,7 +152,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const handleOpenRent = (e) => {
-		if (!checkLogin() || checkIsProvider()){
+		if (!checkLogin() || checkIsProvider()) {
 			return;
 		}
 		const courtId = e.target.id;
@@ -184,7 +184,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const checkRentInput = (data) => {
-		let flag = true; 
+		let flag = true;
 		const text = [];
 
 		if (data.current_member_number <= 0) {
@@ -197,7 +197,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			flag = false;
 		}
 
-		if (data.team_member_emails?.length !== (data.current_member_number-1)) {
+		if (data.team_member_emails?.length !== (data.current_member_number - 1)) {
 			text.push(t("隊友Email不符合人數"));
 			flag = false;
 		}
@@ -206,10 +206,10 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			text.push(t("請選擇球友球技要求"));
 			flag = false;
 		}
-		
+
 		if (
-			data?.level_requirement?.length === 2 && 
-			data?.level_requirement.includes("EASY") && 
+			data?.level_requirement?.length === 2 &&
+			data?.level_requirement.includes("EASY") &&
 			data?.level_requirement.includes("HARD")
 		) {
 			text.push(t("球技要求不可跳級"));
@@ -228,7 +228,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const checkJoinInput = (data) => {
-		let flag = true; 
+		let flag = true;
 		const text = [];
 
 		if (data.people <= 0) {
@@ -236,7 +236,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			flag = false;
 		}
 
-		if (data.team_member_emails?.length !== (peopleJoin-1)) {
+		if (data.team_member_emails?.length !== (peopleJoin - 1)) {
 			text.push(t("隊友Email不符合人數"));
 			flag = false;
 		}
@@ -374,13 +374,13 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			<Row>
 				<Col>
 					<span className={styles.borderAttrTitle}>{t("欲加入人數")}</span>
-					<PeopleSelect 
+					<PeopleSelect
 						className="mr-4 px-2 text-center"
-						people={peopleJoin} 
-						maxPeople={currCourtInfo.max_number_of_member - currCourtInfo.current_member_number} 
+						people={peopleJoin}
+						maxPeople={currCourtInfo.max_number_of_member - currCourtInfo.current_member_number}
 						onChange={setPeopleJoin}
 					/>
-					<span>{ t("人") }</span>
+					<span>{t("人")}</span>
 				</Col>
 			</Row>
 
@@ -388,17 +388,17 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			<Row>
 				<Col className="flex items-center mt-2">
 					<span className={styles.borderAttrTitle}>{t("隊友Email")}</span>
-					<InputEmail emails={emails} onChange={handleEmailChange}/>
+					<InputEmail emails={emails} onChange={handleEmailChange} />
 				</Col>
 			</Row>
 
 			{/* Button */}
 			<Row className='mt-3'>
 				<Col className='text-center'>
-					<button 
-						data-court-id={currCourtInfo?.stadium_court_id} 
+					<button
+						data-court-id={currCourtInfo?.stadium_court_id}
 						data-team-id={currCourtInfo?.team_id}
-						className={styles.confirmButton} 
+						className={styles.confirmButton}
 						onClick={(e) => handleJoin(e)}
 					>
 						{t("確定")}
@@ -435,7 +435,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				<Row>
 					<Col>
 						<span className={styles.borderAttrTitle}>{t("球技要求")}</span>
-						{		
+						{
 							levels?.map((item, index) => (
 								<span key={index} className={styles.level}>{t(levelList[item])}</span>
 							))
@@ -473,13 +473,13 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			<Row>
 				<Col>
 					<span className={styles.noBorderAttrTitle}>{t("使用人數")}</span>
-					<PeopleSelect 
+					<PeopleSelect
 						className="mx-4 px-2 text-center"
-						people={peopleUsed} 
-						maxPeople={venueInfo?.max_number_of_people} 
+						people={peopleUsed}
+						maxPeople={venueInfo?.max_number_of_people}
 						onChange={rentPeopleUsedChange}
 					/>
-					<span>{ t("人") }</span>
+					<span>{t("人")}</span>
 				</Col>
 			</Row>
 
@@ -487,7 +487,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			<Row>
 				<Col className="flex items-center mt-2">
 					<span className={styles.noBorderAttrTitle}>{t("隊友Email")}</span>
-					<InputEmail emails={emails} onChange={handleEmailChange}/>
+					<InputEmail emails={emails} onChange={handleEmailChange} />
 				</Col>
 			</Row>
 
@@ -495,7 +495,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			<Row>
 				<Col>
 					<span className={styles.noBorderAttrTitle}>{t("允許配對球友?")}</span>
-					<BaseSwitch 
+					<BaseSwitch
 						checked={allowMatching}
 						handleChange={setAllowMatching}
 					/>
@@ -506,14 +506,14 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			<Row>
 				<Col>
 					<span className={styles.noBorderAttrTitle}>{t("想再找幾名球友?")}</span>
-					<PeopleSelect 
+					<PeopleSelect
 						className="mx-4 px-2 text-center"
 						disabled={!allowMatching}
-						people={peopleMatching} 
-						maxPeople={venueInfo.max_number_of_people - peopleUsed} 
+						people={peopleMatching}
+						maxPeople={venueInfo.max_number_of_people - peopleUsed}
 						onChange={setPeopleMatching}
 					/>
-					<span>{ t("人") }</span>
+					<span>{t("人")}</span>
 				</Col>
 			</Row>
 
@@ -555,13 +555,13 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 
 		return (
 			<Container>
-				
+
 				{/* People */}
 				<Row>
 					<Col>
 						<span className={styles.rentSuccAttrTitle}>{t("目前使用人數")}</span>
 						<span>{`${data?.current_member_number}`}</span>
-						<span className="ml-2">{ t("人") }</span>
+						<span className="ml-2">{t("人")}</span>
 					</Col>
 				</Row>
 
@@ -569,7 +569,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				<Row>
 					<Col>
 						<span className={styles.rentSuccAttrTitle}>{t("允許配對")}</span>
-						<span>{ data?.is_matching ? t("是") : t("否") }</span>
+						<span>{data?.is_matching ? t("是") : t("否")}</span>
 					</Col>
 				</Row>
 
@@ -577,8 +577,8 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				<Row>
 					<Col>
 						<span className={styles.rentSuccAttrTitle}>{t("可配對人數")}</span>
-						<span>{data ? data.max_number_of_member-data.current_member_number : 0}</span>
-						<span className="ml-2">{ t("人") }</span>
+						<span>{data ? data.max_number_of_member - data.current_member_number : 0}</span>
+						<span className="ml-2">{t("人")}</span>
 					</Col>
 				</Row>
 
@@ -601,63 +601,63 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	};
 
 	const getModalVenueName = () => `${venueInfo?.name} ${venueInfo?.venue_name} ${currCourtInfo?.name}`;
-	
+
 	return (
 		<>
-    		<TableContainer component={Paper}>
+			<TableContainer component={Paper}>
 				<Table sx={{ minWidth: 650 }} aria-label='simple table' className={styles.table}>
 					<TableHead>
 						<TableRow>
-							<TableCell className={styles.tableTitle}>{ t("球場") }</TableCell>
-							<TableCell className={styles.tableTitle}>{ t("租借人") }</TableCell>
-							<TableCell className={styles.tableTitle}>{ t("使用人數") }</TableCell>
-							<TableCell className={styles.tableTitle}>{ t("球技要求") }</TableCell>
-							<TableCell className={styles.tableTitle} style={{borderRight: 0}}>
-								{ t("狀態") }
+							<TableCell className={styles.tableTitle}>{t("球場")}</TableCell>
+							<TableCell className={styles.tableTitle}>{t("租借人")}</TableCell>
+							<TableCell className={styles.tableTitle}>{t("使用人數")}</TableCell>
+							<TableCell className={styles.tableTitle}>{t("球技要求")}</TableCell>
+							<TableCell className={styles.tableTitle} style={{ borderRight: 0 }}>
+								{t("狀態")}
 							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
-					{courtData && courtData.map((row) => (
-						<TableRow
-							key={row.stadium_court_id}
-						>
-							<TableCell component='th' scope='row' className={styles.tableCell}>
-								{row.name}
-							</TableCell>
-							<TableCell className={styles.tableCell}>{row.renter_name ?? t("無")}</TableCell>
-							<TableCell className={styles.tableCell}>{`${row.current_member_number ?? 0}/${row.max_number_of_member ?? venueInfo.max_number_of_people}`}</TableCell>
-							<TableCell className={styles.tableCell}>
-								{
-									(row.level_requirement?.length > 0 && row.level_requirement.map((item, index) => (
-										<span key={index} className={styles.level}>{t(item)}</span>
-									)))
-									|| 
-									<span className={styles.level}>{t("無")}</span>
-								}
-							</TableCell>
-							<TableCell className={styles.tableCell}>
-								{
-									row.status === statusList.join &&
-									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenJoin(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
-								}
-								{
-									row.status === statusList.rent &&
-									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenRent(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
-								}
-								{
-									row.status !== statusList.join && row.status !== statusList.rent &&
-									<span className='text-gray cursor-default'>{t(row.status)}</span>
-								}
-							</TableCell>
-						</TableRow>
-					))}
+						{courtData && courtData.map((row) => (
+							<TableRow
+								key={row.stadium_court_id}
+							>
+								<TableCell component='th' scope='row' className={styles.tableCell}>
+									{row.name}
+								</TableCell>
+								<TableCell className={styles.tableCell}>{row.renter_name ?? t("無")}</TableCell>
+								<TableCell className={styles.tableCell}>{`${row.current_member_number ?? 0}/${row.max_number_of_member ?? venueInfo.max_number_of_people}`}</TableCell>
+								<TableCell className={styles.tableCell}>
+									{
+										(row.level_requirement?.length > 0 && row.level_requirement.map((item, index) => (
+											<span key={index} className={styles.level}>{t(item)}</span>
+										)))
+										||
+										<span className={styles.level}>{t("無")}</span>
+									}
+								</TableCell>
+								<TableCell className={styles.tableCell}>
+									{
+										row.status === statusList.join &&
+										<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenJoin(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
+									}
+									{
+										row.status === statusList.rent &&
+										<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenRent(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
+									}
+									{
+										row.status !== statusList.join && row.status !== statusList.rent &&
+										<span className='text-gray cursor-default'>{t(row.status)}</span>
+									}
+								</TableCell>
+							</TableRow>
+						))}
 					</TableBody>
 				</Table>
 			</TableContainer>
 
 			{/* Modal for joined */}
-			<BaseModal 
+			<BaseModal
 				venue={getModalVenueName()}
 				date={date}
 				startTime={startTime}
@@ -666,11 +666,11 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				handleClose={handleCloseJoin}
 				title={t("加入隊伍")}
 				content={getJoinContent()}
-				customStyles={{width: joinModalWidth}}
+				customStyles={{ width: joinModalWidth }}
 			/>
 
 			{/* Modal for joined resopnse */}
-			<BaseModal 
+			<BaseModal
 				venue={getModalVenueName()}
 				date={date}
 				startTime={startTime}
@@ -679,11 +679,11 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				handleClose={handleCloseJoinRes}
 				title={t("加入成功")}
 				content={getJoinResContent()}
-				customStyles={{width: joinModalWidth}}
+				customStyles={{ width: joinModalWidth }}
 			/>
 
 			{/* Modal for rental */}
-			<BaseModal 
+			<BaseModal
 				venue={getModalVenueName()}
 				date={date}
 				startTime={startTime}
@@ -692,11 +692,11 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				handleClose={handleCloseRent}
 				title={t("租借場地")}
 				content={getRentContent()}
-				customStyles={{width: rentModalWidth}}
+				customStyles={{ width: rentModalWidth }}
 			/>
 
 			{/* Modal for rental response */}
-			<BaseModal 
+			<BaseModal
 				venue={getModalVenueName()}
 				date={date}
 				startTime={startTime}
@@ -705,7 +705,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				handleClose={() => setShowRentRes(false)}
 				title={t("租借成功")}
 				content={getRentResContent()}
-				customStyles={{width: rentSuccessModalWidth}}
+				customStyles={{ width: rentSuccessModalWidth }}
 			/>
 		</>
 	);

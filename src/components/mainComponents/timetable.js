@@ -6,7 +6,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ButtonDatePicker from "@/components/buttonDatePicker";
 import Loading from "@/components/loading";
-import SessionModal from "@/pages/main/_components/sessionModal";
+import SessionModal from "@/components/mainComponents/sessionModal";
 import axios from "@/utils/axios";
 import styles from "@/styles/timetable.module.css";
 
@@ -80,7 +80,7 @@ function TimeTable({ people, level, venueInfo }) {
 		}
 	}, [windowSize]);
 
-	const convertDateFormat = (date, format="MM/DD (ddd)") => {
+	const convertDateFormat = (date, format = "MM/DD (ddd)") => {
 		const dateString = dayjs(date).format(format);
 		return dateString;
 	};
@@ -95,7 +95,7 @@ function TimeTable({ people, level, venueInfo }) {
 	/** handle time table dates based on startDate and dayDuration */
 	useEffect(() => {
 		const newTimeTableDates = [];
-		for (let i=0; i<dayDuration; i+=1) {
+		for (let i = 0; i < dayDuration; i += 1) {
 			const newDate = addDate(startDate.clone(), i);
 			newTimeTableDates.push(newDate);
 		}
@@ -110,9 +110,9 @@ function TimeTable({ people, level, venueInfo }) {
 	};
 
 	const handleTimeCols = (sessionStart, sessionEnd) => {
-		
+
 		const timeCols = [];
-		
+
 		/** get session time */
 		const FormatSessionStart = convertTimeFormat(sessionStart);
 		const FormatSessionEnd = convertTimeFormat(sessionEnd);
@@ -126,34 +126,34 @@ function TimeTable({ people, level, venueInfo }) {
 
 			/** get session status */
 			const hour = sessionStart.hour().toString();
-			const status = timeTableData[i][`day_${i+1}`][hour];
+			const status = timeTableData[i][`day_${i + 1}`][hour];
 
 			let col;
 			if (status === "Available") {
-				col = 
-				<Col 
-					key={i}
-					data-date={convertDateFormat(date, "YYYY-MM-DD")}
-					data-start={FormatSessionStart}
-					data-end={FormatSessionEnd}
-					onClick={handleSessionClick} 
-					aria-disabled={false}
-					className={styles.timeTableAvailableCell}
-				>
-					{ t("Open") }
-				</Col>;
-			}
-			else {
-				col = 
-					<Col 
-						key={i} 
-						data-date={convertDateFormat(date, "YYYY-MM-DD")} 
+				col =
+					<Col
+						key={i}
+						data-date={convertDateFormat(date, "YYYY-MM-DD")}
 						data-start={FormatSessionStart}
 						data-end={FormatSessionEnd}
-						aria-disabled 
+						onClick={handleSessionClick}
+						aria-disabled={false}
 						className={styles.timeTableAvailableCell}
 					>
-						{ (status === "Booked") ? t("Rented") : t("Closed") }
+						{t("Open")}
+					</Col>;
+			}
+			else {
+				col =
+					<Col
+						key={i}
+						data-date={convertDateFormat(date, "YYYY-MM-DD")}
+						data-start={FormatSessionStart}
+						data-end={FormatSessionEnd}
+						aria-disabled
+						className={styles.timeTableAvailableCell}
+					>
+						{(status === "Booked") ? t("Rented") : t("Closed")}
 					</Col>;
 			}
 
@@ -168,7 +168,7 @@ function TimeTable({ people, level, venueInfo }) {
 		const dateCols = [];
 
 		/** get first cell */
-		dateCols.push(<Col key={-1} className={styles.timeTableDateCell}>{ t("Session") }</Col>);
+		dateCols.push(<Col key={-1} className={styles.timeTableDateCell}>{t("Session")}</Col>);
 
 		/** get date columns */
 		timeTableDates.forEach((date) => {
@@ -190,7 +190,7 @@ function TimeTable({ people, level, venueInfo }) {
 
 			const sessions = Object.keys(timeTableData[0].day_1);
 			const openingHoursStart = Math.min(...sessions);
-			const openingHoursEnd = Math.max(...sessions)+1;
+			const openingHoursEnd = Math.max(...sessions) + 1;
 
 			const startTime = dayjs(`${openingHoursStart}:00`, "HH:mm");
 			const endTime = dayjs(`${openingHoursEnd}:00`, "HH:mm");
@@ -200,7 +200,7 @@ function TimeTable({ people, level, venueInfo }) {
 			let sessionEnd = startTime.clone().add(1, "hour");
 
 			/** get time table body */
-			for (let i=0; i<timeIntervals; i+=1) {
+			for (let i = 0; i < timeIntervals; i += 1) {
 				timeTable.push(<Row key={i}>{handleTimeCols(sessionStart, sessionEnd)}</Row>);
 				sessionStart = sessionEnd;
 				sessionEnd = sessionStart.clone().add(1, "hour");
@@ -212,7 +212,7 @@ function TimeTable({ people, level, venueInfo }) {
 
 	return (
 		<>
-			{loading && <Loading/>}
+			{loading && <Loading />}
 			<Container className='bg-cream'>
 				<Row>
 					<Col className='text-center py-1'>
@@ -230,15 +230,15 @@ function TimeTable({ people, level, venueInfo }) {
 				</Row>
 				{handleTimeTable()}
 			</Container>
-			<SessionModal 
+			<SessionModal
 				venueInfo={venueInfo}
 				date={clickCellDate}
 				startTime={clickCellStartTime}
 				endTime={clickCellEndTime}
 				level={level}
-				show={showSessionModal} 
-				setShow={setShowSessionModal} 
-				windowSize={windowSize} 
+				show={showSessionModal}
+				setShow={setShowSessionModal}
+				windowSize={windowSize}
 				people={people}
 			/>
 		</>

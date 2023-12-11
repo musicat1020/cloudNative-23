@@ -11,12 +11,12 @@ import IconButton from "@mui/material/IconButton";
 import { Link } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import TimeTable from "@/pages/main/_components/timetable";
+import Button from "@mui/material/Button";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import TimeTable from "@/components/mainComponents/timetable";
 import LevelEnum from "@/utils/levelEnum";
 import PeopleSelect from "@/components/peopleSelect";
 import styles from "@/styles/venuetab.module.css";
-import Button from "@mui/material/Button";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 const theme = createTheme({
 	palette: {
@@ -145,8 +145,8 @@ function VenueTab({ venueInfo }) {
 								<p className="text-lg">
 									<span className={styles.infoAttr}>{t("Location")}</span>
 									<span>{venueInfo?.address}</span>
-									{venueInfo?.google_map_url && 
-										<Link 
+									{venueInfo?.google_map_url &&
+										<Link
 											target="_blank"
 											rel="noopener noreferrer"
 											href={venueInfo?.google_map_url}>
@@ -182,7 +182,7 @@ function VenueTab({ venueInfo }) {
 								</p>
 							</Col>
 							<Col lg={12} xl={6}>
-								{venueInfo?.picture && 
+								{venueInfo?.picture &&
 									<Image
 										src={venueInfo?.picture}
 										className='d-block shadow-md rounded-md'
@@ -200,10 +200,10 @@ function VenueTab({ venueInfo }) {
 						<Row>
 							<Col xs={12} md={6} xl={4} className='my-2'>
 								<span>{t("欲使用人數")}</span>
-								<PeopleSelect 
+								<PeopleSelect
 									className="mx-4 px-2 text-center"
-									people={people} 
-									maxPeople={venueInfo?.max_number_of_people} 
+									people={people}
+									maxPeople={venueInfo?.max_number_of_people}
 									onChange={setPeople}
 								/>
 								<span>{t("人")}</span>
@@ -224,7 +224,7 @@ function VenueTab({ venueInfo }) {
 						<Row className='my-3'>
 							<TimeTable people={people} level={level} venueInfo={venueInfo} />
 							<div className="flex justify-end mt-4">
-								<Button 
+								<Button
 									variant="outlined"
 									color="secondary"
 									endIcon={<ChevronRightIcon />}

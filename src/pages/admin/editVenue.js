@@ -9,13 +9,13 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Tabs, Tab, Box, Button, Snackbar, Alert } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import NavBar from "./_components/navbarAdmin";
-import VenueDetail from "./_components/venueDetail";
-import styles from "@/styles/venue.module.css";
-import axios from "@/utils/axios";
-import EditVenueModal from "@/pages/admin/_components/editVenueModal";
-import ButtonDeleteVenue from "@/pages/admin/_components/buttonDeleteVenue";
-import AdminTimeTable from "@/pages/admin/_components/timetableAdmin";
+import NavBar from "@/components/adminComponents/navbarAdmin";
+import styles from "@/styles/venuetab.module.css";
+import VenueDetail from "@/components/adminComponents/venueDetail";
+import AdminTimeTable from "@/components/adminComponents/timetableAdmin";
+import ButtonDeleteVenue from "@/components/adminComponents/buttonDeleteVenue";
+import EditVenueModal from "@/components/adminComponents/editVenueModal";
+
 
 const theme = createTheme({
 	palette: {

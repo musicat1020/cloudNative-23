@@ -7,10 +7,10 @@ import IconButton from "@mui/material/IconButton";
 import PublishIcon from "@mui/icons-material/Publish";
 import { Button, Snackbar, Alert } from "@mui/material";
 
-import styles from "../../styles/venue.module.css";
-import VenueInput from "./_components/venueInput";
-import NavBar from "./_components/navbarAdmin";
-import EditVenueModal from "@/pages/admin/_components/editVenueModal";
+import NavBar from "@/components/adminComponents/navbarAdmin";
+import styles from "@/styles/venuetab.module.css";
+import VenueInput from "@/components/adminComponents/venueInput";
+import EditVenueModal from "@/components/adminComponents/editVenueModal";
 
 function NewVenue() {
 	const initialState = {
@@ -46,8 +46,7 @@ function NewVenue() {
 			venueInfo.max_number_of_people === 0 ||
 			venueInfo.stadium_courts.length === 0 ||
 			venueInfo.available_times.weekdays.length === 0 ||
-			venueInfo.description === "") 
-		{
+			venueInfo.description === "") {
 			// setShowAlert(true);
 			alert(t("請填寫所有必填欄位（包含圖片）"));
 			return;
@@ -132,7 +131,7 @@ function NewVenue() {
 											type="file"
 											onChange={handleInputChange}
 											ref={hiddenFileInput}
-											style={{ display: 'none' }} // Make the file input element invisible
+											style={{ display: "none" }} // Make the file input element invisible
 										/>
 									</IconButton>
 									<p>{t("點擊上傳圖片")}</p>
@@ -196,7 +195,7 @@ function NewVenue() {
 				handleClose={() => setShowNewVenueModal(false)}
 				title={t("新增場地")}
 				info={venueInfo}
-				type={"new"}
+				type="new"
 			/>
 		</ThemeProvider>
 

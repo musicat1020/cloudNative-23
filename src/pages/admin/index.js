@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
-import NavBar from "./_components/navbarAdmin";
+import NavBar from "../../components/adminComponents/navbarAdmin";
 import VenueListConainer from "@/components/venueListConainer";
 
 function Index() {

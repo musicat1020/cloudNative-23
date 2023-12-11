@@ -12,9 +12,9 @@ import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-import DeleteVenueModal from "@/pages/admin/_components/deleteVenueModal";
-import DeleteVenueSessionModal from "@/pages/admin/_components/deleteVenueSessionModal";
-import EnableVenueSessionModal from "@/pages/admin/_components/enableVenueSessionModal";
+import DeleteVenueModal from "@/components/adminComponents/deleteVenueModal";
+import DeleteVenueSessionModal from "@/components/adminComponents/deleteVenueSessionModal";
+import EnableVenueSessionModal from "@/components/adminComponents/enableVenueSessionModal";
 
 
 function ButtonDeleteVenue({ info, setRefresh }) {

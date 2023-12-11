@@ -8,7 +8,7 @@ import ButtonDatePicker from "@/components/buttonDatePicker";
 import Loading from "@/components/loading";
 import axios from "@/utils/axios";
 import styles from "@/styles/timetable.module.css";
-import AdminSessionModal from "@/pages/admin/_components/adminSessionModal";
+import AdminSessionModal from "@/components/adminComponents/adminSessionModal";
 
 function AdminTimeTable({ venueInfo, refresh, setRefresh }) {
 	const { t } = useTranslation();

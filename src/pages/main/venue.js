@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import axios from "@/utils/axios";
-import NavBar from "@/pages/main/_components/navbar";
-import VenueTab from "@/pages/main/_components/venueTab";
+import NavBar from "@/components/mainComponents/navbar";
+import VenueTab from "@/components/mainComponents/venueTab";
 import styles from "@/styles/venue.module.css";
 
 function Venue() {

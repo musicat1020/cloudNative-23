@@ -1,7 +1,7 @@
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import BaseModal from "@/components/baseModal";
-import CourtTable from "@/pages/main/_components/courtTable";
+import CourtTable from "@/components/mainComponents/courtTable";
 
 function SessionModal({ venueInfo, date, startTime, endTime, show, setShow, windowSize, people, level }) {
 
@@ -23,24 +23,24 @@ function SessionModal({ venueInfo, date, startTime, endTime, show, setShow, wind
 	}, [windowSize]);
 
 	return (
-		<BaseModal 
+		<BaseModal
 			venue={`${venueInfo?.name} ${venueInfo?.venue_name}`}
 			date={date ? date.replaceAll("-", "/") : date}
 			startTime={startTime}
 			endTime={endTime}
-			show={show} 
-			handleClose={() => setShow(false)} 
+			show={show}
+			handleClose={() => setShow(false)}
 			title={t("租借場地")}
-			content={<CourtTable 
-				venueInfo={venueInfo} 
-				date={date} 
-				startTime={startTime} 
+			content={<CourtTable
+				venueInfo={venueInfo}
+				date={date}
+				startTime={startTime}
 				endTime={endTime}
-				windowSize={windowSize} 
+				windowSize={windowSize}
 				people={people}
-				level={level}/>
+				level={level} />
 			}
-			customStyles={{width: modalWidth}}
+			customStyles={{ width: modalWidth }}
 		/>
 	);
 }
