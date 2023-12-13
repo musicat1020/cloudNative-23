@@ -35,7 +35,7 @@ function RentalTable() {
   }, []);
 
   useEffect(() => {
-    if (rentalRecords.length === 0) {
+    if (rentalRecords?.length === 0) {
       fetchRentalRecords();
     }
   }, [rentalRecords]);
@@ -58,7 +58,7 @@ function RentalTable() {
           </tr>
         </thead>
         <tbody>
-          {rentalRecords.map((record) => {
+          {rentalRecords?.map((record) => {
             const isCancelled = record.status
               === "已取消" || record.status === "已退出";
             return (
