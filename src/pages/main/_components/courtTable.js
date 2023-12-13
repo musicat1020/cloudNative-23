@@ -27,17 +27,19 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 
 	const { t } = useTranslation();
 
-	const levelList = {
+	const levelTranslation = {
 		"EASY": t("初級"),
 		"MEDIUM": t("中級"),
 		"HARD": t("高級"),
 	};
-	const statusList = {
+
+	const statusTranslation = {
 		"join": "加入",
 		"rent": "租借",
 		"full": "已滿",
 	};
-	const reverseLevelEnum = Object.fromEntries(
+
+	const idx2Level = Object.fromEntries(
 		Object.entries(LevelEnum).map(([key, value]) => [value, key])
 	);
 
@@ -286,13 +288,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		}
 	};
 
-	const mapLevelRequirement = async (levels) => {
-		const mapLevels = levels.sort().map(item => reverseLevelEnum[parseInt(item, 10)]);
-		return mapLevels;
-	};
-
 	const handleRent = async () => {
-		const levelRequirement = await mapLevelRequirement(levelChecked);
 		const data = {
 			stadium_court_id: currCourtInfo.stadium_court_id,
 			date,
@@ -301,7 +297,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 			current_member_number: peopleUsed,
 			max_number_of_member: allowMatching ? parseInt(peopleUsed, 10) + parseInt(peopleMatching, 10) : parseInt(peopleUsed, 10),
 			is_matching: allowMatching,
-			level_requirement: levelRequirement,
+			level_requirement: levelChecked,
 			team_member_emails: emails?.map((item) => item.email),
 		};
 
@@ -309,9 +305,6 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 		if (!checkRentInput(data)) {
 			return;
 		}
-
-		// Convert level requirement to index
-		data.level_requirement = LevelEnum[levelRequirement.join("_")];
 
 		const res = await axios.post("/api/v1/stadium-court/rent", data, {});
 
@@ -410,7 +403,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 
 	const getJoinResContent = () => {
 		const { team } = joinResponse;
-		const levels = reverseLevelEnum[team?.level_requirement]?.split("_");
+		const levels = idx2Level[team?.level_requirement]?.split("_");
 
 		return (
 			<Container>
@@ -437,7 +430,7 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 						<span className={styles.borderAttrTitle}>{t("球技要求")}</span>
 						{		
 							levels?.map((item, index) => (
-								<span key={index} className={styles.level}>{t(levelList[item])}</span>
+								<span key={index} className={styles.level}>{t(levelTranslation[item])}</span>
 							))
 						}
 					</Col>
@@ -522,9 +515,9 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				<Col className='flex flex-row'>
 					<span className={styles.noBorderAttrTitle}>{t("球友球技要求")}</span>
 					<FormGroup className='ml-4'>
-						<FormControlLabel control={<BaseCheckbox value={LevelEnum.EASY} checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.EASY} />
-						<FormControlLabel control={<BaseCheckbox value={LevelEnum.MEDIUM} checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.MEDIUM} />
-						<FormControlLabel control={<BaseCheckbox value={LevelEnum.HARD} checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelList.HARD} />
+						<FormControlLabel control={<BaseCheckbox value="EASY" checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelTranslation.EASY} />
+						<FormControlLabel control={<BaseCheckbox value="MEDIUM" checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelTranslation.MEDIUM} />
+						<FormControlLabel control={<BaseCheckbox value="HARD" checkedList={levelChecked} handleChecked={setLevelChecked} />} label={levelTranslation.HARD} />
 					</FormGroup>
 				</Col>
 			</Row>
@@ -540,13 +533,13 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 	);
 
 	const convertLevelIndexToList = (levelIndex) => {
-		const levels = reverseLevelEnum[levelIndex]?.split("_");
+		const levels = idx2Level[levelIndex]?.split("_");
 		if (levels?.length === 0) {
 			return <span key={0} className={styles.level}>{t("無")}</span>;
 		}
 
 		return levels?.map((item, index) => (
-			<span key={index} className={styles.level}>{t(levelList[item])}</span>
+			<span key={index} className={styles.level}>{t(levelTranslation[item])}</span>
 		));
 	};
 
@@ -586,7 +579,13 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 				<Row>
 					<Col>
 						<span className={styles.rentSuccAttrTitle}>{t("球技要求")}</span>
-						{convertLevelIndexToList(data?.level_requirement)}
+						{
+							(data?.level_requirement?.length > 0 && data.level_requirement.map((item, index) => (
+								<span key={index} className={styles.level}>{t(item)}</span>
+							)))
+							|| 
+							<span className={styles.level}>{t("無")}</span>
+						}
 					</Col>
 				</Row>
 
@@ -638,15 +637,15 @@ function CourtTable({ venueInfo, date, startTime, endTime, windowSize, people, l
 							</TableCell>
 							<TableCell className={styles.tableCell}>
 								{
-									row.status === statusList.join &&
+									row.status === statusTranslation.join &&
 									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenJoin(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
 								}
 								{
-									row.status === statusList.rent &&
+									row.status === statusTranslation.rent &&
 									<button id={row.stadium_court_id} data-name={row.name} onClick={(e) => handleOpenRent(e)} className={`${styles.statusButton} ${styles.statusButtonBlack}`}>{t(row.status)}</button>
 								}
 								{
-									row.status !== statusList.join && row.status !== statusList.rent &&
+									row.status !== statusTranslation.join && row.status !== statusTranslation.rent &&
 									<span className='text-gray cursor-default'>{t(row.status)}</span>
 								}
 							</TableCell>

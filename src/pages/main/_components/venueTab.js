@@ -11,12 +11,11 @@ import IconButton from "@mui/material/IconButton";
 import { Link } from "@mui/material";
 import { Container, Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import TimeTable from "@/pages/main/_components/timetable";
-import LevelEnum from "@/utils/levelEnum";
-import PeopleSelect from "@/components/peopleSelect";
-import styles from "@/styles/venuetab.module.css";
 import Button from "@mui/material/Button";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import TimeTable from "@/pages/main/_components/timetable";
+import PeopleSelect from "@/components/peopleSelect";
+import styles from "@/styles/venuetab.module.css";
 
 const theme = createTheme({
 	palette: {
@@ -76,10 +75,9 @@ function VenueTab({ venueInfo }) {
 	const { t } = useTranslation();
 	const router = useRouter();
 
-	// 1 初級, 2 初＋中, 3 中, 4 初＋中＋高, 5 中＋高, 6 高
 	const [value, setValue] = useState(1);
 	const [people, setPeople] = useState(2);
-	const [level, setLevel] = useState(LevelEnum.EASY);
+	const [level, setLevel] = useState("EASY");
 
 	const mapWeekday = {
 		1: t("週一"),
@@ -215,9 +213,9 @@ function VenueTab({ venueInfo }) {
 									value={level}
 									onChange={(e) => setLevel(e.target.value)}
 								>
-									<option value={LevelEnum.EASY}>{t("初級")}</option>
-									<option value={LevelEnum.MEDIUM}>{t("中級")}</option>
-									<option value={LevelEnum.HARD}>{t("高級")}</option>
+									<option value="EASY">{t("初級")}</option>
+									<option value="MEDIUM">{t("中級")}</option>
+									<option value="HARD">{t("高級")}</option>
 								</select>
 							</Col>
 						</Row>

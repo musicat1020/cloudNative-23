@@ -5,6 +5,13 @@ function middleware(request) {
 		return NextResponse.rewrite(new URL("/main", request.url));
 	}
 
+	if (request.nextUrl.pathname.startsWith("/main/records")) {
+		const accessToken = request.cookies.get("accessToken")?.value;
+		if (!accessToken) {
+			return NextResponse.redirect(new URL("/main", request.url));
+		}
+	}
+
 	if (request.nextUrl.pathname.startsWith("/admin")) {
 		const isProvider = request.cookies.get("isProvider")?.value;
 		if (isProvider!=="true") {
