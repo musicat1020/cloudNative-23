@@ -7,6 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import ButtonDatePicker from "@/components/buttonDatePicker";
 import Loading from "@/components/loading";
 import SessionModal from "@/pages/main/_components/sessionModal";
+import LevelEnum from "@/utils/levelEnum";
 import axios from "@/utils/axios";
 import styles from "@/styles/timetable.module.css";
 
@@ -35,7 +36,7 @@ function TimeTable({ people, level, venueInfo }) {
 			stadium_id: id,
 			query_date: queryDate.format("YYYY-MM-DD"),
 			headcount,
-			level_requirement: levelRequirement,
+			level_requirement: LevelEnum[levelRequirement],
 		};
 		const res = await axios.post("/api/v1/stadium/timetable", {}, { params });
 
