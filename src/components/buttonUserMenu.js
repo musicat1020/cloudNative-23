@@ -26,8 +26,8 @@ function UserMenu({ data, signOut, expanded }) {
                 <button className="relative" onClick={handleButtonClick}>
                     {/* {expanded && <span className={styles.navLink}>{data.user.name}</span>} */}
                     {!expanded && <Image
-                        src={data.user.picture}
-                        alt={`${data.user.name} photo`}
+                        src={data.picture}
+                        alt={`${data.name} photo`}
                         width={50}
                         height={50}
                         className={`rounded-full object-cover h-10 w-10 ${isDropdownVisible ? "ring-1 ring-dark-blue ring-offset-2 ring-offset-cream" : ""}`}
@@ -41,9 +41,9 @@ function UserMenu({ data, signOut, expanded }) {
                                     {t("Records")}
                                 </Nav.Link>
                             )}
-                            <button className={styles.manageList} onClick={() => signOut()}>
+                            <a className={styles.manageList} href="/api/auth/logout">
                                 {t("Logout")}
-                            </button>
+                            </a>
                         </div>
                     </div>
                 )}

@@ -8,16 +8,17 @@ import { useTranslation } from "next-i18next";
 import { getCookie, setCookie } from "cookies-next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
-import { useSession, signIn, signOut } from "next-auth/react";
+// import { useSession, signIn, signOut } from "next-auth/react";
+import { getSession } from "@auth0/nextjs-auth0";
 import styles from "@/styles/navbar.module.css";
 import i18n from "@/utils/i18n";
 import UserMenu from "@/components/buttonUserMenu";
 import { setUserCookies, clearAllCookies, getAllCookies } from "@/utils/cookies";
 
-
 function NavBar() {
   const { t } = useTranslation();
-  const { data, status } = useSession();
+  // const { data, status } = useSession();
+  const { user: data } = getSession();
   const [lang, setLang] = useState(getCookie("lang") ?? "en");
   const timeoutRef = useRef(null);
 

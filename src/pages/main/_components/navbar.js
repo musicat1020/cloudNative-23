@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import {
   Navbar, Nav, Container
 } from "react-bootstrap";
@@ -8,7 +8,10 @@ import { useTranslation } from "next-i18next";
 import { getCookie, setCookie } from "cookies-next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEarthAmericas } from "@fortawesome/free-solid-svg-icons";
-import { useSession, signIn, signOut } from "next-auth/react";
+// import { useSession, signIn, signOut } from "next-auth/react";
+
+import { useUser } from "@auth0/nextjs-auth0/client";
+import { getSession } from "@auth0/nextjs-auth0";
 import styles from "@/styles/navbar.module.css";
 import i18n from "@/utils/i18n";
 import UserMenu from "@/components/buttonUserMenu";
@@ -16,7 +19,10 @@ import { setUserCookies, clearAllCookies, getAllCookies, getIsProvider } from "@
 
 function NavBar() {
   const { t } = useTranslation();
-  const { data, status } = useSession();
+  // const { data, status } = useSession();
+  const { user } = useUser();
+  console.log("user", user);
+
   const timeoutRef = useRef(null);
   const [lang, setLang] = useState(getCookie("lang") ?? "en");
   const [isProvider, setIsProvider] = useState(false);
@@ -33,7 +39,7 @@ function NavBar() {
   };
 
   const handleLogout = () => {
-    signOut();
+    // signOut();
     clearAllCookies();
   };
 
@@ -43,22 +49,22 @@ function NavBar() {
     setIsProvider(getIsProvider() === "true");
   }, []);
 
-  useEffect(() => {
-    // After login, set user cookies and reload the page
-    // to show the admin if the user is provider
-    if (data?.user !== undefined && Object.keys(getAllCookies()).length === 0) {
-      setUserCookies(data?.user).then(() => {
-        window.location.reload(false);
-      });
-    }
+  // useEffect(() => {
+  //   // After login, set user cookies and reload the page
+  //   // to show the admin if the user is provider
+  //   if (data?.user !== undefined && Object.keys(getAllCookies()).length === 0) {
+  //     setUserCookies(data?.user).then(() => {
+  //       window.location.reload(false);
+  //     });
+  //   }
 
-    // If token is expired, sign out and clear all cookies
-    if (data?.user !== undefined && Object.keys(getAllCookies()).length === 2) {
-      signOut();
-      clearAllCookies();
-      alert(t("連線逾時，請重新登入！"));
-    }
-  }, [data?.user]);
+  //   // If token is expired, sign out and clear all cookies
+  //   if (data?.user !== undefined && Object.keys(getAllCookies()).length === 2) {
+  //     signOut();
+  //     clearAllCookies();
+  //     alert(t("連線逾時，請重新登入！"));
+  //   }
+  // }, [data?.user]);
 
   const [expanded, setExpanded] = useState(false);
 
@@ -86,19 +92,20 @@ function NavBar() {
             <Nav.Link href="/main" className={styles.navLink}>
               {t("Home")}
             </Nav.Link>
-            {status === "authenticated" ? (
+            {user ? (
               <>
                 {/* Check if the Navbar is collapsed */}
                 <UserMenu
-                  data={data}
+                  data={user}
                   signOut={handleLogout}
                   expanded={expanded}
                 />
               </>
             ) : (
-              <button className={styles.navLink} onClick={() => signIn("google")}>
-                {t("Login")}
-              </button>
+              // <button className={styles.navLink} onClick={() => signIn("google")}>
+              //   {t("Login")}
+              // </button>
+              <a className={styles.navLink} href="/api/auth/login">{t("Login")}</a>
             )}
             <Nav.Link className={styles.navLink} onClick={handleLang}>
               <FontAwesomeIcon icon={faEarthAmericas} className="mr-2 flex flex-row" />

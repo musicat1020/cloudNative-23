@@ -14,15 +14,15 @@ export const handleDisableSession = async (id, startDate, startTime, endDate, en
 };
 
 export const handleEnableSession = async (id, startDate, startTime, endDate, endTime) => {
-    const data = {
+    const params = {
         stadium_id: id,
         start_date: startDate,
         start_time: startTime,
         end_date: endDate,
         end_time: endTime ?? startTime + 1
     };
-    console.log("requestData", data);
+    console.log("params", params);
 
-    await axios.delete("/api/v1/stadium/undisable/", { data })
+    await axios.delete("/api/v1/stadium/undisable/", { params })
         .then((res) => console.log("undisable res", res));
 };
